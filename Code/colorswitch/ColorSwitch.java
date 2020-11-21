@@ -42,7 +42,7 @@ public class ColorSwitch extends Application
 		Button creditsButton=new Button("CREDITS");
 		
 		Button exitButton=new Button("EXIT");
-		exitButton.setOnAction(event -> ColorSwitch.closeProgram());
+		exitButton.setOnAction(exitEvent -> ColorSwitch.closeProgram());
 
 		Button[] menuButtons={newGameButton,loadGameButton,statsButton,helpButton,creditsButton,exitButton};
 		
@@ -61,6 +61,7 @@ public class ColorSwitch extends Application
 	private static void closeProgram()
 	{
 		ColorSwitch.applicationWindow.close();
+		System.out.println("Close Program in action");
 	}
 
 	@Override
@@ -69,6 +70,10 @@ public class ColorSwitch extends Application
 		ColorSwitch.applicationWindow=primaryStage;
 
 		ColorSwitch.setUpWindow();
+		ColorSwitch.applicationWindow.setOnCloseRequest(closeEvent -> {
+			closeEvent.consume();
+			ColorSwitch.closeProgram();
+		});
 
 		ColorSwitch.setUpMainMenu();
 
