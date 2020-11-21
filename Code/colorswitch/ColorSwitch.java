@@ -12,13 +12,21 @@ import javafx.scene.paint.Color;
 
 public class ColorSwitch extends Application
 {
+	private static final double desiredSceneWidth;
+	private static final double desiredSceneHeight;
+
+	static
+	{
+		desiredSceneWidth=500;
+		desiredSceneHeight=650;
+	}	
+
 	private static Stage applicationWindow;
+	private static GameSpace currentGame;
 	
 	private static void setUpWindow()
 	{
 		ColorSwitch.applicationWindow.setTitle("Color Switch");
-		ColorSwitch.applicationWindow.setHeight(700);
-		ColorSwitch.applicationWindow.setWidth(500);
 		ColorSwitch.applicationWindow.setResizable(false);
 	}
 
@@ -32,6 +40,7 @@ public class ColorSwitch extends Application
 		menuOptions.setPrefHeight(50);
 
 		Button newGameButton=new Button("NEW GAME");
+		newGameButton.setOnAction(newGameEvent -> ColorSwitch.startNewGame());
 
 		Button loadGameButton=new Button("LOAD GAME");
 
@@ -54,14 +63,32 @@ public class ColorSwitch extends Application
 
 		menuOptions.getChildren().addAll(newGameButton,loadGameButton,statsButton,helpButton,creditsButton,exitButton);
 	
-		Scene mainMenu=new Scene(menuOptions);
+		Scene mainMenu=new Scene(menuOptions,ColorSwitch.desiredSceneWidth,ColorSwitch.desiredSceneHeight);
+
 		ColorSwitch.applicationWindow.setScene(mainMenu);
+	}
+
+	private static void startNewGame()
+	{
+		ColorSwitch.currentGame=new GameSpace(ColorSwitch.applicationWindow,ColorSwitch.desiredSceneWidth,ColorSwitch.desiredSceneHeight);
+		ColorSwitch.launchGame();
+	}
+
+	private static void launchGame()
+	{
+		if(currentGame==null)
+		{
+			//Need to be handled through Exceptions later
+			System.out.println("No game currently active");
+			return;
+		}
+		int gameState=ColorSwitch.currentGame.start();
+		System.out.println("Game exited with state "+gameState);
 	}
 
 	private static void closeProgram()
 	{
 		ColorSwitch.applicationWindow.close();
-		System.out.println("Close Program in action");
 	}
 
 	@Override
@@ -77,6 +104,7 @@ public class ColorSwitch extends Application
 
 		ColorSwitch.setUpMainMenu();
 
+		ColorSwitch.applicationWindow.hide();
 		ColorSwitch.applicationWindow.show();
 	}
 
