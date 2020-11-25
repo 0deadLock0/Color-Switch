@@ -8,7 +8,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.control.Label;
 import javafx.animation.AnimationTimer;
 
-import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.Background;
 
@@ -16,69 +15,68 @@ import javafx.application.Application;
 
 public class GameSpace extends Application
 {
-    private static Stage applicationWindow;
-    private static Scene gameScene;
-    private static Pane gamePane;
-    private static Label scoreLabel;
+    private Stage applicationWindow;
+    private Scene gameScene;
+    private Pane gamePane;
+    private Label scoreLabel;
 
-    private static Player player;
-    private static Star star;
-    private static Obstacle obstacle;
+    private Player player;
+    private Star star;
+    private Obstacle obstacle;
 
-    private static boolean gameActive;
-    private static long lastTime;
-    private static long score;
-
-    static
-    {
-        player=new Player();
-        star=new Star();
-        obstacle=null;
-        gameActive=false;
-        lastTime=0;
-        score=0;
-        scoreLabel=new Label("Score: 0");
-
-    }
+    private boolean gameActive;
+    private long lastTime;
+    private long score;
 
     public GameSpace()
     {
-        this.player=new Player();
-        this.gameActive=false;
         this.applicationWindow=null;
+        this.player=null;
+        this.star=null;
+        this.obstacle=null;
+        this.gameActive=false;
+        this.lastTime=-1;
+        this.score=-1;
+        this.scoreLabel=null;
         this.gameScene=null;
     }
+
     public GameSpace(Stage window, double desiredWidth, double desiredHeight)
     {
-        this.player=new Player();
-        this.gameActive=false;
         this.applicationWindow=window;
+        this.player=new Player();
+        this.star=new Star();
+        this.obstacle=null; //different types of obstacles exists
+        this.gameActive=false;
+        this.lastTime=0;
+        this.score=0;
+        this.scoreLabel=new Label("Score: 0");
         this.gameScene=this.createScene(desiredWidth,desiredHeight);
     }
 
-    private static Scene createScene(double desiredWidth, double desiredHeight)
+    private  Scene createScene(double desiredWidth, double desiredHeight)
     {
-        GameSpace.gamePane=new Pane();
-        GameSpace.gamePane.setBackground(Background.EMPTY);
-        GameSpace.gamePane.getChildren().add(GameSpace.player);
-        GameSpace.gamePane.getChildren().add(GameSpace.star);
-        GameSpace.gamePane.getChildren().add(GameSpace.scoreLabel);
+        this.gamePane=new Pane();
+        this.gamePane.setBackground(Background.EMPTY);
+        this.gamePane.getChildren().add(this.player);
+        this.gamePane.getChildren().add(this.star);
+        this.gamePane.getChildren().add(this.scoreLabel);
 
-        Scene scene=new Scene(GameSpace.gamePane,desiredWidth,desiredHeight,Color.BLACK);
+        Scene scene=new Scene(this.gamePane,desiredWidth,desiredHeight,Color.BLACK);
 
-        GameSpace.obstacle=new CircularRotatingObstacle(scene.getWidth()/2,0);
-        GameSpace.obstacle.startTransformation();
-        GameSpace.gamePane.getChildren().add(GameSpace.obstacle);
+        this.obstacle=new CircularRotatingObstacle(scene.getWidth()/2,0);
+        this.obstacle.startTransformation();
+        this.gamePane.getChildren().add(this.obstacle);
 
-        GameSpace.player.setPosition(scene.getWidth()/2,scene.getHeight()-GameSpace.player.getSize());
+        this.player.setPosition(scene.getWidth()/2,scene.getHeight()-this.player.getSize());
 
-        GameSpace.scoreLabel.setPrefWidth(-1);
-        GameSpace.scoreLabel.setPrefHeight(-1);
-        GameSpace.scoreLabel.setTranslateX(scene.getWidth()-GameSpace.scoreLabel.getWidth()-10);
-        GameSpace.scoreLabel.setTranslateY(10);
-        GameSpace.scoreLabel.setTextFill(Color.YELLOW);
+        this.scoreLabel.setPrefWidth(-1);
+        this.scoreLabel.setPrefHeight(-1);
+        this.scoreLabel.setTranslateX(scene.getWidth()-this.scoreLabel.getWidth()-10);
+        this.scoreLabel.setTranslateY(10);
+        this.scoreLabel.setTextFill(Color.YELLOW);
 
-        GameSpace.star.setPosition(scene.getWidth()/2,0);
+        this.star.setPosition(scene.getWidth()/2,0);
 
         return scene;
     }
@@ -86,38 +84,47 @@ public class GameSpace extends Application
     @Override
     public void start(Stage primaryStage)
     {
-        GameSpace.gameActive=true;
-        GameSpace.applicationWindow=primaryStage;
-        GameSpace.gameScene=GameSpace.createScene(500,650);
-        GameSpace.applicationWindow.setScene(GameSpace.gameScene);
+        //this section needs to be in constructor only, to be removed...
+        this.player=new Player();
+        this.star=new Star();
+        this.obstacle=null;
+        this.gameActive=false;
+        this.lastTime=0;
+        this.score=0;
+        this.scoreLabel=new Label("Score: 0");
 
-        GameSpace.setUserInput();
+        this.applicationWindow=primaryStage;
+        this.gameActive=true;
+        this.gameScene=this.createScene(500,650);
+        this.applicationWindow.setScene(this.gameScene);
+
+        this.setUserInput();
         AnimationTimer timer=new AnimationTimer()
         {
             @Override
             public void handle(long now)
             {
-                GameSpace.backgroundProcess(now);
+                backgroundProcess(now);
             }
         };
         timer.start();
 
-        GameSpace.applicationWindow.hide();
-        GameSpace.applicationWindow.show();
+        this.applicationWindow.hide();
+        this.applicationWindow.show();
 
     }
 
-    private static void backgroundProcess(long now)
+    private void backgroundProcess(long now)
     {
         if(!gameActive)
             return;
-        if(GameSpace.isPlayerInteractingStar(GameSpace.player,GameSpace.star))
+        if(this.isPlayerInteractingStar(this.player,this.star))
         {
-            ++GameSpace.score;
-            GameSpace.gamePane.getChildren().remove(GameSpace.star);
-            GameSpace.star=null;//Error coming :) Fix it
+            ++this.score;
+            this.gamePane.getChildren().remove(this.star);
+            this.star=null;//Error coming :) Fix it
         }
-        GameSpace.updateGUI();
+        this.updateGUI();
         if (lastTime==0L)
             lastTime=now;
         else
@@ -125,76 +132,76 @@ public class GameSpace extends Application
             long timePast=now-lastTime;
             if(timePast>=400_000_000L) //400 ms
             {
-                GameSpace.player.moveDown();
-                GameSpace.obstacle.transform();
+                this.player.moveDown();
+                this.obstacle.transform();
                 lastTime=now;
             }
         }
     }
-    private static void updateGUI()
+    private void updateGUI()
     {
         updateScore();
     }
-    private static void updateScore()
+    private void updateScore()
     {
-        GameSpace.scoreLabel.setText("Score: "+GameSpace.score);
-        GameSpace.scoreLabel.setTranslateX(GameSpace.gameScene.getWidth()-GameSpace.scoreLabel.getWidth()-10);
-        GameSpace.scoreLabel.setTranslateY(10);
+        this.scoreLabel.setText("Score: "+this.score);
+        this.scoreLabel.setTranslateX(this.gameScene.getWidth()-this.scoreLabel.getWidth()-10);
+        this.scoreLabel.setTranslateY(10);
     }
 
-    private static void setUserInput()
+    private void setUserInput()
     {
-        GameSpace.gameScene.setOnKeyPressed(keyPressedEvent ->
+        this.gameScene.setOnKeyPressed(keyPressedEvent ->
         {
             switch(keyPressedEvent.getCode())
             {
                 case SPACE:
                 {
                     if(gameActive)
-                        GameSpace.movePlayerUp();
+                        this.movePlayerUp();
                     break;
                 }
                 case TAB:
                 {
-                    GameSpace.gameActive=!GameSpace.gameActive;
-                    if(!GameSpace.gameActive)
-                        GameSpace.pauseAnimations();
+                    this.gameActive=!this.gameActive;
+                    if(!this.gameActive)
+                        this.pauseAnimations();
                     else
-                        GameSpace.resumeAnimations();
+                        this.resumeAnimations();
                     break;
                 }
                 case Q:
                 {
-                    GameSpace.applicationWindow.close();
+                    this.applicationWindow.close();
                     break;
                 }
             }
         });
     }
 
-    private static void pauseAnimations()
+    private void pauseAnimations()
     {
-        GameSpace.obstacle.stopTransformation();
+        this.obstacle.stopTransformation();
     }
-    private static void resumeAnimations()
+    private void resumeAnimations()
     {
-        GameSpace.obstacle.startTransformation();
+        this.obstacle.startTransformation();
     }
 
-    private static void movePlayerUp()
+    private void movePlayerUp()
     {
-        double equilibriumY=3*GameSpace.gameScene.getHeight()/4;
-        double[] playerPosition =GameSpace.player.getPosition();
+        double equilibriumY=3*this.gameScene.getHeight()/4;
+        double[] playerPosition =this.player.getPosition();
 
         if(playerPosition[1]>equilibriumY)
-            GameSpace.player.moveUp();
-        GameSpace.star.moveDown();
-        GameSpace.obstacle.moveDown();
+            this.player.moveUp();
+        this.star.moveDown();
+        this.obstacle.moveDown();
     }
 
-    private static boolean isPlayerInteractingStar(Player player, Star star)
+    private boolean isPlayerInteractingStar(Player player, Star star)
     {
-        return Shape.intersect(player, star).getBoundsInLocal().isEmpty() == false;
+        return !Shape.intersect(player, star).getBoundsInLocal().isEmpty();
     }
 
     public static void main(String[] args)
