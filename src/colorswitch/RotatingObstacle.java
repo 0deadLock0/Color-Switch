@@ -3,14 +3,16 @@ package colorswitch;
 
 abstract class RotatingObstacle extends Obstacle
 {
+    private final double factor;
+
     public RotatingObstacle()
     {
         super();
+        this.factor=100;
     }
 
     public void transform()
     {
-        double factor=100;
-        this.setRotate(this.getRotate()+Settings.TransformationSpeed*factor);
+        this.setRotate(this.getRotate()+Settings.TransformationSpeed*this.factor);
     }
 }

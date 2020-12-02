@@ -1,6 +1,8 @@
 
 package colorswitch;
 
+import java.util.Random;
+
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.shape.Shape;
@@ -26,19 +28,6 @@ public class GameSpace
     private long lastTime;
     private long score;
 
-    public GameSpace() //No use, but program throws error without no args constructor
-    {
-        this.applicationWindow=null;
-        this.player=null;
-        this.star=null;
-        this.obstacle=null;
-        this.gameActive=false;
-        this.lastTime=-1;
-        this.score=-1;
-        this.scoreLabel=null;
-        this.gameScene=null;
-    }
-
     public GameSpace(Stage window, double desiredWidth, double desiredHeight)
     {
         this.applicationWindow=window;
@@ -62,7 +51,7 @@ public class GameSpace
 
         Scene scene=new Scene(this.gamePane,desiredWidth,desiredHeight,Color.BLACK);
 
-        this.obstacle=new CircularRotatingObstacle(scene.getWidth()/2,0);
+        this.obstacle=this.createObstacle(scene.getWidth()/2,0);
         this.gamePane.getChildren().add(this.obstacle);
 
         this.player.setPosition(scene.getWidth()/2,scene.getHeight()-this.player.getSize());
@@ -172,6 +161,22 @@ public class GameSpace
     private boolean isPlayerInteractingStar(Player player, Star star)
     {
         return !Shape.intersect(player, star).getBoundsInLocal().isEmpty();
+    }
+
+    private Obstacle createObstacle(double xCenter, double yCenter)
+    {
+        Random rd=new Random();
+
+        Obstacle obstacle;
+        switch(rd.nextInt(Settings.ObstaclesCount))
+        {
+            // To add new obstacles, also update Settings.ObstaclesCount
+
+            case 0 : obstacle = new CircularRotatingObstacle(xCenter, yCenter); break;
+            case 1 : obstacle = new SquareRotatingObstacle(xCenter, yCenter); break;
+            default : obstacle = null;
+        }
+        return obstacle;
     }
 
 }

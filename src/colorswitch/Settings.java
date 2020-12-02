@@ -15,6 +15,8 @@ class Settings
 
     public static final Color[] IntersectionColors;
 
+    public static final int ObstaclesCount;
+
     static
     {
         DesiredSceneWidth = 500;
@@ -27,5 +29,8 @@ class Settings
         Gravity = MotionSpeed * 0.15;
 
         IntersectionColors = new Color[]{Color.BLUE,Color.YELLOW,Color.RED,Color.GREEN};
+
+        ObstaclesCount=2; //update according to number of obstacles available //check children of Obstacle class
+
     }
 }

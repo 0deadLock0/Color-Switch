@@ -102,8 +102,6 @@ public class ColorSwitch extends Application
         //changes1
         mainMenu.getStylesheets().add(ColorSwitch.class.getResource("styles.css").toExternalForm());
 
-
-
         ColorSwitch.applicationWindow.setScene(mainMenu);
     }
     private static void setUpLoadMenu()
