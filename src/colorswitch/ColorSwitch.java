@@ -11,21 +11,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class ColorSwitch extends Application
 {
-    private static final double desiredSceneWidth;
-    private static final double desiredSceneHeight;
-
-    static
-    {
-        desiredSceneWidth=500;
-        desiredSceneHeight=650;
-    }
-
     private static Stage applicationWindow;
     private static GameSpace currentGame;
 
@@ -108,9 +98,9 @@ public class ColorSwitch extends Application
         }
         title.getChildren().add(imageView);
         menuOptions.getChildren().addAll(title,newGameButton,loadGameButton,statsButton,helpButton,creditsButton,exitButton);
-        Scene mainMenu=new Scene(menuOptions,ColorSwitch.desiredSceneWidth,ColorSwitch.desiredSceneHeight);
+        Scene mainMenu=new Scene(menuOptions,Settings.DesiredSceneWidth,Settings.DesiredSceneHeight);
         //changes1
-        mainMenu.getStylesheets().add(ColorSwitch.class.getResource("a.css").toExternalForm());
+        mainMenu.getStylesheets().add(ColorSwitch.class.getResource("styles.css").toExternalForm());
 
 
 
@@ -160,9 +150,9 @@ public class ColorSwitch extends Application
         }
 
         menuOptions.getChildren().addAll(File1,File2,File3,File4,File5,Back);
-        Scene mainMenu=new Scene(menuOptions,ColorSwitch.desiredSceneWidth,ColorSwitch.desiredSceneHeight);
+        Scene mainMenu=new Scene(menuOptions,Settings.DesiredSceneWidth,Settings.DesiredSceneHeight);
         //changes1
-        mainMenu.getStylesheets().add(ColorSwitch.class.getResource("a.css").toExternalForm());
+        mainMenu.getStylesheets().add(ColorSwitch.class.getResource("styles.css").toExternalForm());
 
 
 
@@ -199,9 +189,9 @@ public class ColorSwitch extends Application
 
         Back.setMinWidth(menuOptions.getPrefWidth());
         menuOptions.getChildren().addAll(Tittle,dummy1,dummy2,label1,label2,label3,label4,label5,label6,Back);
-        Scene mainMenu=new Scene(menuOptions,ColorSwitch.desiredSceneWidth,ColorSwitch.desiredSceneHeight);
+        Scene mainMenu=new Scene(menuOptions,Settings.DesiredSceneWidth,Settings.DesiredSceneHeight);
         //changes1
-        mainMenu.getStylesheets().add(ColorSwitch.class.getResource("a.css").toExternalForm());
+        mainMenu.getStylesheets().add(ColorSwitch.class.getResource("styles.css").toExternalForm());
 
 
         ColorSwitch.applicationWindow.setScene(mainMenu);
@@ -236,9 +226,9 @@ public class ColorSwitch extends Application
         Back.setMinWidth(menuOptions.getPrefWidth());
 //      Back.setMinHeight(menuOptions.getPrefHeight());
         menuOptions.getChildren().addAll(Tittle,dummy1,dummy2,label1,label2,label3,label4,label5,label6,Back);
-        Scene mainMenu=new Scene(menuOptions,ColorSwitch.desiredSceneWidth,ColorSwitch.desiredSceneHeight);
+        Scene mainMenu=new Scene(menuOptions,Settings.DesiredSceneWidth,Settings.DesiredSceneHeight);
         //changes1
-        mainMenu.getStylesheets().add(ColorSwitch.class.getResource("a.css").toExternalForm());
+        mainMenu.getStylesheets().add(ColorSwitch.class.getResource("styles.css").toExternalForm());
 
 
         ColorSwitch.applicationWindow.setScene(mainMenu);
@@ -271,9 +261,9 @@ public class ColorSwitch extends Application
 
         Back.setMinWidth(menuOptions.getPrefWidth());
         menuOptions.getChildren().addAll(Tittle,dummy1,dummy2,label1,label2,label3,label4,Back);
-        Scene mainMenu=new Scene(menuOptions,ColorSwitch.desiredSceneWidth,ColorSwitch.desiredSceneHeight);
+        Scene mainMenu=new Scene(menuOptions,Settings.DesiredSceneWidth,Settings.DesiredSceneHeight);
         //changes1
-        mainMenu.getStylesheets().add(ColorSwitch.class.getResource("a.css").toExternalForm());
+        mainMenu.getStylesheets().add(ColorSwitch.class.getResource("styles.css").toExternalForm());
 
 
         ColorSwitch.applicationWindow.setScene(mainMenu);
@@ -282,7 +272,7 @@ public class ColorSwitch extends Application
 
     private static void startNewGame()
     {
-        ColorSwitch.currentGame=new GameSpace(ColorSwitch.applicationWindow,ColorSwitch.desiredSceneWidth,ColorSwitch.desiredSceneHeight);
+        ColorSwitch.currentGame=new GameSpace(ColorSwitch.applicationWindow,Settings.DesiredSceneWidth,Settings.DesiredSceneHeight);
         ColorSwitch.launchGame();
     }
 
@@ -294,8 +284,8 @@ public class ColorSwitch extends Application
             System.out.println("No game currently active");
             return;
         }
-        // int gameState=ColorSwitch.currentGame.start();
-        // System.out.println("Game exited with state "+gameState);
+         int gameState=ColorSwitch.currentGame.start();
+         System.out.println("Game exited with state "+gameState);
     }
 
     private static void closeProgram()

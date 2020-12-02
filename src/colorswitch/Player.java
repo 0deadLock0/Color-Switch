@@ -1,16 +1,16 @@
 
 package colorswitch;
 
-import javafx.scene.Scene;
-import javafx.scene.shape.Circle;
+import java.util.Random;
 
+import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 
 class Player extends Circle
 {
     Player()
     {
-        super(5,Color.BLUE);
+        super(5,Settings.IntersectionColors[(new Random()).nextInt(Settings.IntersectionColors.length)]);
     }
 
     public void setPosition(double x, double y)
@@ -38,10 +38,10 @@ class Player extends Circle
 
     public void moveUp()
     {
-        this.setCenterY(this.getCenterY()-5);
+        this.setCenterY(this.getCenterY()-Settings.MotionSpeed);
     }
     public void moveDown()
     {
-        this.setCenterY(this.getCenterY()+5);
+        this.setCenterY(this.getCenterY()+Settings.Gravity);
     }
 }

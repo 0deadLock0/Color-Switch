@@ -41,7 +41,7 @@ class Star extends Polygon
     public Star(double xPosition,double yPosition)
     {
         this();
-        this.setPosition(xPosition,yPosition);
+        this.translatePosition(xPosition,yPosition);
     }
 
     public double getScore()
@@ -52,7 +52,7 @@ class Star extends Polygon
     {
         this.score=s;
     }
-    public void setPosition(double x,double y)
+    public void translatePosition(double x,double y)
     {
         Double[] pointsXY=new Double[2*Star.points];
         int i=0;
@@ -74,6 +74,6 @@ class Star extends Polygon
 
     public void moveDown()
     {
-        this.setPosition(0,5);
+        this.translatePosition(0,Settings.MotionSpeed);
     }
 }
