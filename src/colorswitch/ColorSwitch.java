@@ -16,16 +16,16 @@ import java.io.FileNotFoundException;
 
 public class ColorSwitch extends Application
 {
-    private static Stage applicationWindow;
-    private static GameSpace currentGame;
+    private Stage applicationWindow;
+    private GameSpace currentGame;
 
-    private static void setUpWindow()
+    private void setUpWindow()
     {
-        ColorSwitch.applicationWindow.setTitle("Color Switch");
-        ColorSwitch.applicationWindow.setResizable(false);
+        this.applicationWindow.setTitle("Color Switch");
+        this.applicationWindow.setResizable(false);
     }
 
-    private static void setUpMainMenu()
+    private void setUpMainMenu()
     {
         VBox menuOptions=new VBox();
         HBox title=new HBox();
@@ -67,11 +67,11 @@ public class ColorSwitch extends Application
         newGameButton.setStyle("-fx-font-weight: bold");
         newGameButton.setStyle("-fx-background-color: #AB4642");
 
-        newGameButton.setOnAction(newGameEvent -> ColorSwitch.startNewGame());
+        newGameButton.setOnAction(newGameEvent -> this.startNewGame());
 
         Button loadGameButton=new Button("LOAD GAME");
         loadGameButton.setStyle("-fx-background-color: #00bfff");
-        loadGameButton.setOnAction(loadGameEvent -> ColorSwitch.setUpLoadMenu());
+        loadGameButton.setOnAction(loadGameEvent -> this.setUpLoadMenu());
 
         Button statsButton=new Button("STATS");
         statsButton.setStyle("-fx-background-color: #e9967a");
@@ -83,11 +83,11 @@ public class ColorSwitch extends Application
 
         Button creditsButton=new Button("CREDITS");
         creditsButton.setStyle("-fx-background-color: #F7CA88");
-        creditsButton.setOnAction(creditsevent -> ColorSwitch.setUpCreditsMenu());
+        creditsButton.setOnAction(creditsevent -> this.setUpCreditsMenu());
 
         Button exitButton=new Button("EXIT");
         exitButton.setStyle("-fx-background-color: #f08080");
-        exitButton.setOnAction(exitEvent -> ColorSwitch.closeProgram());
+        exitButton.setOnAction(exitEvent -> this.closeProgram());
 
         Button[] menuButtons={newGameButton,loadGameButton,statsButton,helpButton,creditsButton,exitButton};
 
@@ -102,9 +102,9 @@ public class ColorSwitch extends Application
         //changes1
         mainMenu.getStylesheets().add(ColorSwitch.class.getResource("styles.css").toExternalForm());
 
-        ColorSwitch.applicationWindow.setScene(mainMenu);
+        this.applicationWindow.setScene(mainMenu);
     }
-    private static void setUpLoadMenu()
+    private void setUpLoadMenu()
     {
         VBox menuOptions=new VBox();
 
@@ -120,7 +120,7 @@ public class ColorSwitch extends Application
 
         File1.setStyle("-fx-background-color: #AB4642");
 
-        //File1.setOnAction(newGameEvent -> ColorSwitch.startNewGame());
+        //File1.setOnAction(newGameEvent -> this.startNewGame());
 
         Button File2=new Button("Saved State 2");
         File2.setStyle("-fx-background-color: #00bfff");
@@ -136,7 +136,7 @@ public class ColorSwitch extends Application
 
         Button Back= new Button("BACK");
         Back.setStyle("-fx-background-color: #ff4500");
-        Back.setOnAction(event -> ColorSwitch.setUpMainMenu());
+        Back.setOnAction(event -> this.setUpMainMenu());
 
 
         Button[] menuButtons={File1,File2,File3,File4,File5,Back};
@@ -154,9 +154,9 @@ public class ColorSwitch extends Application
 
 
 
-        ColorSwitch.applicationWindow.setScene(mainMenu);
+        this.applicationWindow.setScene(mainMenu);
     }
-    private static void setUpCreditsMenu()
+    private void setUpCreditsMenu()
     {
         VBox menuOptions=new VBox();
 
@@ -183,7 +183,7 @@ public class ColorSwitch extends Application
 
         Button Back= new Button("BACK");
         Back.setStyle("-fx-background-color: #ff4500");
-        Back.setOnAction(event -> ColorSwitch.setUpMainMenu());
+        Back.setOnAction(event -> this.setUpMainMenu());
 
         Back.setMinWidth(menuOptions.getPrefWidth());
         menuOptions.getChildren().addAll(Tittle,dummy1,dummy2,label1,label2,label3,label4,label5,label6,Back);
@@ -192,9 +192,9 @@ public class ColorSwitch extends Application
         mainMenu.getStylesheets().add(ColorSwitch.class.getResource("styles.css").toExternalForm());
 
 
-        ColorSwitch.applicationWindow.setScene(mainMenu);
+        this.applicationWindow.setScene(mainMenu);
     }
-    private static void setUpHelpMenu()
+    private void setUpHelpMenu()
     {
         VBox menuOptions=new VBox();
 
@@ -219,7 +219,7 @@ public class ColorSwitch extends Application
 
         Button Back= new Button("BACK");
         Back.setStyle("-fx-background-color: #ff4500");
-        Back.setOnAction(event -> ColorSwitch.setUpMainMenu());
+        Back.setOnAction(event -> this.setUpMainMenu());
 
         Back.setMinWidth(menuOptions.getPrefWidth());
 //      Back.setMinHeight(menuOptions.getPrefHeight());
@@ -229,9 +229,9 @@ public class ColorSwitch extends Application
         mainMenu.getStylesheets().add(ColorSwitch.class.getResource("styles.css").toExternalForm());
 
 
-        ColorSwitch.applicationWindow.setScene(mainMenu);
+        this.applicationWindow.setScene(mainMenu);
     }
-    private static void setUpStatsMenu()
+    private void setUpStatsMenu()
     {
         VBox menuOptions=new VBox();
 
@@ -254,7 +254,7 @@ public class ColorSwitch extends Application
 
         Button Back= new Button("BACK");
         Back.setStyle("-fx-background-color: #ff4500");
-        Back.setOnAction(event -> ColorSwitch.setUpMainMenu());
+        Back.setOnAction(event -> this.setUpMainMenu());
 
 
         Back.setMinWidth(menuOptions.getPrefWidth());
@@ -264,17 +264,17 @@ public class ColorSwitch extends Application
         mainMenu.getStylesheets().add(ColorSwitch.class.getResource("styles.css").toExternalForm());
 
 
-        ColorSwitch.applicationWindow.setScene(mainMenu);
+        this.applicationWindow.setScene(mainMenu);
     }
 
 
-    private static void startNewGame()
+    private void startNewGame()
     {
-        ColorSwitch.currentGame=new GameSpace(ColorSwitch.applicationWindow,Settings.DesiredSceneWidth,Settings.DesiredSceneHeight);
-        ColorSwitch.launchGame();
+        this.currentGame=new GameSpace(this.applicationWindow,Settings.DesiredSceneWidth,Settings.DesiredSceneHeight);
+        this.launchGame();
     }
 
-    private static void launchGame()
+    private void launchGame()
     {
         if(currentGame==null)
         {
@@ -282,30 +282,29 @@ public class ColorSwitch extends Application
             System.out.println("No game currently active");
             return;
         }
-         int gameState=ColorSwitch.currentGame.start();
-         System.out.println("Game exited with state "+gameState);
+        this.currentGame.start();
     }
 
-    private static void closeProgram()
+    private void closeProgram()
     {
-        ColorSwitch.applicationWindow.close();
+        this.applicationWindow.close();
     }
 
     @Override
     public void start(Stage primaryStage)
     {
-        ColorSwitch.applicationWindow=primaryStage;
+        this.applicationWindow=primaryStage;
 
-        ColorSwitch.setUpWindow();
-        ColorSwitch.applicationWindow.setOnCloseRequest(closeEvent -> {
+        this.setUpWindow();
+        this.applicationWindow.setOnCloseRequest(closeEvent -> {
             closeEvent.consume();
-            ColorSwitch.closeProgram();
+            this.closeProgram();
         });
 
-        ColorSwitch.setUpMainMenu();
+        this.setUpMainMenu();
 
-        ColorSwitch.applicationWindow.hide();
-        ColorSwitch.applicationWindow.show();
+        this.applicationWindow.hide();
+        this.applicationWindow.show();
     }
 
     public static void main(String[] args)
