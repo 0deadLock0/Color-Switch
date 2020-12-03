@@ -32,9 +32,9 @@ public class GameSpace
     private long lastTime;
     private long score;
 
-    public GameSpace(ColorSwitch sourceAplication, Stage window, double desiredWidth, double desiredHeight)
+    public GameSpace(ColorSwitch sourceApplication, Stage window, double desiredWidth, double desiredHeight)
     {
-        this.application=sourceAplication;
+        this.application=sourceApplication;
         this.applicationWindow=window;
         this.player=new Player();
         this.star=null;
@@ -93,6 +93,17 @@ public class GameSpace
             }
         };
         timer.start();
+    }
+
+    private void stop()
+    {
+        this.gameActive=false;
+        //Pause Menu to be generated
+    }
+    private void resume() // should be called using an action listener //like clicking resume Button
+    {
+        this.gameActive=true;
+//        this.applicationWindow.setScene(this.gameScene);
     }
 
     private void backgroundProcess(long now)
@@ -157,7 +168,10 @@ public class GameSpace
                 }
                 case X:
                 {
-                    this.gameActive=!this.gameActive;
+                    if(this.gameActive)
+                        this.stop();
+                    else // To be removed when Action Listener is created
+                        this.resume();
                     break;
                 }
                 case TAB:
