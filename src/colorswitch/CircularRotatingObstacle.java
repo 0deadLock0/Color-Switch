@@ -37,7 +37,7 @@ public class CircularRotatingObstacle extends RotatingObstacle
             arcs[i].setLength(90.37167f);
             arcs[i].setType(ArcType.OPEN);
             arcs[i].setStroke(Settings.IntersectionColors[i]);
-            arcs[i].setFill(Color.BLACK);
+            arcs[i].setFill(Color.TRANSPARENT);
             arcs[i].setStrokeWidth(10);
         }
 

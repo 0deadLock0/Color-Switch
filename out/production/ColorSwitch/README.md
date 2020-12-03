@@ -1,22 +1,7 @@
-This directory contains all the code files for the project
+Design:
 
+Contains UML and UseCase Diagrams of the intended design
 
-# Command to Compile and Run:
+UML: https://drive.google.com/file/d/1bYwZqJ_CLKPT1vnscFWqKZIF28kYbC8a/view
 
-Note:
-
-1) %PATH_TO_JAVAFX% is the path where javafx is present
-2) Commands need to be run in the folder contaning this README 
-
-
-Compile:
-
-javac --module-path %PATH_TO_JAVAFX% --add-modules javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.media,javafx.swing,javafx.web ./colorswitch/*.java
-
-Run:
-
-java --module-path %PATH_TO_JAVAFX% --add-modules javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.media,javafx.swing,javafx.web colorswitch.ColorSwitch
-
-Compile and Run:
-
-javac --module-path %PATH_TO_JAVAFX% --add-modules javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.media,javafx.swing,javafx.web ./colorswitch/*.java & java --module-path %PATH_TO_JAVAFX% --add-modules javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.media,javafx.swing,javafx.web colorswitch.ColorSwitch
+UseCase: https://drive.google.com/file/d/1kyMMhG5Tq1LirWngaNBrvvz1FY_RKAcF/view

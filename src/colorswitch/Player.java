@@ -18,9 +18,9 @@ class Player extends Circle
         this.setCenterX(x);
         this.setCenterY(y);
     }
-    public void changeColor(Color color)
+    public void changeColor(ColorBall colorBall)
     {
-        this.setFill(color);
+        this.setFill(colorBall.getColor());
     }
 
     public double getSize()

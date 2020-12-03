@@ -32,7 +32,7 @@ class SquareRotatingObstacle extends RotatingObstacle
         for(int i = 0 ; i < SquareRotatingObstacle.SubParts ; ++i)
         {
             sides[i].setStroke(Settings.IntersectionColors[i]);
-            sides[i].setFill(Color.BLACK);
+            sides[i].setFill(Color.TRANSPARENT);
             sides[i].setStrokeWidth(10);
         }
 

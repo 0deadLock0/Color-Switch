@@ -9,7 +9,7 @@ class Settings
 
     public static final long TimeDelay; // in ms
 
-    public static final double TransformationSpeed;
+    public static double TransformationSpeed;
     public static final double MotionSpeed; // in pixels
     public static final double Gravity; // in pixels
 

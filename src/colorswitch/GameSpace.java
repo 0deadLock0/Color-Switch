@@ -3,6 +3,7 @@ package colorswitch;
 
 import java.util.Random;
 
+import javafx.scene.Node;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.shape.Shape;
@@ -23,6 +24,7 @@ public class GameSpace
     private final Player player;
     private Star star;
     private Obstacle obstacle;
+    private ColorBall colorBall;
 
     private boolean gameActive;
     private long lastTime;
@@ -32,8 +34,9 @@ public class GameSpace
     {
         this.applicationWindow=window;
         this.player=new Player();
-        this.star=new Star();
+        this.star=null;
         this.obstacle=null; //different types of obstacles exists
+        this.colorBall=null;
         this.gameActive=false;
         this.lastTime=0;
         this.score=0;
@@ -46,10 +49,15 @@ public class GameSpace
         this.gamePane=new Pane();
         this.gamePane.setBackground(Background.EMPTY);
         this.gamePane.getChildren().add(this.player);
-        this.gamePane.getChildren().add(this.star);
         this.gamePane.getChildren().add(this.scoreLabel);
 
         Scene scene=new Scene(this.gamePane,desiredWidth,desiredHeight,Color.BLACK);
+
+        this.star=new Star();
+        this.gamePane.getChildren().add(this.star);
+
+        this.colorBall=new ColorBall(scene.getWidth()/2,scene.getWidth()/2, this.player.getColor());
+        this.gamePane.getChildren().add(this.colorBall);
 
         this.obstacle=this.createObstacle(scene.getWidth()/2,0);
         this.gamePane.getChildren().add(this.obstacle);
@@ -90,11 +98,22 @@ public class GameSpace
     {
         if(!gameActive)
             return;
-        if(this.isPlayerInteractingStar(this.player,this.star))
+        if(GameSpace.isPlayerInteractingStar(this.player, this.star))
         {
             ++this.score;
             this.gamePane.getChildren().remove(this.star);
-            this.star=null;//Error coming :) Fix it
+//            this.star=null;//Error coming :) Fix it
+        }
+        if(GameSpace.isPlayerInteractingColorBall(this.player, this.colorBall))
+        {
+            this.player.changeColor(this.colorBall);
+            this.gamePane.getChildren().remove(this.colorBall);
+//            this.colorBall=null;//Error coming :) Fix it
+        }
+        if(GameSpace.isPlayerCollidingObstacle(this.player, this.obstacle))
+        {
+//            System.out.println("Collision Detected");
+            //Proceed to Exit Game
         }
         this.updateGUI();
         if (lastTime==0L)
@@ -105,11 +124,13 @@ public class GameSpace
             if(timePast>=Settings.TimeDelay)
             {
                 this.obstacle.transform();
+                this.colorBall.changeColors();
                 this.player.moveDown();
                 lastTime=now;
             }
         }
     }
+
     private void updateGUI()
     {
         updateScore();
@@ -133,12 +154,12 @@ public class GameSpace
                         this.movePlayerUp();
                     break;
                 }
-                case TAB:
+                case X:
                 {
                     this.gameActive=!this.gameActive;
                     break;
                 }
-                case Q:
+                case C:
                 {
                     this.applicationWindow.close();
                     break;
@@ -155,12 +176,38 @@ public class GameSpace
         if(playerPosition[1]>equilibriumY)
             this.player.moveUp();
         this.star.moveDown();
+        this.colorBall.moveDown();
         this.obstacle.moveDown();
     }
 
-    private boolean isPlayerInteractingStar(Player player, Star star)
+    private static boolean isPlayerInteractingStar(Player player, Star star)
     {
         return !Shape.intersect(player, star).getBoundsInLocal().isEmpty();
+    }
+
+    private static boolean isPlayerInteractingColorBall(Player player, ColorBall colorBall)
+    {
+        for (Node colorBallParts : colorBall.getChildren().toArray(new Node[0]))
+        {
+            if (!Shape.intersect(player, (Shape)colorBallParts).getBoundsInLocal().isEmpty())
+                return true;
+        }
+
+        return false;
+    }
+
+    private static boolean isPlayerCollidingObstacle(Player player, Obstacle obstacle)
+    {
+        for (Node obstacleParts : obstacle.getChildren().toArray(new Node[0]))
+        {
+            if (!Shape.intersect(player, (Shape)obstacleParts).getBoundsInLocal().isEmpty())
+            {
+                Color obstacleColor=(Color)((Shape)obstacleParts).getStroke();
+                return !obstacleColor.equals(player.getColor());
+            }
+        }
+
+        return false;
     }
 
     private Obstacle createObstacle(double xCenter, double yCenter)
