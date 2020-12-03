@@ -16,6 +16,8 @@ import javafx.scene.layout.Background;
 
 public class GameSpace
 {
+    private final ColorSwitch application;
+
     private final Stage applicationWindow;
     private final Scene gameScene;
     private Pane gamePane;
@@ -30,8 +32,9 @@ public class GameSpace
     private long lastTime;
     private long score;
 
-    public GameSpace(Stage window, double desiredWidth, double desiredHeight)
+    public GameSpace(ColorSwitch sourceAplication, Stage window, double desiredWidth, double desiredHeight)
     {
+        this.application=sourceAplication;
         this.applicationWindow=window;
         this.player=new Player();
         this.star=null;
@@ -75,7 +78,7 @@ public class GameSpace
         return scene;
     }
 
-    public int start()
+    public void start()
     {
         this.gameActive=true;
         this.applicationWindow.setScene(this.gameScene);
@@ -90,8 +93,6 @@ public class GameSpace
             }
         };
         timer.start();
-
-        return 0;
     }
 
     private void backgroundProcess(long now)
@@ -157,6 +158,12 @@ public class GameSpace
                 case X:
                 {
                     this.gameActive=!this.gameActive;
+                    break;
+                }
+                case TAB:
+                {
+                    //To return to Main Menu // just for testing purpose
+                    this.application.setUpMainMenu();
                     break;
                 }
                 case C:

@@ -25,7 +25,7 @@ public class ColorSwitch extends Application
         this.applicationWindow.setResizable(false);
     }
 
-    private void setUpMainMenu()
+    public void setUpMainMenu()
     {
         VBox menuOptions=new VBox();
         HBox title=new HBox();
@@ -270,7 +270,7 @@ public class ColorSwitch extends Application
 
     private void startNewGame()
     {
-        this.currentGame=new GameSpace(this.applicationWindow,Settings.DesiredSceneWidth,Settings.DesiredSceneHeight);
+        this.currentGame=new GameSpace(this, this.applicationWindow, Settings.DesiredSceneWidth, Settings.DesiredSceneHeight);
         this.launchGame();
     }
 
