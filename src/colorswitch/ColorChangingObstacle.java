@@ -1,19 +1,16 @@
 
 package colorswitch;
 
+import javafx.scene.Node;
 import javafx.scene.shape.Shape;
 
-// This type of obstacle don't seem feasible in a game
-// Better be removed
 abstract class ColorChangingObstacle extends Obstacle
 {
-    protected Shape shape;
     private int colorIndex;
 
     public ColorChangingObstacle()
     {
         super();
-        this.shape=null;
         this.colorIndex=-1;
     }
 
@@ -27,6 +24,7 @@ abstract class ColorChangingObstacle extends Obstacle
         ++this.colorIndex;
         if(this.colorIndex==4)
             this.colorIndex=0;
-        this.shape.setFill(Settings.IntersectionColors[this.colorIndex]);
+        for (Node part : this.getChildren().toArray(new Node[0]))
+            ((Shape)part).setStroke(Settings.IntersectionColors[this.colorIndex]);
     }
 }
