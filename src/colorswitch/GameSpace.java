@@ -64,7 +64,7 @@ public class GameSpace
 
         Scene scene=new Scene(this.gamePane,desiredWidth,desiredHeight,Color.BLACK);
 
-        this.star=new Star();
+        this.star=this.createStar(scene.getWidth()/2,0);
         this.gamePane.getChildren().add(this.star);
 
         this.colorBall=new ColorBall(scene.getWidth()/2,scene.getWidth()/2, this.player.getColor());
@@ -80,8 +80,6 @@ public class GameSpace
         this.scoreLabel.setTranslateX(scene.getWidth()-this.scoreLabel.getWidth()-10);
         this.scoreLabel.setTranslateY(10);
         this.scoreLabel.setTextFill(Color.YELLOW);
-
-        this.star.translatePosition(scene.getWidth()/2,0);
 
         return scene;
     }
@@ -120,7 +118,7 @@ public class GameSpace
             return;
         if(GameSpace.isPlayerInteractingStar(this.player, this.star))
         {
-            ++this.score;
+            this.score+=this.star.getScore();
             this.gamePane.getChildren().remove(this.star);
 //            this.star=null;//Error coming :) Fix it
         }
@@ -308,6 +306,17 @@ public class GameSpace
     private boolean isPlayerFallenDown(Player player)
     {
         return player.getPosition()[1]>this.gameScene.getHeight();
+    }
+
+    private Star createStar(double xPosition, double yPosition)
+    {
+        Random rd=new Random();
+        Star star;
+        if(rd.nextDouble()<0.85)
+            star=new Star(xPosition,yPosition);
+        else
+            star=new SpecialStar(xPosition, yPosition);
+        return star;
     }
 
     private Obstacle createObstacle(double xCenter, double yCenter)
