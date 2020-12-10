@@ -44,7 +44,7 @@ class Star extends Polygon
         this.translatePosition(xPosition,yPosition);
     }
 
-    public double getScore()
+    public int getScore()
     {
         return this.score;
     }
