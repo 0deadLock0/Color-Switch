@@ -3,7 +3,9 @@ package colorswitch;
 
 import java.util.Random;
 
+import javafx.animation.TranslateTransition;
 import javafx.scene.Node;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.shape.Shape;
@@ -13,6 +15,7 @@ import javafx.animation.AnimationTimer;
 
 import javafx.scene.paint.Color;
 import javafx.scene.layout.Background;
+import javafx.util.Duration;
 
 public class GameSpace
 {
@@ -29,6 +32,7 @@ public class GameSpace
     private ColorBall colorBall;
 
     private boolean gameActive;
+    private boolean gameOver;
     private long lastTime;
     private long score;
 
@@ -41,6 +45,7 @@ public class GameSpace
         this.obstacle=null; //different types of obstacles exists
         this.colorBall=null;
         this.gameActive=false;
+        this.gameOver=false;
         this.lastTime=0;
         this.score=0;
         this.scoreLabel=new Label("Score: 0");
@@ -108,7 +113,7 @@ public class GameSpace
 
     private void backgroundProcess(long now)
     {
-        if(!gameActive)
+        if(gameOver || !gameActive)
             return;
         if(GameSpace.isPlayerInteractingStar(this.player, this.star))
         {
@@ -124,7 +129,10 @@ public class GameSpace
         }
         if(GameSpace.isPlayerCollidingObstacle(this.player, this.obstacle))
         {
-//            System.out.println("Collision Detected");
+            this.gameOver=true;
+            this.gamePane.getChildren().remove(this.player);
+//            this.player=null;
+            this.addBrokenBalls(this.player.getPosition()[0],this.player.getPosition()[1]);
             //Proceed to Exit Game
         }
         this.updateGUI();
@@ -140,6 +148,49 @@ public class GameSpace
                 this.player.moveDown();
                 lastTime=now;
             }
+        }
+    }
+
+    private void addBrokenBalls(double posX,double posY)
+    {
+        int count=Settings.brokenBallsCount;
+        final Circle[] balls=new Circle[count];
+        Random rd=new Random();
+        for(int i=0;i<count;++i)
+        {
+            balls[i]=new Circle(posX,posY,2+rd.nextInt(3));
+            balls[i].setFill(Settings.IntersectionColors[rd.nextInt(Settings.IntersectionColors.length)]);
+
+            double oldX=balls[i].getCenterX();
+            double oldY=balls[i].getCenterY();
+            double newX=rd.nextDouble()*this.gameScene.getWidth();
+            double newY=rd.nextDouble()*this.gameScene.getHeight();
+            double transX=newX-balls[i].getCenterX();
+            double transY=newY-balls[i].getCenterY();
+
+            double tangent=transY/transX;
+            double leftX=(newX<oldX)?newX:this.gameScene.getWidth()-newX;
+            double leftY=(newY<oldY)?newY:this.gameScene.getHeight()-newY;
+
+            if(leftX<leftY)
+            {
+                transX+=(leftX+10)*(transX<0?-1:1);//10- buffer
+                transY=transX*tangent;
+            }
+            else
+            {
+                transY+=(leftX+10)*(transY<0?-1:1);//10- buffer
+                transX=transY/tangent;
+            }
+
+            TranslateTransition translate=new TranslateTransition(Duration.millis(1000+rd.nextDouble()*3000),balls[i]);
+            translate.setToX(transX);
+            translate.setToY(transY);
+            translate.play();
+            int finalI = i;
+            translate.setOnFinished(finishedEvent -> this.gamePane.getChildren().remove(balls[finalI]));
+
+            this.gamePane.getChildren().add(balls[i]);
         }
     }
 
@@ -162,13 +213,13 @@ public class GameSpace
             {
                 case SPACE:
                 {
-                    if(gameActive)
+                    if(gameActive && !gameOver)
                         this.movePlayerUp();
                     break;
                 }
                 case X:
                 {
-                    if(this.gameActive)
+                    if(this.gameActive && !gameOver)
                         this.stop();
                     else // To be removed when Action Listener is created
                         this.resume();

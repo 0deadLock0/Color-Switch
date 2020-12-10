@@ -16,6 +16,7 @@ class Settings
     public static final Color[] IntersectionColors;
 
     public static final int ObstaclesCount;
+    public static final int brokenBallsCount;
 
     static
     {
@@ -32,5 +33,6 @@ class Settings
 
         ObstaclesCount=2; //update according to number of obstacles available //check children of Obstacle class
 
+        brokenBallsCount=100;
     }
 }
