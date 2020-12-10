@@ -323,6 +323,7 @@ public class GameSpace
             case 1 : obstacle = new SquareRotatingObstacle(xCenter, yCenter); break;
             case 2 : obstacle = new CircularColorChangingObstacle(xCenter, yCenter); break;
             case 3 : obstacle = new LineColorSwappingObstacle(xCenter, yCenter); break;
+            case 4 : obstacle = new SquareColorSwappingObstacle(xCenter, yCenter); break;
             default : obstacle = null;
         }
         return obstacle;
