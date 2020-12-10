@@ -11,11 +11,17 @@ class Player extends Circle
     private int score;
     private int starsCollected;
 
-    Player()
+    private Player()
     {
         super(5,Settings.IntersectionColors[(new Random()).nextInt(Settings.IntersectionColors.length)]);
         this.score=0;
         this.starsCollected=0;
+    }
+
+    public Player(double x, double y)
+    {
+        this();
+        this.setPosition(x,y);
     }
 
     public void setPosition(double x, double y)

@@ -24,9 +24,9 @@ public class GameSpace
     private final Stage applicationWindow;
     private final Scene gameScene;
     private Pane gamePane;
-    private final Label scoreLabel;
+    private Label scoreLabel;
 
-    private final Player player;
+    private Player player;
     private Star star;
     private Obstacle obstacle;
     private ColorBall colorBall;
@@ -41,45 +41,16 @@ public class GameSpace
     {
         this.application=sourceApplication;
         this.applicationWindow=window;
-        this.player=new Player();
-        this.star=null;
-        this.obstacle=null; //different types of obstacles exists
-        this.colorBall=null;
         this.gameActive=false;
         this.gameOver=false;
         this.ideallyObstacleTransformed=0;
         this.lastTime=0;
-        this.scoreLabel=new Label("Score: 0");
         this.gameScene=this.createScene(desiredWidth,desiredHeight);
     }
 
-    private Scene createScene(double desiredWidth, double desiredHeight)
+    public int getScore()
     {
-        this.gamePane=new Pane();
-        this.gamePane.setBackground(Background.EMPTY);
-        this.gamePane.getChildren().add(this.player);
-        this.gamePane.getChildren().add(this.scoreLabel);
-
-        Scene scene=new Scene(this.gamePane,desiredWidth,desiredHeight,Color.BLACK);
-
-        this.star=this.createStar(scene.getWidth()/2,0);
-        this.gamePane.getChildren().add(this.star);
-
-        this.colorBall=new ColorBall(scene.getWidth()/2,scene.getWidth()/2, this.player.getColor());
-        this.gamePane.getChildren().add(this.colorBall);
-
-        this.obstacle=this.createObstacle(scene.getWidth()/2,0);
-        this.gamePane.getChildren().add(this.obstacle);
-
-        this.player.setPosition(scene.getWidth()/2,4*scene.getHeight()/5);
-
-        this.scoreLabel.setPrefWidth(-1);
-        this.scoreLabel.setPrefHeight(-1);
-        this.scoreLabel.setTranslateX(scene.getWidth()-this.scoreLabel.getWidth()-10);
-        this.scoreLabel.setTranslateY(10);
-        this.scoreLabel.setTextFill(Color.YELLOW);
-
-        return scene;
+        return this.player.getScore();
     }
 
     public void start()
@@ -98,121 +69,6 @@ public class GameSpace
         };
         timer.start();
     }
-
-    private void stop()
-    {
-        this.gameActive=false;
-        //Pause Menu to be generated
-    }
-    private void resume() // should be called using an action listener //like clicking resume Button
-    {
-        this.gameActive=true;
-//        this.applicationWindow.setScene(this.gameScene);
-    }
-
-    private void backgroundProcess(long now)
-    {
-        if(gameOver || !gameActive)
-            return;
-        if(GameSpace.isPlayerInteractingStar(this.player, this.star))
-        {
-            this.player.collectStar(this.star);
-            this.gamePane.getChildren().remove(this.star);
-//            this.star=null;//Error coming :) Fix it
-        }
-        if(GameSpace.isPlayerInteractingColorBall(this.player, this.colorBall))
-        {
-            this.player.changeColor(this.colorBall);
-            this.gamePane.getChildren().remove(this.colorBall);
-//            this.colorBall=null;//Error coming :) Fix it
-        }
-        if(GameSpace.isPlayerCollidingObstacle(this.player, this.obstacle))
-        {
-            this.gameOver=true;
-            this.gamePane.getChildren().remove(this.player);
-//            this.player=null;
-            this.addBrokenBalls(this.player.getPosition()[0],this.player.getPosition()[1]);
-            //Proceed to Exit Game
-        }
-        if(this.isPlayerFallenDown(this.player))
-        {
-            this.gameOver=true;
-            this.gamePane.getChildren().remove(this.player);
-//            this.player=null;
-            this.addBrokenBalls(this.player.getPosition()[0],this.player.getPosition()[1]);
-            //Proceed to Exit Game
-        }
-        this.updateGUI();
-        if (lastTime==0L)
-            lastTime=now;
-        else
-        {
-            long timePast=now-lastTime;
-            if(timePast>=Settings.TimeDelay)
-            {
-                ++this.ideallyObstacleTransformed;
-                this.transformObstacle(this.obstacle);
-                this.colorBall.changeColors();
-                this.player.moveDown();
-                lastTime=now;
-            }
-        }
-    }
-
-    private void addBrokenBalls(double posX,double posY)
-    {
-        int count=Settings.BrokenBallsCount;
-        final Circle[] balls=new Circle[count];
-        Random rd=new Random();
-        for(int i=0;i<count;++i)
-        {
-            balls[i]=new Circle(posX,posY,2+rd.nextInt(3));
-            balls[i].setFill(Settings.IntersectionColors[rd.nextInt(Settings.IntersectionColors.length)]);
-
-            double oldX=balls[i].getCenterX();
-            double oldY=balls[i].getCenterY();
-            double newX=rd.nextDouble()*this.gameScene.getWidth();
-            double newY=rd.nextDouble()*this.gameScene.getHeight();
-            double transX=newX-balls[i].getCenterX();
-            double transY=newY-balls[i].getCenterY();
-
-            double tangent=transY/transX;
-            double leftX=(newX<oldX)?newX:this.gameScene.getWidth()-newX;
-            double leftY=(newY<oldY)?newY:this.gameScene.getHeight()-newY;
-
-            if(leftX<leftY)
-            {
-                transX+=leftX*(transX<0?-1:1);
-                transY=transX*tangent;
-            }
-            else
-            {
-                transY+=leftY*(transY<0?-1:1);
-                transX=transY/tangent;
-            }
-
-            TranslateTransition translate=new TranslateTransition(Duration.millis(1000+rd.nextDouble()*3000),balls[i]);
-            translate.setToX(transX);
-            translate.setToY(transY);
-            translate.play();
-            final int finalI = i;
-            translate.setOnFinished(finishedEvent -> this.gamePane.getChildren().remove(balls[finalI]));
-
-            this.gamePane.getChildren().add(balls[i]);
-        }
-    }
-
-    private void updateGUI()
-    {
-        updateScore();
-    }
-    private void updateScore()
-    {
-        this.scoreLabel.setText("Score: "+this.player.getScore());
-        this.scoreLabel.setTranslateX(this.gameScene.getWidth()-this.scoreLabel.getWidth()-10);
-        this.scoreLabel.setTranslateY(10);
-    }
-
     private void setUserInput()
     {
         this.gameScene.setOnKeyPressed(keyPressedEvent ->
@@ -248,7 +104,78 @@ public class GameSpace
         });
     }
 
-    private void transformObstacle(Obstacle obstacle)
+    private void stop()
+    {
+        this.gameActive=false;
+        //Pause Menu to be generated
+    }
+    private void resume() // should be called using an action listener //like clicking resume Button
+    {
+        this.gameActive=true;
+//        this.applicationWindow.setScene(this.gameScene);
+    }
+
+    private void backgroundProcess(long now)
+    {
+        if(gameOver || !gameActive)
+            return;
+        if(GameSpace.isPlayerInteractingStar(this.player, this.star))
+        {
+            this.player.collectStar(this.star);
+            this.gamePane.getChildren().remove(this.star);
+//            this.star=null;//Error coming :) Fix it
+        }
+        if(GameSpace.isPlayerInteractingColorBall(this.player, this.colorBall))
+        {
+            this.player.changeColor(this.colorBall);
+            this.gamePane.getChildren().remove(this.colorBall);
+//            this.colorBall=null;//Error coming :) Fix it
+        }
+        if(GameSpace.isPlayerCollidingObstacle(this.player, this.obstacle))
+        {
+            this.gameOver=true;
+            this.gamePane.getChildren().remove(this.player);
+//            this.player=null;
+            this.addBrokenBallsWithAnimation(this.player.getPosition()[0],this.player.getPosition()[1]);
+            //Proceed to Exit Game
+        }
+        if(this.isPlayerFallenDown(this.player))
+        {
+            this.gameOver=true;
+            this.gamePane.getChildren().remove(this.player);
+//            this.player=null;
+            this.addBrokenBallsWithAnimation(this.player.getPosition()[0],this.player.getPosition()[1]);
+            //Proceed to Exit Game
+        }
+        this.updateGUI();
+        if (lastTime==0L)
+            lastTime=now;
+        else
+        {
+            long timePast=now-lastTime;
+            if(timePast>=Settings.TimeDelay)
+            {
+                ++this.ideallyObstacleTransformed;
+                this.transformObstacles(this.obstacle);
+                this.colorBall.changeColors();
+                this.player.moveDown();
+                lastTime=now;
+            }
+        }
+    }
+
+    private void updateGUI()
+    {
+        updateScore();
+    }
+    private void updateScore()
+    {
+        this.scoreLabel.setText("Score: "+this.getScore());
+        this.scoreLabel.setTranslateX(this.gameScene.getWidth()-this.scoreLabel.getWidth()-10);
+        this.scoreLabel.setTranslateY(10);
+    }
+
+    private void transformObstacles(Obstacle obstacle)
     {
         if((obstacle instanceof ColorChangingObstacle) || (obstacle instanceof ColorSwappingObstacle))
         {
@@ -306,6 +233,52 @@ public class GameSpace
         return player.getPosition()[1]>this.gameScene.getHeight();
     }
 
+    private Scene createScene(double desiredWidth, double desiredHeight)
+    {
+        this.gamePane=new Pane();
+        this.gamePane.setBackground(Background.EMPTY);
+
+        Scene scene=new Scene(this.gamePane,desiredWidth,desiredHeight,Color.BLACK);
+
+        this.scoreLabel=this.createScoreLabel(scene.getWidth(), 10);
+        this.gamePane.getChildren().add(this.scoreLabel);
+
+        this.player=this.createPlayer(scene.getWidth()/2, 4*scene.getHeight()/5);
+        this.gamePane.getChildren().add(this.player);
+
+        this.star=this.createStar(scene.getWidth()/2,0);
+        this.gamePane.getChildren().add(this.star);
+
+        this.colorBall=this.createColorBall(scene.getWidth()/2,scene.getWidth()/2, this.player.getColor());
+        this.gamePane.getChildren().add(this.colorBall);
+
+        this.obstacle=this.createObstacle(scene.getWidth()/2,0);
+        this.gamePane.getChildren().add(this.obstacle);
+
+        return scene;
+    }
+
+    private Label createScoreLabel(double xPosition, double yPosition)
+    {
+        Label label=new Label("Score: 0");
+        label.setPrefWidth(-1);
+        label.setPrefHeight(-1);
+        label.setTranslateX(xPosition-label.getWidth()-10);
+        label.setTranslateY(yPosition);
+        label.setTextFill(Color.YELLOW);
+        return label;
+    }
+
+    private Player createPlayer(double xPosition, double yPosition)
+    {
+        return new Player(xPosition, yPosition);
+    }
+
+    private ColorBall createColorBall(double xPosition, double yPosition, Color ignoredColor)
+    {
+        return new ColorBall(xPosition, yPosition, ignoredColor);
+    }
+
     private Star createStar(double xPosition, double yPosition)
     {
         Random rd=new Random();
@@ -336,4 +309,46 @@ public class GameSpace
         return obstacle;
     }
 
+    private void addBrokenBallsWithAnimation(double xPosition, double yPosition)
+    {
+        int count=Settings.BrokenBallsCount;
+        final Circle[] balls=new Circle[count];
+        Random rd=new Random();
+        for(int i=0;i<count;++i)
+        {
+            balls[i]=new Circle(xPosition, yPosition,2+rd.nextInt(3));
+            balls[i].setFill(Settings.IntersectionColors[rd.nextInt(Settings.IntersectionColors.length)]);
+
+            double oldX=balls[i].getCenterX();
+            double oldY=balls[i].getCenterY();
+            double newX=rd.nextDouble()*this.gameScene.getWidth();
+            double newY=rd.nextDouble()*this.gameScene.getHeight();
+            double transX=newX-balls[i].getCenterX();
+            double transY=newY-balls[i].getCenterY();
+
+            double tangent=transY/transX;
+            double leftX=(newX<oldX)?newX:this.gameScene.getWidth()-newX;
+            double leftY=(newY<oldY)?newY:this.gameScene.getHeight()-newY;
+
+            if(leftX<leftY)
+            {
+                transX+=leftX*(transX<0?-1:1);
+                transY=transX*tangent;
+            }
+            else
+            {
+                transY+=leftY*(transY<0?-1:1);
+                transX=transY/tangent;
+            }
+
+            TranslateTransition translate=new TranslateTransition(Duration.millis(1000+rd.nextDouble()*3000),balls[i]);
+            translate.setToX(transX);
+            translate.setToY(transY);
+            translate.play();
+            final int finalI = i;
+            translate.setOnFinished(finishedEvent -> this.gamePane.getChildren().remove(balls[finalI]));
+
+            this.gamePane.getChildren().add(balls[i]);
+        }
+    }
 }
