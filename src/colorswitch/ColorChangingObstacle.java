@@ -16,11 +16,6 @@ abstract class ColorChangingObstacle extends Obstacle
 
     public void transform()
     {
-        this.changeColor();
-    }
-
-    protected void changeColor()
-    {
         ++this.colorIndex;
         if(this.colorIndex==4)
             this.colorIndex=0;

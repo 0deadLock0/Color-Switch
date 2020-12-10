@@ -27,6 +27,6 @@ class CircularColorChangingObstacle extends ColorChangingObstacle
 
             this.getChildren().add(arc);
         }
-        this.changeColor();
+        this.transform();
     }
 }
