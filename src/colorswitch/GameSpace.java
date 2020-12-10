@@ -70,7 +70,7 @@ public class GameSpace
         this.obstacle=this.createObstacle(scene.getWidth()/2,0);
         this.gamePane.getChildren().add(this.obstacle);
 
-        this.player.setPosition(scene.getWidth()/2,scene.getHeight()-this.player.getSize());
+        this.player.setPosition(scene.getWidth()/2,4*scene.getHeight()/5);
 
         this.scoreLabel.setPrefWidth(-1);
         this.scoreLabel.setPrefHeight(-1);
@@ -128,6 +128,14 @@ public class GameSpace
 //            this.colorBall=null;//Error coming :) Fix it
         }
         if(GameSpace.isPlayerCollidingObstacle(this.player, this.obstacle))
+        {
+            this.gameOver=true;
+            this.gamePane.getChildren().remove(this.player);
+//            this.player=null;
+            this.addBrokenBalls(this.player.getPosition()[0],this.player.getPosition()[1]);
+            //Proceed to Exit Game
+        }
+        if(this.isPlayerFallenDown(this.player))
         {
             this.gameOver=true;
             this.gamePane.getChildren().remove(this.player);
@@ -280,6 +288,11 @@ public class GameSpace
         }
 
         return false;
+    }
+
+    private boolean isPlayerFallenDown(Player player)
+    {
+        return player.getPosition()[1]>this.gameScene.getHeight();
     }
 
     private Obstacle createObstacle(double xCenter, double yCenter)
