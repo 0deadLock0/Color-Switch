@@ -13,6 +13,10 @@ abstract class RotatingObstacle extends Obstacle
 
     public void transform()
     {
+        this.rotate();
+    }
+    private void rotate()
+    {
         this.setRotate(this.getRotate()+Settings.TransformationSpeed*this.factor);
     }
 }

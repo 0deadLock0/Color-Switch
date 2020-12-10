@@ -17,6 +17,10 @@ abstract class ColorSwappingObstacle extends Obstacle
 
 	public void transform()
 	{
+		this.swapColors();
+	}
+	private void swapColors()
+	{
 		ArrayList<Color> colors=new ArrayList<>(Settings.IntersectionColors.length);
 		colors.addAll(Arrays.asList(Settings.IntersectionColors));
 		Random rd=new Random();
