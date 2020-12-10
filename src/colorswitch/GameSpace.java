@@ -254,9 +254,9 @@ public class GameSpace
 
     private void transformObstacle(Obstacle obstacle)
     {
-        if(obstacle instanceof ColorChangingObstacle)
+        if((obstacle instanceof ColorChangingObstacle) || (obstacle instanceof ColorSwappingObstacle))
         {
-            if(this.ideallyObstacleTransformed % Settings.ColorChangingObstacleTransformationSpeed == 0)
+            if(this.ideallyObstacleTransformed % Settings.ObstacleTransformationSpeed == 0)
                 this.obstacle.transform();
         }
         else
@@ -322,6 +322,7 @@ public class GameSpace
             case 0 : obstacle = new CircularRotatingObstacle(xCenter, yCenter); break;
             case 1 : obstacle = new SquareRotatingObstacle(xCenter, yCenter); break;
             case 2 : obstacle = new CircularColorChangingObstacle(xCenter, yCenter); break;
+            case 3 : obstacle = new LineColorSwappingObstacle(xCenter, yCenter); break;
             default : obstacle = null;
         }
         return obstacle;

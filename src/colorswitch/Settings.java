@@ -10,7 +10,7 @@ class Settings
     public static final long TimeDelay; // in ms
 
     public static double TransformationSpeed;
-    public static long ColorChangingObstacleTransformationSpeed; //Special Case
+    public static long ObstacleTransformationSpeed; //Special Case
     public static final double MotionSpeed; // in pixels
     public static final double Gravity; // in pixels
 
@@ -32,8 +32,8 @@ class Settings
 
         IntersectionColors = new Color[]{Color.BLUE,Color.YELLOW,Color.RED,Color.GREEN};
 
-        ColorChangingObstacleTransformationSpeed = 4*(long)(TimeDelay*TransformationSpeed)/(long)1e5;
-        ObstaclesCount = 3; //update according to number of obstacles available //check children of Obstacle class
+        ObstacleTransformationSpeed = 4*(long)(TimeDelay*TransformationSpeed)/(long)1e5;
+        ObstaclesCount = 4; //update according to number of obstacles available //check children of Obstacle class
 
         BrokenBallsCount = 100;
     }
