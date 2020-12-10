@@ -182,12 +182,12 @@ public class GameSpace
 
             if(leftX<leftY)
             {
-                transX+=(leftX+10)*(transX<0?-1:1);//10- buffer
+                transX+=leftX*(transX<0?-1:1);
                 transY=transX*tangent;
             }
             else
             {
-                transY+=(leftX+10)*(transY<0?-1:1);//10- buffer
+                transY+=leftY*(transY<0?-1:1);
                 transX=transY/tangent;
             }
 
@@ -195,7 +195,7 @@ public class GameSpace
             translate.setToX(transX);
             translate.setToY(transY);
             translate.play();
-            int finalI = i;
+            final int finalI = i;
             translate.setOnFinished(finishedEvent -> this.gamePane.getChildren().remove(balls[finalI]));
 
             this.gamePane.getChildren().add(balls[i]);
