@@ -34,7 +34,6 @@ public class GameSpace
     private boolean gameActive;
     private boolean gameOver;
     private long lastTime;
-    private long score;
 
     private long ideallyObstacleTransformed;
 
@@ -50,7 +49,6 @@ public class GameSpace
         this.gameOver=false;
         this.ideallyObstacleTransformed=0;
         this.lastTime=0;
-        this.score=0;
         this.scoreLabel=new Label("Score: 0");
         this.gameScene=this.createScene(desiredWidth,desiredHeight);
     }
@@ -118,7 +116,7 @@ public class GameSpace
             return;
         if(GameSpace.isPlayerInteractingStar(this.player, this.star))
         {
-            this.score+=this.star.getScore();
+            this.player.collectStar(this.star);
             this.gamePane.getChildren().remove(this.star);
 //            this.star=null;//Error coming :) Fix it
         }
@@ -210,7 +208,7 @@ public class GameSpace
     }
     private void updateScore()
     {
-        this.scoreLabel.setText("Score: "+this.score);
+        this.scoreLabel.setText("Score: "+this.player.getScore());
         this.scoreLabel.setTranslateX(this.gameScene.getWidth()-this.scoreLabel.getWidth()-10);
         this.scoreLabel.setTranslateY(10);
     }

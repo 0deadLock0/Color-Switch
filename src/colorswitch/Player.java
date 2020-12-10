@@ -8,9 +8,14 @@ import javafx.scene.paint.Color;
 
 class Player extends Circle
 {
+    private int score;
+    private int starsCollected;
+
     Player()
     {
         super(5,Settings.IntersectionColors[(new Random()).nextInt(Settings.IntersectionColors.length)]);
+        this.score=0;
+        this.starsCollected=0;
     }
 
     public void setPosition(double x, double y)
@@ -18,9 +23,28 @@ class Player extends Circle
         this.setCenterX(x);
         this.setCenterY(y);
     }
+
+    public void collectStar(Star star)
+    {
+        this.increaseScore(star.getScore());
+    }
     public void changeColor(ColorBall colorBall)
     {
         this.setFill(colorBall.getColor());
+    }
+
+    void increaseScore(int score)
+    {
+        this.score+=score;
+    }
+
+    public void moveUp()
+    {
+        this.setCenterY(this.getCenterY()-Settings.MotionSpeed);
+    }
+    public void moveDown()
+    {
+        this.setCenterY(this.getCenterY()+Settings.Gravity);
     }
 
     public double getSize()
@@ -31,17 +55,12 @@ class Player extends Circle
     {
         return new double[]{this.getCenterX(),this.getCenterY()};
     }
+    public int getScore()
+    {
+        return this.score;
+    }
     public Color getColor()
     {
         return (Color)this.getFill();
-    }
-
-    public void moveUp()
-    {
-        this.setCenterY(this.getCenterY()-Settings.MotionSpeed);
-    }
-    public void moveDown()
-    {
-        this.setCenterY(this.getCenterY()+Settings.Gravity);
     }
 }
