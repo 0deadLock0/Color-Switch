@@ -36,6 +36,8 @@ public class GameSpace
     private long lastTime;
     private long score;
 
+    private long ideallyObstacleTransformed;
+
     public GameSpace(ColorSwitch sourceApplication, Stage window, double desiredWidth, double desiredHeight)
     {
         this.application=sourceApplication;
@@ -46,6 +48,7 @@ public class GameSpace
         this.colorBall=null;
         this.gameActive=false;
         this.gameOver=false;
+        this.ideallyObstacleTransformed=0;
         this.lastTime=0;
         this.score=0;
         this.scoreLabel=new Label("Score: 0");
@@ -151,7 +154,8 @@ public class GameSpace
             long timePast=now-lastTime;
             if(timePast>=Settings.TimeDelay)
             {
-                this.obstacle.transform();
+                ++this.ideallyObstacleTransformed;
+                this.transformObstacle(this.obstacle);
                 this.colorBall.changeColors();
                 this.player.moveDown();
                 lastTime=now;
@@ -161,7 +165,7 @@ public class GameSpace
 
     private void addBrokenBalls(double posX,double posY)
     {
-        int count=Settings.brokenBallsCount;
+        int count=Settings.BrokenBallsCount;
         final Circle[] balls=new Circle[count];
         Random rd=new Random();
         for(int i=0;i<count;++i)
@@ -248,6 +252,17 @@ public class GameSpace
         });
     }
 
+    private void transformObstacle(Obstacle obstacle)
+    {
+        if(obstacle instanceof ColorChangingObstacle)
+        {
+            if(this.ideallyObstacleTransformed % Settings.ColorChangingObstacleTransformationSpeed == 0)
+                this.obstacle.transform();
+        }
+        else
+            this.obstacle.transform();
+    }
+
     private void movePlayerUp()
     {
         double equilibriumY=3*this.gameScene.getHeight()/4;
@@ -306,6 +321,7 @@ public class GameSpace
 
             case 0 : obstacle = new CircularRotatingObstacle(xCenter, yCenter); break;
             case 1 : obstacle = new SquareRotatingObstacle(xCenter, yCenter); break;
+            case 2 : obstacle = new CircularColorChangingObstacle(xCenter, yCenter); break;
             default : obstacle = null;
         }
         return obstacle;
