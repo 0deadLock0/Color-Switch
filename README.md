@@ -3,30 +3,39 @@ CSE231: Advanced Programming
 GROUP PROJECT - Color Switch
 
 Contributors:
+
 Abhimanyu Gupta (abhimanyu19226@iiitd.ac.in)
+
 Shubham Garg (shubham2019336@iiitd.ac.in)
 
 Classroom:
+
 https://classroom.google.com/u/1/c/MTI2NTMwMzgzMTgx
 
 Instructions:
+
 https://drive.google.com/file/d/1I3G6xzSPOAEdxKNT5Zmw-2wCCWRuIBu6/view
 
 GitHub Repository:
+
 https://github.com/0deadLock0/Color-Switch
 
-Current Deadline: https://classroom.google.com/u/1/c/MTI2NTMwMzgzMTgx/a/MjA0OTk2OTUzNDYy/details
+Current Deadline:
+
+https://classroom.google.com/u/1/c/MTI2NTMwMzgzMTgx/a/MjM1NjUzNDg2NTc2/details
+
+Current Position:
+
+-> Different entities inside game are properly interacting
 
 Milestone:
--> Minimum Static GUI
 
-Things to do:
--> Create all pages
--> Playable game with a single obstacle for the movement
+-> Set Up Pause Menu
 
-TODO(General):
--> Create a rough version of player movement and obstacles coming down 
--> Create an image of expected background layout
+-> Set Up Infinite Loop for Game
+
+-> Implement Serialization and Deserialization
+
 
 Design:
 
