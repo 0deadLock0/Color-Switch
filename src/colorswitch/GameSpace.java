@@ -312,43 +312,9 @@ public class GameSpace
     private void addBrokenBallsWithAnimation(double xPosition, double yPosition)
     {
         int count=Settings.BrokenBallsCount;
-        final Circle[] balls=new Circle[count];
+        double[] bounds={this.gameScene.getWidth(),this.gameScene.getHeight()};
         Random rd=new Random();
-        for(int i=0;i<count;++i)
-        {
-            balls[i]=new Circle(xPosition, yPosition,2+rd.nextInt(3));
-            balls[i].setFill(Settings.IntersectionColors[rd.nextInt(Settings.IntersectionColors.length)]);
-
-            double oldX=balls[i].getCenterX();
-            double oldY=balls[i].getCenterY();
-            double newX=rd.nextDouble()*this.gameScene.getWidth();
-            double newY=rd.nextDouble()*this.gameScene.getHeight();
-            double transX=newX-balls[i].getCenterX();
-            double transY=newY-balls[i].getCenterY();
-
-            double tangent=transY/transX;
-            double leftX=(newX<oldX)?newX:this.gameScene.getWidth()-newX;
-            double leftY=(newY<oldY)?newY:this.gameScene.getHeight()-newY;
-
-            if(leftX<leftY)
-            {
-                transX+=leftX*(transX<0?-1:1);
-                transY=transX*tangent;
-            }
-            else
-            {
-                transY+=leftY*(transY<0?-1:1);
-                transX=transY/tangent;
-            }
-
-            TranslateTransition translate=new TranslateTransition(Duration.millis(1000+rd.nextDouble()*3000),balls[i]);
-            translate.setToX(transX);
-            translate.setToY(transY);
-            translate.play();
-            final int finalI = i;
-            translate.setOnFinished(finishedEvent -> this.gamePane.getChildren().remove(balls[finalI]));
-
-            this.gamePane.getChildren().add(balls[i]);
-        }
+		for(int i=0;i<count;++i)
+			new RandomMotionBall(xPosition, yPosition,2+rd.nextInt(3),bounds,this.gamePane);
     }
 }
