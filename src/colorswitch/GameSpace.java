@@ -178,10 +178,10 @@ public class GameSpace
         if((obstacle instanceof ColorChangingObstacle) || (obstacle instanceof ColorSwappingObstacle))
         {
             if(this.ideallyObstacleTransformed % Settings.ObstacleTransformationSpeed == 0)
-                this.obstacle.transform();
+                obstacle.transform();
         }
         else
-            this.obstacle.transform();
+            obstacle.transform();
     }
 
     private void movePlayerUp()
