@@ -3,19 +3,17 @@ package colorswitch;
 
 import java.util.Random;
 
-import javafx.animation.TranslateTransition;
 import javafx.scene.Node;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.shape.Shape;
 import javafx.scene.layout.Pane;
-import javafx.scene.control.Label;
-import javafx.animation.AnimationTimer;
-
-import javafx.scene.paint.Color;
 import javafx.scene.layout.Background;
-import javafx.util.Duration;
+
+import javafx.scene.shape.Shape;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
+
+import javafx.animation.AnimationTimer;
 
 public class GameSpace
 {
