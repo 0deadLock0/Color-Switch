@@ -16,12 +16,13 @@ public class LineColorSwappingObstacle extends ColorSwappingObstacle
 	public LineColorSwappingObstacle(double xCenter,double yCenter)
 	{
 		super();
-		this.dimension=100;
+		this.dimension=150;
+		final double depth=50;
 
 		double[][] sideDimensions = new double[LineColorSwappingObstacle.SubParts][4];
-		sideDimensions[0] = new double[]{ xCenter-this.dimension/2 , yCenter+this.dimension/2 , xCenter-this.dimension/6 , yCenter+this.dimension/2 };
-		sideDimensions[1] = new double[]{ xCenter-this.dimension/6 , yCenter+this.dimension/2 , xCenter+this.dimension/6 , yCenter+this.dimension/2 };
-		sideDimensions[2] = new double[]{ xCenter+this.dimension/6 , yCenter+this.dimension/2 , xCenter+this.dimension/2 , yCenter+this.dimension/2 };
+		sideDimensions[0] = new double[]{ xCenter-this.dimension/2 , yCenter+depth , xCenter-this.dimension/6 , yCenter+depth };
+		sideDimensions[1] = new double[]{ xCenter-this.dimension/6 , yCenter+depth , xCenter+this.dimension/6 , yCenter+depth };
+		sideDimensions[2] = new double[]{ xCenter+this.dimension/6 , yCenter+depth , xCenter+this.dimension/2 , yCenter+depth };
 
 		Line[] sides = new Line[LineColorSwappingObstacle.SubParts];
 		for(int i = 0 ; i < LineColorSwappingObstacle.SubParts ; ++i)
