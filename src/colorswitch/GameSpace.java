@@ -2,6 +2,8 @@
 package colorswitch;
 
 import java.util.Random;
+import java.util.Queue;
+import java.util.LinkedList;
 
 import javafx.scene.Node;
 import javafx.stage.Stage;
@@ -25,9 +27,9 @@ public class GameSpace
     private Label scoreLabel;
 
     private Player player;
-    private Star star;
-    private Obstacle obstacle;
-    private ColorBall colorBall;
+    private final Queue<Star> stars;
+    private final Queue<Obstacle> obstacles;
+    private final Queue<ColorBall> colorBalls;
 
     private boolean gameActive;
     private boolean gameOver;
@@ -43,7 +45,13 @@ public class GameSpace
         this.gameOver=false;
         this.ideallyObstacleTransformed=0;
         this.lastTime=0;
+        this.obstacles=new LinkedList<>();
+        this.stars=new LinkedList<>();
+        this.colorBalls=new LinkedList<>();
         this.gameScene=this.createScene(desiredWidth,desiredHeight);
+        this.addObstacles();
+        this.addStars();
+        this.addColorBalls();
     }
 
     public int getScore()
@@ -117,23 +125,23 @@ public class GameSpace
     {
         if(gameOver || !gameActive)
             return;
-        if(GameSpace.isPlayerInteractingStar(this.player, this.star))
+        if(GameSpace.isPlayerInteractingStar(this.player, this.stars.peek()))
         {
-            this.player.collectStar(this.star);
-            this.gamePane.getChildren().remove(this.star);
-//            this.star=null;//Error coming :) Fix it
+            this.player.collectStar(this.stars.peek());
+            this.gamePane.getChildren().remove(this.stars.peek());
+            this.stars.remove();
         }
-        if(GameSpace.isPlayerInteractingColorBall(this.player, this.colorBall))
+        if(GameSpace.isPlayerInteractingColorBall(this.player, this.colorBalls.peek()))
         {
-            this.player.changeColor(this.colorBall);
-            this.gamePane.getChildren().remove(this.colorBall);
-//            this.colorBall=null;//Error coming :) Fix it
+            this.player.changeColor(this.colorBalls.peek());
+            this.gamePane.getChildren().remove(this.colorBalls.peek());
+            this.colorBalls.remove();
+            this.colorBalls.peek().setColor(this.player.getColor());
         }
-        if(GameSpace.isPlayerCollidingObstacle(this.player, this.obstacle))
+        if(this.isPlayerCollidingObstacles(this.player))
         {
             this.gameOver=true;
             this.gamePane.getChildren().remove(this.player);
-//            this.player=null;
             this.addBrokenBallsWithAnimation(this.player.getPosition()[0],this.player.getPosition()[1]);
             //Proceed to Exit Game
         }
@@ -141,10 +149,10 @@ public class GameSpace
         {
             this.gameOver=true;
             this.gamePane.getChildren().remove(this.player);
-//            this.player=null;
             this.addBrokenBallsWithAnimation(this.player.getPosition()[0],this.player.getPosition()[1]);
             //Proceed to Exit Game
         }
+
         this.updateGUI();
         if (lastTime==0L)
             lastTime=now;
@@ -154,8 +162,8 @@ public class GameSpace
             if(timePast>=Settings.TimeDelay)
             {
                 ++this.ideallyObstacleTransformed;
-                this.transformObstacles(this.obstacle);
-                this.colorBall.changeColors();
+                this.transformObstacles();
+                this.transformColorBalls();
                 this.player.moveDown();
                 lastTime=now;
             }
@@ -173,7 +181,12 @@ public class GameSpace
         this.scoreLabel.setTranslateY(10);
     }
 
-    private void transformObstacles(Obstacle obstacle)
+    private void transformObstacles()
+    {
+        for(Obstacle obstacle : this.obstacles)
+            this.transformObstacle(obstacle);
+    }
+    private void transformObstacle(Obstacle obstacle)
     {
         if((obstacle instanceof ColorChangingObstacle) || (obstacle instanceof ColorSwappingObstacle))
         {
@@ -184,6 +197,12 @@ public class GameSpace
             obstacle.transform();
     }
 
+    private void transformColorBalls()
+    {
+        for(ColorBall colorBall : this.colorBalls)
+            colorBall.changeColors();
+    }
+
     private void movePlayerUp()
     {
         double equilibriumY=3*this.gameScene.getHeight()/4;
@@ -191,16 +210,31 @@ public class GameSpace
 
         if(playerPosition[1]>equilibriumY)
             this.player.moveUp();
-        this.star.moveDown();
-        this.colorBall.moveDown();
-        this.obstacle.moveDown();
+        this.moveObstaclesDown();
+        this.moveStarsDown();
+        this.moveColorBallsDown();
+    }
+
+    private void moveObstaclesDown()
+    {
+        for(Obstacle obstacle : this.obstacles)
+            obstacle.moveDown();
+    }
+    private void moveStarsDown()
+    {
+        for(Star star : this.stars)
+            star.moveDown();
+    }
+    private void moveColorBallsDown()
+    {
+        for(ColorBall colorBall : this.colorBalls)
+            colorBall.moveDown();
     }
 
     private static boolean isPlayerInteractingStar(Player player, Star star)
     {
         return !Shape.intersect(player, star).getBoundsInLocal().isEmpty();
     }
-
     private static boolean isPlayerInteractingColorBall(Player player, ColorBall colorBall)
     {
         for (Node colorBallParts : colorBall.getChildren().toArray(new Node[0]))
@@ -212,17 +246,19 @@ public class GameSpace
         return false;
     }
 
-    private static boolean isPlayerCollidingObstacle(Player player, Obstacle obstacle)
+    private boolean isPlayerCollidingObstacles(Player player)
     {
-        for (Node obstacleParts : obstacle.getChildren().toArray(new Node[0]))
+        for(Obstacle obstacle : this.obstacles)
         {
-            if (!Shape.intersect(player, (Shape)obstacleParts).getBoundsInLocal().isEmpty())
+            for (Node obstacleParts : obstacle.getChildren().toArray(new Node[0]))
             {
-                Color obstacleColor=(Color)((Shape)obstacleParts).getStroke();
-                return !obstacleColor.equals(player.getColor());
+                if (!Shape.intersect(player, (Shape) obstacleParts).getBoundsInLocal().isEmpty())
+                {
+                    Color obstacleColor = (Color) ((Shape) obstacleParts).getStroke();
+                    return !obstacleColor.equals(player.getColor());
+                }
             }
         }
-
         return false;
     }
 
@@ -244,15 +280,6 @@ public class GameSpace
         this.player=this.createPlayer(scene.getWidth()/2, 4*scene.getHeight()/5);
         this.gamePane.getChildren().add(this.player);
 
-        this.star=this.createStar(scene.getWidth()/2,0);
-        this.gamePane.getChildren().add(this.star);
-
-        this.colorBall=this.createColorBall(scene.getWidth()/2,scene.getWidth()/2, this.player.getColor());
-        this.gamePane.getChildren().add(this.colorBall);
-
-        this.obstacle=this.createObstacle(scene.getWidth()/2,0);
-        this.gamePane.getChildren().add(this.obstacle);
-
         return scene;
     }
 
@@ -272,9 +299,9 @@ public class GameSpace
         return new Player(xPosition, yPosition);
     }
 
-    private ColorBall createColorBall(double xPosition, double yPosition, Color ignoredColor)
+    private ColorBall createColorBall(double xPosition, double yPosition)
     {
-        return new ColorBall(xPosition, yPosition, ignoredColor);
+        return new ColorBall(xPosition, yPosition);
     }
 
     private Star createStar(double xPosition, double yPosition)
@@ -305,6 +332,44 @@ public class GameSpace
             default : obstacle = null;
         }
         return obstacle;
+    }
+
+    private void addObstacles()
+    {
+        double xPosition=this.gameScene.getWidth()/2;
+        double yPosition=this.gameScene.getHeight()/2;
+        for(int i=0;i<Settings.MinimumEntitiesCount;++i)
+        {
+            Obstacle obstacle=this.createObstacle(xPosition,yPosition);
+            this.obstacles.add(obstacle);
+            this.gamePane.getChildren().add(obstacle);
+            yPosition-=Settings.EntitiesGap;
+        }
+    }
+    private void addStars()
+    {
+        double xPosition=this.gameScene.getWidth()/2;
+        double yPosition=this.gameScene.getHeight()/2;
+        for(int i=0;i<Settings.MinimumEntitiesCount;++i)
+        {
+            Star star=this.createStar(xPosition,yPosition);
+            this.stars.add(star);
+            this.gamePane.getChildren().add(star);
+            yPosition-=Settings.EntitiesGap;
+        }
+    }
+    private void addColorBalls()
+    {
+        double xPosition=this.gameScene.getWidth()/2;
+        double yPosition=this.gameScene.getHeight()/2-Settings.EntitiesGap/2;
+        for(int i=0;i<Settings.MinimumEntitiesCount;++i)
+        {
+            ColorBall colorBall=this.createColorBall(xPosition,yPosition);
+            this.colorBalls.add(colorBall);
+            this.gamePane.getChildren().add(colorBall);
+            yPosition-=Settings.EntitiesGap;
+        }
+        this.colorBalls.peek().setColor(this.player.getColor()); //Not really worth to set other color balls color
     }
 
     private void addBrokenBallsWithAnimation(double xPosition, double yPosition)

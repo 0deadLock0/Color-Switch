@@ -19,6 +19,9 @@ class Settings
     public static final int ObstaclesCount;
     public static final int BrokenBallsCount;
 
+    public static final int MinimumEntitiesCount;
+    public static final double EntitiesGap;
+
     static
     {
         DesiredSceneWidth = 500;
@@ -36,5 +39,8 @@ class Settings
         ObstaclesCount = 5; //update according to number of obstacles available //check children of Obstacle class
 
         BrokenBallsCount = 100;
+
+        MinimumEntitiesCount = 5;
+        EntitiesGap = 300;
     }
 }
