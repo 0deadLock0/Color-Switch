@@ -50,12 +50,7 @@ public class ColorBall extends Group
     public ColorBall(double xCenter, double yCenter, Color ignoredColor)
     {
         this(xCenter,yCenter);
-
-        Color chosenColor=ignoredColor;
-        Random rd=new Random();
-        while(chosenColor.equals(ignoredColor))
-            chosenColor = Settings.IntersectionColors[rd.nextInt(Settings.IntersectionColors.length)];
-        this.switchColor = chosenColor;
+        this.setColor(ignoredColor);
     }
 
     public void moveDown()
@@ -80,6 +75,14 @@ public class ColorBall extends Group
         }
     }
 
+    public void setColor(Color ignoredColor)
+    {
+        Color chosenColor=ignoredColor;
+        Random rd=new Random();
+        while(chosenColor.equals(ignoredColor))
+            chosenColor = Settings.IntersectionColors[rd.nextInt(Settings.IntersectionColors.length)];
+        this.switchColor = chosenColor;
+    }
     public Color getColor()
     {
         return this.switchColor;
