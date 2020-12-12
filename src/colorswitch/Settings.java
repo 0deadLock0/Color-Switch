@@ -35,7 +35,7 @@ class Settings
         MotionSpeed = 5;
         Gravity = MotionSpeed * 0.15;
 
-        IntersectionColors = new Color[]{Color.BLUE,Color.YELLOW,Color.RED,Color.GREEN};
+        IntersectionColors = new Color[]{Color.RED,Color.YELLOW,Color.MAGENTA,Color.AQUAMARINE};
 
         ObstacleTransformationSpeed = 3 * (long)(TimeDelay*TransformationSpeed)/(long)1e5;
         ObstaclesCount = 5; //update according to number of obstacles available //check children of Obstacle class
