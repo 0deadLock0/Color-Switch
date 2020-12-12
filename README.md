@@ -26,13 +26,11 @@ https://classroom.google.com/u/1/c/MTI2NTMwMzgzMTgx/a/MjM1NjUzNDg2NTc2/details
 
 Current Position:
 
--> Different entities inside game are properly interacting
+-> Infinite Loop for Game working
 
 Milestone:
 
 -> Set Up Pause Menu
-
--> Set Up Infinite Loop for Game
 
 -> Implement Serialization and Deserialization
 
