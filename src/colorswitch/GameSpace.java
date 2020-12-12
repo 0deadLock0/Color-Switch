@@ -1,6 +1,7 @@
 
 package colorswitch;
 
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Queue;
 import java.util.LinkedList;
@@ -130,12 +131,14 @@ public class GameSpace
             this.player.collectStar(this.stars.peek());
             this.gamePane.getChildren().remove(this.stars.peek());
             this.stars.remove();
+            this.addStar();
         }
         if(GameSpace.isPlayerInteractingColorBall(this.player, this.colorBalls.peek()))
         {
             this.player.changeColor(this.colorBalls.peek());
             this.gamePane.getChildren().remove(this.colorBalls.peek());
             this.colorBalls.remove();
+            this.addColorBall();
             this.colorBalls.peek().setColor(this.player.getColor());
         }
         if(this.isPlayerCollidingObstacles(this.player))
@@ -152,7 +155,8 @@ public class GameSpace
             this.addBrokenBallsWithAnimation(this.player.getPosition()[0],this.player.getPosition()[1]);
             //Proceed to Exit Game
         }
-
+        
+        this.updateObstacles();
         this.updateGUI();
         if (lastTime==0L)
             lastTime=now;
@@ -179,6 +183,26 @@ public class GameSpace
         this.scoreLabel.setText("Score: "+this.getScore());
         this.scoreLabel.setTranslateX(this.gameScene.getWidth()-this.scoreLabel.getWidth()-10);
         this.scoreLabel.setTranslateY(10);
+    }
+    
+    private void updateObstacles()
+    {
+        int count=0;
+        for(Iterator<Obstacle> itr=this.obstacles.iterator();itr.hasNext();)
+        {
+            Obstacle obstacle=itr.next();
+            if(this.isObstacleOutOfScope(obstacle))
+            {
+                this.gamePane.getChildren().remove(obstacle);
+                itr.remove();
+                ++count;
+            }
+            else
+                break;
+        }
+
+        while(--count>=0)
+            this.addObstacle();
     }
 
     private void transformObstacles()
@@ -262,6 +286,11 @@ public class GameSpace
         return false;
     }
 
+    private boolean isObstacleOutOfScope(Obstacle obstacle)
+    {
+        return obstacle.getPosition()[1]>this.gameScene.getHeight()+20; //20-buffer
+    }
+
     private boolean isPlayerFallenDown(Player player)
     {
         return player.getPosition()[1]>this.gameScene.getHeight();
@@ -334,42 +363,66 @@ public class GameSpace
         return obstacle;
     }
 
+    private void addObstacle()
+    {
+        int count=0;
+        int size=this.obstacles.size();
+        double[] position={this.gameScene.getWidth()/2,this.gameScene.getHeight()/2};
+        for(Obstacle obstacle : this.obstacles)
+        {
+            ++count;
+            if(count==size)
+                position[1]=obstacle.getPosition()[1]-Settings.EntitiesGap;
+        }
+        Obstacle obstacle=this.createObstacle(position[0],position[1]);
+        this.obstacles.add(obstacle);
+        this.gamePane.getChildren().add(obstacle);
+    }
     private void addObstacles()
     {
-        double xPosition=this.gameScene.getWidth()/2;
-        double yPosition=this.gameScene.getHeight()/2;
         for(int i=0;i<Settings.MinimumEntitiesCount;++i)
+            this.addObstacle();
+    }
+    private void addStar()
+    {
+        int count=0;
+        int size=this.stars.size();
+        double[] position={this.gameScene.getWidth()/2,this.gameScene.getHeight()/2};
+        for(Star star : this.stars)
         {
-            Obstacle obstacle=this.createObstacle(xPosition,yPosition);
-            this.obstacles.add(obstacle);
-            this.gamePane.getChildren().add(obstacle);
-            yPosition-=Settings.EntitiesGap;
+            ++count;
+            if(count==size)
+                position[1]=star.getPosition()[1]-Settings.EntitiesGap;
         }
+        Star star=this.createStar(position[0],position[1]);
+        this.stars.add(star);
+        this.gamePane.getChildren().add(star);
     }
     private void addStars()
     {
-        double xPosition=this.gameScene.getWidth()/2;
-        double yPosition=this.gameScene.getHeight()/2;
         for(int i=0;i<Settings.MinimumEntitiesCount;++i)
+            this.addStar();
+    }
+    private void addColorBall()
+    {
+        int count=0;
+        int size=this.colorBalls.size();
+        double[] position={this.gameScene.getWidth()/2,this.gameScene.getHeight()/2-Settings.EntitiesGap/2};
+        for(ColorBall colorBall : this.colorBalls)
         {
-            Star star=this.createStar(xPosition,yPosition);
-            this.stars.add(star);
-            this.gamePane.getChildren().add(star);
-            yPosition-=Settings.EntitiesGap;
+            ++count;
+            if(count==size)
+                position[1]=colorBall.getPosition()[1]-Settings.EntitiesGap;
         }
+        ColorBall colorBall=this.createColorBall(position[0],position[1]);
+        this.colorBalls.add(colorBall);
+        this.gamePane.getChildren().add(colorBall);
     }
     private void addColorBalls()
     {
-        double xPosition=this.gameScene.getWidth()/2;
-        double yPosition=this.gameScene.getHeight()/2-Settings.EntitiesGap/2;
         for(int i=0;i<Settings.MinimumEntitiesCount;++i)
-        {
-            ColorBall colorBall=this.createColorBall(xPosition,yPosition);
-            this.colorBalls.add(colorBall);
-            this.gamePane.getChildren().add(colorBall);
-            yPosition-=Settings.EntitiesGap;
-        }
-        this.colorBalls.peek().setColor(this.player.getColor()); //Not really worth to set other color balls color
+            this.addColorBall();
+        this.colorBalls.peek().setColor(this.player.getColor()); //Not really worth to set other color-balls color
     }
 
     private void addBrokenBallsWithAnimation(double xPosition, double yPosition)
