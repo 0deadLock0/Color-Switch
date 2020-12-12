@@ -1,6 +1,7 @@
 
 package colorswitch;
 
+import javafx.geometry.Bounds;
 import javafx.scene.shape.Polygon;
 import javafx.scene.effect.Glow;
 import javafx.scene.paint.Color;
@@ -44,14 +45,21 @@ class Star extends Polygon
         this.translatePosition(xPosition,yPosition);
     }
 
-    public int getScore()
-    {
-        return this.score;
-    }
     public void setScore(int s)
     {
         this.score=s;
     }
+    public int getScore()
+    {
+        return this.score;
+    }
+
+    public double[] getPosition()
+    {
+        Bounds boundsInScene=this.localToScene(this.getBoundsInLocal());
+        return new double[]{boundsInScene.getCenterX(),boundsInScene.getCenterY()};
+    }
+
     public void translatePosition(double x,double y)
     {
         Double[] pointsXY=new Double[2*Star.points];

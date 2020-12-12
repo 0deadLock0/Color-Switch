@@ -2,6 +2,7 @@ package colorswitch;
 
 import java.util.Random;
 
+import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -86,5 +87,11 @@ public class ColorBall extends Group
     public Color getColor()
     {
         return this.switchColor;
+    }
+
+    public double[] getPosition()
+    {
+        Bounds boundsInScene=this.localToScene(this.getBoundsInLocal());
+        return new double[]{boundsInScene.getCenterX(),boundsInScene.getCenterY()};
     }
 }
