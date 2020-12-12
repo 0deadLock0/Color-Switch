@@ -44,6 +44,6 @@ class Settings
         BrokenBallsCount = 100;
 
         MinimumEntitiesCount = 5;
-        EntitiesGap = 300;
+        EntitiesGap = 400;
     }
 }
