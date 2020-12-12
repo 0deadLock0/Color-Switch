@@ -17,7 +17,7 @@ class SquareRotatingObstacle extends RotatingObstacle
     {
         super();
 
-        this.dimension = 100;
+        this.dimension=Settings.ObstacleSize;
 
         double[][] sideDimensions = new double[SquareRotatingObstacle.SubParts][4];
         sideDimensions[0] = new double[]{ xCenter-this.dimension/2 , yCenter-this.dimension/2 , xCenter+this.dimension/2 , yCenter-this.dimension/2 };

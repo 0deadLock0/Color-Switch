@@ -17,6 +17,8 @@ class Settings
     public static final Color[] IntersectionColors;
 
     public static final int ObstaclesCount;
+    public static final double ObstacleSize;
+
     public static final int BrokenBallsCount;
 
     public static final int MinimumEntitiesCount;
@@ -37,6 +39,7 @@ class Settings
 
         ObstacleTransformationSpeed = 3 * (long)(TimeDelay*TransformationSpeed)/(long)1e5;
         ObstaclesCount = 5; //update according to number of obstacles available //check children of Obstacle class
+        ObstacleSize = 150;
 
         BrokenBallsCount = 100;
 

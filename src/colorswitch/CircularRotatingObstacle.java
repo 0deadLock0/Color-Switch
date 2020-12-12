@@ -20,7 +20,7 @@ public class CircularRotatingObstacle extends RotatingObstacle
     {
         super();
 
-        this.radius=50;
+        this.radius=Settings.ObstacleSize/2;
 
         double[] startAngles={0.0,90.0,180.0,270.0};
         Arc[] arcs=new Arc[CircularRotatingObstacle.SubParts];
