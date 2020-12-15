@@ -288,7 +288,7 @@ public class GameSpace
 
     private boolean isObstacleOutOfScope(Obstacle obstacle)
     {
-        return obstacle.getPosition()[1]>this.gameScene.getHeight()+20; //20-buffer
+        return obstacle.getTopPoint()>this.gameScene.getHeight();
     }
 
     private boolean isPlayerFallenDown(Player player)

@@ -22,4 +22,9 @@ abstract class Obstacle extends Group
         Bounds boundsInScene=this.localToScene(this.getBoundsInLocal());
         return new double[]{boundsInScene.getCenterX(),boundsInScene.getCenterY()};
     }
+    public double getTopPoint()
+    {
+        Bounds boundsInScene=this.localToScene(this.getBoundsInLocal());
+        return boundsInScene.getMinY();
+    }
 }
