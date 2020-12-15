@@ -10,7 +10,7 @@ class CircularColorChangingObstacle extends ColorChangingObstacle
     public CircularColorChangingObstacle(double xCenter,double yCenter)
     {
         super();
-        double radius=Settings.ObstacleSize/2;
+        double radius=this.obstacleSize/2;
         double[] angles={0,90,180,270};
         for(int i=0;i<4;++i) //4 parts are needed to support existing obstacle collision algorithm
         {

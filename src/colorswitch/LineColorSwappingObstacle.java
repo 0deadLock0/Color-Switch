@@ -6,7 +6,6 @@ import javafx.scene.shape.Line;
 
 public class LineColorSwappingObstacle extends ColorSwappingObstacle
 {
-	private final double dimension;
 	private final double depth;
 	private static final int SubParts;
 
@@ -18,13 +17,13 @@ public class LineColorSwappingObstacle extends ColorSwappingObstacle
 	public LineColorSwappingObstacle(double xCenter,double yCenter)
 	{
 		super();
-		this.dimension=1.5*Settings.ObstacleSize;
+		double dimension = 1.5 * this.obstacleSize;
 		this.depth=50;
 
 		double[][] sideDimensions = new double[LineColorSwappingObstacle.SubParts][4];
-		sideDimensions[0] = new double[]{ xCenter-this.dimension/2 , yCenter+this.depth , xCenter-this.dimension/6 , yCenter+this.depth };
-		sideDimensions[1] = new double[]{ xCenter-this.dimension/6 , yCenter+this.depth , xCenter+this.dimension/6 , yCenter+this.depth };
-		sideDimensions[2] = new double[]{ xCenter+this.dimension/6 , yCenter+this.depth , xCenter+this.dimension/2 , yCenter+this.depth };
+		sideDimensions[0] = new double[]{ xCenter- dimension /2 , yCenter+this.depth , xCenter- dimension /6 , yCenter+this.depth };
+		sideDimensions[1] = new double[]{ xCenter- dimension /6 , yCenter+this.depth , xCenter+ dimension /6 , yCenter+this.depth };
+		sideDimensions[2] = new double[]{ xCenter+ dimension /6 , yCenter+this.depth , xCenter+ dimension /2 , yCenter+this.depth };
 
 		Line[] sides = new Line[LineColorSwappingObstacle.SubParts];
 		for(int i = 0 ; i < LineColorSwappingObstacle.SubParts ; ++i)

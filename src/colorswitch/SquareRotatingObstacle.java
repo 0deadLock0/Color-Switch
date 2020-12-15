@@ -3,9 +3,10 @@ package colorswitch;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
+import java.util.Random;
+
 class SquareRotatingObstacle extends RotatingObstacle
 {
-    private final double dimension;
     private static final int SubParts;
 
     static
@@ -17,13 +18,13 @@ class SquareRotatingObstacle extends RotatingObstacle
     {
         super();
 
-        this.dimension=Settings.ObstacleSize;
+        double dimension = this.obstacleSize;
 
         double[][] sideDimensions = new double[SquareRotatingObstacle.SubParts][4];
-        sideDimensions[0] = new double[]{ xCenter-this.dimension/2 , yCenter-this.dimension/2 , xCenter+this.dimension/2 , yCenter-this.dimension/2 };
-        sideDimensions[1] = new double[]{ xCenter+this.dimension/2 , yCenter-this.dimension/2 , xCenter+this.dimension/2 , yCenter+this.dimension/2 };
-        sideDimensions[2] = new double[]{ xCenter+this.dimension/2 , yCenter+this.dimension/2 , xCenter-this.dimension/2 , yCenter+this.dimension/2 };
-        sideDimensions[3] = new double[]{ xCenter-this.dimension/2 , yCenter+this.dimension/2 , xCenter-this.dimension/2 , yCenter-this.dimension/2 };
+        sideDimensions[0] = new double[]{ xCenter- dimension /2 , yCenter- dimension /2 , xCenter+ dimension /2 , yCenter- dimension /2 };
+        sideDimensions[1] = new double[]{ xCenter+ dimension /2 , yCenter- dimension /2 , xCenter+ dimension /2 , yCenter+ dimension /2 };
+        sideDimensions[2] = new double[]{ xCenter+ dimension /2 , yCenter+ dimension /2 , xCenter- dimension /2 , yCenter+ dimension /2 };
+        sideDimensions[3] = new double[]{ xCenter- dimension /2 , yCenter+ dimension /2 , xCenter- dimension /2 , yCenter- dimension /2 };
 
         Line[] sides = new Line[SquareRotatingObstacle.SubParts];
         for(int i = 0 ; i < SquareRotatingObstacle.SubParts ; ++i)
@@ -39,6 +40,6 @@ class SquareRotatingObstacle extends RotatingObstacle
         for(int i = 0 ; i < SquareRotatingObstacle.SubParts ; ++i)
             this.getChildren().add(sides[i]);
 
-        this.setRotate(0.0);
+        this.setRotate((new Random()).nextDouble()*360);
     }
 }

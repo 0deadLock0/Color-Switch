@@ -5,7 +5,6 @@ import javafx.scene.shape.Line;
 
 class SquareColorSwappingObstacle extends ColorSwappingObstacle
 {
-	private final double dimension;
 	private static final int SubParts;
 
 	static
@@ -17,13 +16,13 @@ class SquareColorSwappingObstacle extends ColorSwappingObstacle
 	{
 		super();
 
-		this.dimension=Settings.ObstacleSize;
+		double dimension = this.obstacleSize;
 
 		double[][] sideDimensions = new double[SquareColorSwappingObstacle.SubParts][4];
-		sideDimensions[0] = new double[]{ xCenter-this.dimension/2 , yCenter-this.dimension/2 , xCenter+this.dimension/2 , yCenter-this.dimension/2 };
-		sideDimensions[1] = new double[]{ xCenter+this.dimension/2 , yCenter-this.dimension/2 , xCenter+this.dimension/2 , yCenter+this.dimension/2 };
-		sideDimensions[2] = new double[]{ xCenter+this.dimension/2 , yCenter+this.dimension/2 , xCenter-this.dimension/2 , yCenter+this.dimension/2 };
-		sideDimensions[3] = new double[]{ xCenter-this.dimension/2 , yCenter+this.dimension/2 , xCenter-this.dimension/2 , yCenter-this.dimension/2 };
+		sideDimensions[0] = new double[]{ xCenter- dimension /2 , yCenter- dimension /2 , xCenter+ dimension /2 , yCenter- dimension /2 };
+		sideDimensions[1] = new double[]{ xCenter+ dimension /2 , yCenter- dimension /2 , xCenter+ dimension /2 , yCenter+ dimension /2 };
+		sideDimensions[2] = new double[]{ xCenter+ dimension /2 , yCenter+ dimension /2 , xCenter- dimension /2 , yCenter+ dimension /2 };
+		sideDimensions[3] = new double[]{ xCenter- dimension /2 , yCenter+ dimension /2 , xCenter- dimension /2 , yCenter- dimension /2 };
 
 		Line[] sides = new Line[SquareColorSwappingObstacle.SubParts];
 		for(int i = 0 ; i < SquareColorSwappingObstacle.SubParts ; ++i)

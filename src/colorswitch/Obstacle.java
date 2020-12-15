@@ -9,7 +9,7 @@ abstract class Obstacle extends Group
     protected double obstacleSize;
     protected boolean advanced;
 
-    public Obstacle()
+    protected Obstacle()
     {
         this.getChildren().clear();
         this.obstacleSize=Settings.ObstacleSize;

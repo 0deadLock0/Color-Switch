@@ -5,10 +5,11 @@ import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.paint.Color;
 
+import java.util.Random;
+
 public class CircularRotatingObstacle extends RotatingObstacle
 {
 
-    private final double radius;
     private static final int SubParts;
 
     static
@@ -20,7 +21,7 @@ public class CircularRotatingObstacle extends RotatingObstacle
     {
         super();
 
-        this.radius=Settings.ObstacleSize/2;
+        double radius = this.obstacleSize / 2;
 
         double[] startAngles={0.0,90.0,180.0,270.0};
         Arc[] arcs=new Arc[CircularRotatingObstacle.SubParts];
@@ -31,8 +32,8 @@ public class CircularRotatingObstacle extends RotatingObstacle
         {
             arcs[i].setCenterX(xCenter);
             arcs[i].setCenterY(yCenter);
-            arcs[i].setRadiusX(this.radius);
-            arcs[i].setRadiusY(this.radius);
+            arcs[i].setRadiusX(radius);
+            arcs[i].setRadiusY(radius);
             arcs[i].setStartAngle(startAngles[i]);
             arcs[i].setLength(90.37167f);
             arcs[i].setType(ArcType.OPEN);
@@ -44,6 +45,6 @@ public class CircularRotatingObstacle extends RotatingObstacle
         for(int i = 0; i<CircularRotatingObstacle.SubParts; ++i)
             this.getChildren().add(arcs[i]);
 
-        this.setRotate(0.0);
+        this.setRotate((new Random()).nextDouble()*360);
     }
 }
