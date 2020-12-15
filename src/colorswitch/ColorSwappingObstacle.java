@@ -43,7 +43,6 @@ abstract class ColorSwappingObstacle extends Obstacle
 			++count;
 		}
 	}
-
 	private void swapColorsRandomly()
 	{
 		ArrayList<Color> colors=new ArrayList<>(Settings.IntersectionColors.length);
@@ -56,5 +55,11 @@ abstract class ColorSwappingObstacle extends Obstacle
 			colors.remove(colorIndex);
 			((Shape) part).setStroke(newColor);
 		}
+	}
+
+	public void updateProperties()
+	{
+		super.updateProperties();
+		this.colorIndex=(Settings.IntersectionColors.length+this.colorIndex-1)%Settings.IntersectionColors.length;
 	}
 }

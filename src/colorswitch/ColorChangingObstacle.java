@@ -28,6 +28,7 @@ abstract class ColorChangingObstacle extends Obstacle
         else
             this.swapColorRandomly();
     }
+
     private void swapColorOrderly()
     {
         ++this.colorIndex;
@@ -45,5 +46,11 @@ abstract class ColorChangingObstacle extends Obstacle
             newColor=Settings.IntersectionColors[rd.nextInt(Settings.IntersectionColors.length)];
         for (Node part : this.getChildren().toArray(new Node[0]))
             ((Shape)part).setStroke(newColor);
+    }
+
+    public void updateProperties()
+    {
+        super.updateProperties();
+        this.colorIndex=(Settings.IntersectionColors.length+this.colorIndex-1)%Settings.IntersectionColors.length;
     }
 }

@@ -29,6 +29,12 @@ abstract class Obstacle extends Group
     }
     public abstract void construct();
 
+    public void updateProperties()
+    {
+        double[] position=this.getCentrePosition();
+        this.xCenter=position[0];
+        this.yCenter=position[1];
+    }
 
     public void enableAdvanceMode()
     {
