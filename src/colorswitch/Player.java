@@ -11,17 +11,29 @@ class Player extends Circle
     private int score;
     private int starsCollected;
 
-    private Player()
+    private double xCenter;
+    private double yCenter;
+
+    private Color color;
+
+    public Player(double xCenter, double yCenter)
     {
-        super(5,Settings.IntersectionColors[(new Random()).nextInt(Settings.IntersectionColors.length)]);
+        super();
+
         this.score=0;
         this.starsCollected=0;
+        this.xCenter=xCenter;
+        this.yCenter=yCenter;
+        this.color=Settings.IntersectionColors[(new Random()).nextInt(Settings.IntersectionColors.length)];
+
+        this.construct();
     }
 
-    public Player(double x, double y)
+    public void construct()
     {
-        this();
-        this.setPosition(x,y);
+        this.setRadius(5);
+        this.setFill(this.color);
+        this.setPosition(this.xCenter,this.yCenter);
     }
 
     public void setPosition(double x, double y)
@@ -32,6 +44,7 @@ class Player extends Circle
 
     public void collectStar(Star star)
     {
+        ++this.starsCollected;
         this.increaseScore(star.getScore());
     }
     public void changeColor(ColorBall colorBall)
@@ -53,20 +66,28 @@ class Player extends Circle
         this.setCenterY(this.getCenterY()+Settings.Gravity);
     }
 
-    public double getSize()
-    {
-        return 2*this.getRadius();
-    }
     public double[] getPosition()
     {
         return new double[]{this.getCenterX(),this.getCenterY()};
+    }
+    public Color getColor()
+    {
+        return (Color)this.getFill();
     }
     public int getScore()
     {
         return this.score;
     }
-    public Color getColor()
+    public int getStarsCollected()
     {
-        return (Color)this.getFill();
+        return this.starsCollected;
+    }
+
+    public void updateProperties()
+    {
+        double[] position=this.getPosition();
+        this.xCenter=position[0];
+        this.yCenter=position[1];
+        this.color=this.getColor();
     }
 }
