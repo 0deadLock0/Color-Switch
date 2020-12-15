@@ -3,8 +3,6 @@ package colorswitch;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
-import java.util.Random;
-
 class SquareRotatingObstacle extends RotatingObstacle
 {
     private static final int SubParts;
@@ -17,14 +15,20 @@ class SquareRotatingObstacle extends RotatingObstacle
     public SquareRotatingObstacle(double xCenter,double yCenter)
     {
         super();
+        this.xCenter=xCenter;
+        this.yCenter=yCenter;
 
+        this.construct();
+    }
+
+    public void construct()
+    {
         double dimension = this.obstacleSize;
-
         double[][] sideDimensions = new double[SquareRotatingObstacle.SubParts][4];
-        sideDimensions[0] = new double[]{ xCenter- dimension /2 , yCenter- dimension /2 , xCenter+ dimension /2 , yCenter- dimension /2 };
-        sideDimensions[1] = new double[]{ xCenter+ dimension /2 , yCenter- dimension /2 , xCenter+ dimension /2 , yCenter+ dimension /2 };
-        sideDimensions[2] = new double[]{ xCenter+ dimension /2 , yCenter+ dimension /2 , xCenter- dimension /2 , yCenter+ dimension /2 };
-        sideDimensions[3] = new double[]{ xCenter- dimension /2 , yCenter+ dimension /2 , xCenter- dimension /2 , yCenter- dimension /2 };
+        sideDimensions[0] = new double[]{ this.xCenter-dimension/2 , this.yCenter-dimension/2 , this.xCenter+dimension/2 , this.yCenter-dimension/2 };
+        sideDimensions[1] = new double[]{ this.xCenter+dimension/2 , this.yCenter-dimension/2 , this.xCenter+dimension/2 , this.yCenter+dimension/2 };
+        sideDimensions[2] = new double[]{ this.xCenter+dimension/2 , this.yCenter+dimension/2 , this.xCenter-dimension/2 , this.yCenter+dimension/2 };
+        sideDimensions[3] = new double[]{ this.xCenter-dimension/2 , this.yCenter+dimension/2 , this.xCenter-dimension/2 , this.yCenter-dimension/2 };
 
         Line[] sides = new Line[SquareRotatingObstacle.SubParts];
         for(int i = 0 ; i < SquareRotatingObstacle.SubParts ; ++i)

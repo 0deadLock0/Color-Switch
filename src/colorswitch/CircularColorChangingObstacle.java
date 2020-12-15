@@ -7,26 +7,47 @@ import javafx.scene.shape.ArcType;
 
 class CircularColorChangingObstacle extends ColorChangingObstacle
 {
+    private static final int SubParts;
+
+    static
+    {
+        SubParts=4;
+    }
+
     public CircularColorChangingObstacle(double xCenter,double yCenter)
     {
         super();
-        double radius=this.obstacleSize/2;
-        double[] angles={0,90,180,270};
-        for(int i=0;i<4;++i) //4 parts are needed to support existing obstacle collision algorithm
-        {
-            Arc arc = new Arc();
-            arc.setCenterX(xCenter);
-            arc.setCenterY(yCenter);
-            arc.setRadiusX(radius);
-            arc.setRadiusY(radius);
-            arc.setStartAngle(angles[i]);
-            arc.setLength(90);
-            arc.setType(ArcType.OPEN);
-            arc.setFill(Color.TRANSPARENT);
-            arc.setStrokeWidth(10);
+        this.xCenter=xCenter;
+        this.yCenter=yCenter;
 
-            this.getChildren().add(arc);
+        this.construct();
+    }
+
+    public void construct()
+    {
+        double radius = this.obstacleSize/2;
+        double[] startAngles = {0,90,180,270};
+
+        Arc[] arcs=new Arc[CircularColorChangingObstacle.SubParts];
+        for(int i=0;i<CircularColorChangingObstacle.SubParts;++i) //4 parts are needed because arcs have some bulge in there shape which minimizes with decrease in length
+            arcs[i] = new Arc();
+
+        for(int i=0;i<CircularColorChangingObstacle.SubParts;++i)
+        {
+            arcs[i].setCenterX(this.xCenter);
+            arcs[i].setCenterY(this.yCenter);
+            arcs[i].setRadiusX(radius);
+            arcs[i].setRadiusY(radius);
+            arcs[i].setStartAngle(startAngles[i]);
+            arcs[i].setLength(90);
+            arcs[i].setType(ArcType.OPEN);
+            arcs[i].setFill(Color.TRANSPARENT);
+            arcs[i].setStrokeWidth(10);
         }
+
+        for(int i=0;i<CircularColorChangingObstacle.SubParts;++i)
+            this.getChildren().add(arcs[i]);
+
         this.transform();
     }
 }

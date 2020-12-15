@@ -9,11 +9,17 @@ abstract class Obstacle extends Group
     protected double obstacleSize;
     protected boolean advanced;
 
+    protected double xCenter;
+    protected double yCenter;
+
     protected Obstacle()
     {
+        super();
         this.getChildren().clear();
         this.obstacleSize=Settings.ObstacleSize;
-        this.advanced =false;
+        this.advanced=false;
+        this.xCenter=0;
+        this.yCenter=0;
     }
 
     public abstract void transform();
@@ -21,6 +27,8 @@ abstract class Obstacle extends Group
     {
         this.setTranslateY(this.getTranslateY()+Settings.MotionSpeed);
     }
+    public abstract void construct();
+
 
     public void enableAdvanceMode()
     {

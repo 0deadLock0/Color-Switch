@@ -18,22 +18,29 @@ public class CircularRotatingObstacle extends RotatingObstacle
     public CircularRotatingObstacle(double xCenter,double yCenter)
     {
         super();
+        this.xCenter=xCenter;
+        this.yCenter=yCenter;
 
-        double radius = this.obstacleSize / 2;
+        this.construct();
+    }
 
-        double[] startAngles={0.0,90.0,180.0,270.0};
+    public void construct()
+    {
+        double radius = this.obstacleSize/2;
+        double[] startAngles = {0,90,180,270};
+
         Arc[] arcs=new Arc[CircularRotatingObstacle.SubParts];
         for(int i = 0; i<CircularRotatingObstacle.SubParts; ++i)
             arcs[i]=new Arc();
 
         for(int i = 0; i<CircularRotatingObstacle.SubParts; ++i)
         {
-            arcs[i].setCenterX(xCenter);
-            arcs[i].setCenterY(yCenter);
+            arcs[i].setCenterX(this.xCenter);
+            arcs[i].setCenterY(this.yCenter);
             arcs[i].setRadiusX(radius);
             arcs[i].setRadiusY(radius);
             arcs[i].setStartAngle(startAngles[i]);
-            arcs[i].setLength(90.37167f);
+            arcs[i].setLength(90);
             arcs[i].setType(ArcType.OPEN);
             arcs[i].setStroke(Settings.IntersectionColors[i]);
             arcs[i].setFill(Color.TRANSPARENT);
