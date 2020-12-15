@@ -337,7 +337,7 @@ public class GameSpace
     {
         Random rd=new Random();
         Star star;
-        if(rd.nextDouble()<0.85)
+        if(rd.nextDouble()<0.9)
             star=new Star(xPosition,yPosition);
         else
             star=new SpecialStar(xPosition, yPosition);
