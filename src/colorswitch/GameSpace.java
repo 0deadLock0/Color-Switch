@@ -372,7 +372,7 @@ public class GameSpace
         {
             ++count;
             if(count==size)
-                position[1]=obstacle.getPosition()[1]-Settings.EntitiesGap;
+                position[1]=obstacle.getCentrePosition()[1]-Settings.EntitiesGap;
         }
         Obstacle obstacle=this.createObstacle(position[0],position[1]);
         this.obstacles.add(obstacle);

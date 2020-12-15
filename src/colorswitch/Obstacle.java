@@ -17,7 +17,7 @@ abstract class Obstacle extends Group
         this.setTranslateY(this.getTranslateY()+Settings.MotionSpeed);
     }
 
-    public double[] getPosition()
+    public double[] getCentrePosition()
     {
         Bounds boundsInScene=this.localToScene(this.getBoundsInLocal());
         return new double[]{boundsInScene.getCenterX(),boundsInScene.getCenterY()};

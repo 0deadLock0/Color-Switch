@@ -42,7 +42,7 @@ public class LineColorSwappingObstacle extends ColorSwappingObstacle
 		this.transform();
 	}
 
-	public double[] getPosition()
+	public double[] getCentrePosition()
 	{
 		Bounds boundsInScene=this.localToScene(this.getBoundsInLocal());
 		return new double[]{boundsInScene.getCenterX(),boundsInScene.getCenterY()-this.depth};
