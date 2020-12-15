@@ -40,6 +40,6 @@ class SquareRotatingObstacle extends RotatingObstacle
         for(int i = 0 ; i < SquareRotatingObstacle.SubParts ; ++i)
             this.getChildren().add(sides[i]);
 
-        this.setRotate((new Random()).nextDouble()*360);
+        this.setRotate(this.rotateAngle);
     }
 }

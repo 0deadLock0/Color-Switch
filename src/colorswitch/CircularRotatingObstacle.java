@@ -5,8 +5,6 @@ import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.paint.Color;
 
-import java.util.Random;
-
 public class CircularRotatingObstacle extends RotatingObstacle
 {
 
@@ -45,6 +43,6 @@ public class CircularRotatingObstacle extends RotatingObstacle
         for(int i = 0; i<CircularRotatingObstacle.SubParts; ++i)
             this.getChildren().add(arcs[i]);
 
-        this.setRotate((new Random()).nextDouble()*360);
+        this.setRotate(this.rotateAngle);
     }
 }
