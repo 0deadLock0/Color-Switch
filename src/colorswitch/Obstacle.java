@@ -6,15 +6,25 @@ import javafx.scene.Group;
 
 abstract class Obstacle extends Group
 {
+    protected double obstacleSize;
+    protected boolean advanced;
+
     public Obstacle()
     {
         this.getChildren().clear();
+        this.obstacleSize=Settings.ObstacleSize;
+        this.advanced =false;
     }
 
     public abstract void transform();
     public void moveDown()
     {
         this.setTranslateY(this.getTranslateY()+Settings.MotionSpeed);
+    }
+
+    public void enableAdvanceMode()
+    {
+        this.advanced =true;
     }
 
     public double[] getCentrePosition()
