@@ -25,6 +25,8 @@ class CircularColorChangingObstacle extends ColorChangingObstacle
 
     public void construct()
     {
+        this.getChildren().clear();
+
         double radius = this.obstacleSize/2;
         double[] startAngles = {0,90,180,270};
 

@@ -35,6 +35,8 @@ public class ColorBall extends Group
 
     public void construct()
     {
+        this.getChildren().clear();
+
         double radius = 10;
         double[] startAngles = {0.0, 90.0, 180.0, 270.0};
         Arc[] arcs = new Arc[ColorBall.SubParts];

@@ -23,6 +23,8 @@ class SquareColorSwappingObstacle extends ColorSwappingObstacle
 
 	public void construct()
 	{
+		this.getChildren().clear();
+
 		double dimension = this.obstacleSize;
 		double[][] sideDimensions = new double[SquareColorSwappingObstacle.SubParts][4];
 		sideDimensions[0] = new double[]{ this.xCenter-dimension/2 , this.yCenter-dimension/2 , this.xCenter+dimension/2 , this.yCenter-dimension/2 };

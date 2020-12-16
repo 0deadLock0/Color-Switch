@@ -25,6 +25,8 @@ public class LineColorSwappingObstacle extends ColorSwappingObstacle
 
 	public void construct()
 	{
+		this.getChildren().clear();
+
 		this.depth = this.obstacleSize/2;
 
 		double dimension = 1.5 * this.obstacleSize;

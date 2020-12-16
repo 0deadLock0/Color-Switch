@@ -45,6 +45,7 @@ class Star extends Polygon
             pointsXY[2*i]=x;
             pointsXY[2*i+1]=y;
         }
+        this.getPoints().clear();
         this.getPoints().addAll(pointsXY);
         this.setStroke(Color.BLACK);
         this.setStrokeWidth(0.5);
