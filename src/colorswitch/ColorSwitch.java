@@ -17,23 +17,110 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ColorSwitch extends Application
 {
     private Stage applicationWindow;
     private GameSpace currentGame;
 
-    private static final String recordsLocation;
+    private static int gamesPlayed;
+    private static double averageScore;
+    private static int totalStarsCollected;
+    private static int highScore;
+    private static ArrayList<String> savedGames;
+
+    private static final String recordsDirectory;
+    private static final String statsLocation;
+
+    private static final int maxRecords;
 
     static
     {
-        recordsLocation="SavedRecords";
+        recordsDirectory ="SavedRecords";
+        statsLocation=recordsDirectory+"\\Stats.ser";
+
+        maxRecords=5;
+
+        gamesPlayed=0;
+        averageScore=0;
+        totalStarsCollected=0;
+        highScore=0;
+        savedGames=new ArrayList<>(maxRecords);
     }
 
     private void setUpWindow()
     {
         this.applicationWindow.setTitle("Color Switch");
         this.applicationWindow.setResizable(false);
+    }
+
+    private void loadStats()
+    {
+        StatsRecord statsRecord=null;
+
+        try
+        {
+            FileInputStream file=new FileInputStream(ColorSwitch.statsLocation);
+            ObjectInputStream in=new ObjectInputStream(file);
+            statsRecord=(StatsRecord)in.readObject();
+            in.close();
+            file.close();
+        }
+        catch(IOException ex)
+        {
+            System.out.println("IOException is caught");
+        }
+        catch(ClassNotFoundException ex)
+        {
+            System.out.println("ClassNotFoundException is caught");
+        }
+
+        ColorSwitch.gamesPlayed=statsRecord.getGamesPlayed();
+        ColorSwitch.averageScore=statsRecord.getAverageScore();
+        ColorSwitch.totalStarsCollected=statsRecord.getTotalStarsCollected();
+        ColorSwitch.highScore=statsRecord.getHighScore();
+        ColorSwitch.savedGames= statsRecord.getSavedGames();
+    }
+    public void saveStats()
+    {
+        StatsRecord statsRecord=new StatsRecord(ColorSwitch.gamesPlayed,ColorSwitch.averageScore,ColorSwitch.totalStarsCollected,ColorSwitch.highScore,ColorSwitch.savedGames);
+
+        try
+        {
+            FileOutputStream file=new FileOutputStream(ColorSwitch.statsLocation);
+            ObjectOutputStream out=new ObjectOutputStream(file);
+            out.writeObject(statsRecord);
+            out.close();
+            file.close();
+        }
+        catch(IOException ex)
+        {
+            System.out.println("IOException is caught");
+            ex.printStackTrace(System.out);
+        }
+    }
+
+    private void updateStats()
+    {
+        if(this.currentGame!=null)
+        {
+            this.updateAverageScore();
+            this.updateTotalStarsCollected();
+            this.updateHighScore();
+        }
+    }
+    private void updateAverageScore()
+    {
+        ColorSwitch.averageScore=(ColorSwitch.averageScore*(ColorSwitch.gamesPlayed-1)+this.currentGame.getScore())/ColorSwitch.gamesPlayed;
+    }
+    private void updateTotalStarsCollected()
+    {
+        ColorSwitch.totalStarsCollected+=this.currentGame.getStarsCollected();
+    }
+    private void updateHighScore()
+    {
+        ColorSwitch.highScore=Math.max(ColorSwitch.highScore,this.currentGame.getScore());
     }
 
     public void setUpMainMenu()
@@ -127,11 +214,7 @@ public class ColorSwitch extends Application
 
 
         Button File1=new Button("Saved state 1");
-        //vghvhg
-
         File1.setStyle("-fx-background-color: #AB4642");
-
-        //File1.setOnAction(newGameEvent -> this.startNewGame());
 
         Button File2=new Button("Saved State 2");
         File2.setStyle("-fx-background-color: #00bfff");
@@ -149,9 +232,19 @@ public class ColorSwitch extends Application
         Back.setStyle("-fx-background-color: #ff4500");
         Back.setOnAction(event -> this.setUpMainMenu());
 
+        Button[] Files={File1,File2,File3,File4,File5};
+        int fileID=0;
+        for(Button File : Files)
+        {
+            if(ColorSwitch.savedGames.size()>fileID)
+            {
+                int finalFileID=fileID;
+                File.setOnAction(newGameEvent -> this.loadGame(finalFileID));
+            }
+            ++fileID;
+        }
 
-        Button[] menuButtons={File1,File2,File3,File4,File5,Back};
-
+         Button[] menuButtons={File1,File2,File3,File4,File5,Back};
         for(Button button : menuButtons)
         {
             button.setMinWidth(menuOptions.getPrefWidth());
@@ -162,8 +255,6 @@ public class ColorSwitch extends Application
         Scene mainMenu=new Scene(menuOptions,Settings.DesiredSceneWidth,Settings.DesiredSceneHeight);
         //changes1
         mainMenu.getStylesheets().add(ColorSwitch.class.getResource("styles.css").toExternalForm());
-
-
 
         this.applicationWindow.setScene(mainMenu);
     }
@@ -258,10 +349,12 @@ public class ColorSwitch extends Application
         Tittle.getStyleClass().add("heading");
         Tittle.setLayoutY(10);
         Label dummy2= new Label(" ");
-        Label label1=new Label("No Saved Games Yet");
-        Label label2=new Label("Check Back after Playing some games!!");
-        Label label3=new Label("");
-        Label label4=new Label("");
+        Label gamesCountLabel=new Label("Games Played: "+ColorSwitch.gamesPlayed);
+        Label averageScoreLabel=new Label("Average Score: "+((ColorSwitch.gamesPlayed==0)?"NA":ColorSwitch.averageScore));
+        Label starsCollectedLabel=new Label("Total Stars Collected: "+((ColorSwitch.gamesPlayed==0)?"NA":ColorSwitch.totalStarsCollected));
+        Label highScoreLabel=new Label("High Score: "+((ColorSwitch.gamesPlayed==0)?"NA":ColorSwitch.highScore));
+        Label label5=new Label("");
+        Label label6=new Label("");
 
         Button Back= new Button("BACK");
         Back.setStyle("-fx-background-color: #ff4500");
@@ -269,7 +362,7 @@ public class ColorSwitch extends Application
 
 
         Back.setMinWidth(menuOptions.getPrefWidth());
-        menuOptions.getChildren().addAll(Tittle,dummy1,dummy2,label1,label2,label3,label4,Back);
+        menuOptions.getChildren().addAll(Tittle,dummy1,dummy2,gamesCountLabel,averageScoreLabel,starsCollectedLabel,highScoreLabel,label5,label6,Back);
         Scene mainMenu=new Scene(menuOptions,Settings.DesiredSceneWidth,Settings.DesiredSceneHeight);
         //changes1
         mainMenu.getStylesheets().add(ColorSwitch.class.getResource("styles.css").toExternalForm());
@@ -278,21 +371,19 @@ public class ColorSwitch extends Application
         this.applicationWindow.setScene(mainMenu);
     }
 
-    public void saveGame(GameSpace gameSpace)
+    public void saveGame()
     {
-        String fileName=ColorSwitch.recordsLocation+"\\TestingFile";
-        GameRecord gameRecord=new GameRecord(gameSpace.getScore(),"Test",gameSpace);
+        String fileName=ColorSwitch.recordsDirectory +"\\Record"+(ColorSwitch.savedGames.size())+".ser";
+        ColorSwitch.savedGames.add(fileName);
+        GameRecord gameRecord=new GameRecord(this.currentGame.getScore(),("Saved Game "+ColorSwitch.savedGames.size()),this.currentGame);
 
         try
         {
             FileOutputStream file = new FileOutputStream(fileName);
             ObjectOutputStream out = new ObjectOutputStream(file);
             out.writeObject(gameRecord);
-
             out.close();
             file.close();
-
-            System.out.println("Game Saved in file "+fileName);//To be removed
         }
         catch(IOException ex)
         {
@@ -300,35 +391,18 @@ public class ColorSwitch extends Application
             ex.printStackTrace(System.out);
         }
     }
-
-    private void startNewGame()
+    private void loadGame(int option)
     {
-        this.currentGame=new GameSpace(this, this.applicationWindow, Settings.DesiredSceneWidth, Settings.DesiredSceneHeight);
-
-        //Uncomment below lines to test Save Game functionality
-//        this.currentGame=this.loadGame();
-//        this.currentGame.construct(this, this.applicationWindow, Settings.DesiredSceneWidth, Settings.DesiredSceneHeight);
-
-        this.launchGame();
-    }
-
-    private GameSpace loadGame() //For testing, prototype needs to be changed
-    {
-        String fileName=ColorSwitch.recordsLocation+"\\TestingFile";
-
+        String fileName=ColorSwitch.savedGames.get(option);
         GameRecord gameRecord=null;
 
         try
         {
-            FileInputStream file = new FileInputStream(fileName);
-            ObjectInputStream in = new ObjectInputStream(file);
-
-            gameRecord = (GameRecord) in.readObject();
-
+            FileInputStream file=new FileInputStream(fileName);
+            ObjectInputStream in=new ObjectInputStream(file);
+            gameRecord=(GameRecord)in.readObject();
             in.close();
             file.close();
-
-            System.out.println("Game Load from file "+fileName);//To be removed
         }
         catch(IOException ex)
         {
@@ -339,7 +413,17 @@ public class ColorSwitch extends Application
             System.out.println("ClassNotFoundException is caught");
         }
 
-        return gameRecord.getGameSpace();
+        this.currentGame=gameRecord.getGameSpace();
+        this.currentGame.construct(this, this.applicationWindow, Settings.DesiredSceneWidth, Settings.DesiredSceneHeight);
+
+        this.launchGame();
+    }
+
+    private void startNewGame()
+    {
+        ++this.gamesPlayed;
+        this.currentGame=new GameSpace(this, this.applicationWindow, Settings.DesiredSceneWidth, Settings.DesiredSceneHeight);
+        this.launchGame();
     }
 
     private void launchGame()
@@ -355,6 +439,8 @@ public class ColorSwitch extends Application
 
     private void closeProgram()
     {
+        this.updateStats();
+        this.saveStats();
         this.applicationWindow.close();
     }
 
@@ -362,6 +448,8 @@ public class ColorSwitch extends Application
     public void start(Stage primaryStage)
     {
         this.applicationWindow=primaryStage;
+
+        this.loadStats();
 
         this.setUpWindow();
         this.applicationWindow.setOnCloseRequest(closeEvent -> {

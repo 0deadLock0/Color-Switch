@@ -155,7 +155,7 @@ public class GameSpace implements Serializable
                 case V: //Testing //Saving a Game
                 {
                     this.updateProperties();
-                    this.application.saveGame(this);
+                    this.application.saveGame();
                 }
                 case TAB:
                 {
