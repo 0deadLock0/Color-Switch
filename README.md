@@ -28,11 +28,11 @@ Current Position:
 
 -> Infinite Loop for Game working
 
+-> Various Games and stats can be saved
+
 Milestone:
 
 -> Set Up Pause Menu
-
--> Implement Serialization and Deserialization
 
 
 Design:
