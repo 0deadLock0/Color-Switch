@@ -4,7 +4,9 @@ package colorswitch;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
 
-abstract class Obstacle extends Group
+import java.io.Serializable;
+
+abstract class Obstacle extends Group implements Serializable
 {
     protected double obstacleSize;
     protected boolean advanced;

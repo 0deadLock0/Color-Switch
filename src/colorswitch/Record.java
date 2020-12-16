@@ -1,8 +1,9 @@
 package colorswitch;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Record
+public class Record implements Serializable
 {
 	private final int score;
 	private final String name;

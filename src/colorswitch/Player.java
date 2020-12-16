@@ -1,12 +1,13 @@
 
 package colorswitch;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 
-class Player extends Circle
+class Player extends Circle implements Serializable
 {
     private int score;
     private int starsCollected;

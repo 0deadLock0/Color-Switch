@@ -1,5 +1,6 @@
 package colorswitch;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import javafx.geometry.Bounds;
@@ -9,7 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 
-public class ColorBall extends Group
+public class ColorBall extends Group implements Serializable
 {
     private int switchColor;
 

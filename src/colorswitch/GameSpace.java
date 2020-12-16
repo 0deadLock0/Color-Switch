@@ -1,6 +1,7 @@
 
 package colorswitch;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Queue;
@@ -18,14 +19,14 @@ import javafx.scene.paint.Color;
 
 import javafx.animation.AnimationTimer;
 
-public class GameSpace
+public class GameSpace implements Serializable
 {
-    private final ColorSwitch application;
+    private transient ColorSwitch application;
 
-    private final Stage applicationWindow;
-    private final Scene gameScene;
-    private Pane gamePane;
-    private Label scoreLabel;
+    private transient Stage applicationWindow;
+    private transient Scene gameScene;
+    private transient Pane gamePane;
+    private transient Label scoreLabel;
 
     private Player player;
     private final Queue<Star> stars;

@@ -6,7 +6,9 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.effect.Glow;
 import javafx.scene.paint.Color;
 
-class Star extends Polygon
+import java.io.Serializable;
+
+class Star extends Polygon implements Serializable
 {
     private final static int pointsCount;
     private final static double[] adjustmentsX;
