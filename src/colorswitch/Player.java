@@ -14,7 +14,7 @@ class Player extends Circle
     private double xCenter;
     private double yCenter;
 
-    private Color color;
+    private int colorIndex;
 
     public Player(double xCenter, double yCenter)
     {
@@ -24,7 +24,7 @@ class Player extends Circle
         this.starsCollected=0;
         this.xCenter=xCenter;
         this.yCenter=yCenter;
-        this.color=Settings.IntersectionColors[(new Random()).nextInt(Settings.IntersectionColors.length)];
+        this.colorIndex=(new Random()).nextInt(Settings.IntersectionColors.length);
 
         this.construct();
     }
@@ -32,7 +32,7 @@ class Player extends Circle
     public void construct()
     {
         this.setRadius(5);
-        this.setFill(this.color);
+        this.setFill(Settings.IntersectionColors[this.colorIndex]);
         this.setPosition(this.xCenter,this.yCenter);
     }
 
@@ -88,6 +88,10 @@ class Player extends Circle
         double[] position=this.getPosition();
         this.xCenter=position[0];
         this.yCenter=position[1];
-        this.color=this.getColor();
+
+        this.colorIndex=0;
+        Color color=this.getColor();
+        while(!Settings.IntersectionColors[this.colorIndex].equals(color))
+            ++this.colorIndex;
     }
 }
