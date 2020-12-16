@@ -33,6 +33,7 @@ public class GameSpace implements Serializable
     private final Queue<Obstacle> obstacles;
     private final Queue<ColorBall> colorBalls;
 
+    private boolean touched;
     private boolean gameActive;
     private boolean gameOver;
     private long lastTime;
@@ -62,6 +63,8 @@ public class GameSpace implements Serializable
     {
         this.application=sourceApplication;
         this.applicationWindow=window;
+
+        this.touched=false;
 
         if(this.gameScene==null)
         {
@@ -135,7 +138,9 @@ public class GameSpace implements Serializable
             {
                 case SPACE:
                 {
-                    if(gameActive && !gameOver)
+                    if(!this.touched)
+                        this.touched=true;
+                    if(this.gameActive && !this.gameOver)
                         this.movePlayerUp();
                     break;
                 }
@@ -180,7 +185,7 @@ public class GameSpace implements Serializable
 
     private void backgroundProcess(long now)
     {
-        if(gameOver || !gameActive)
+        if(this.gameOver || !this.gameActive)
             return;
         if(this.isPlayerInteractingStar(this.player, this.stars.peek()))
         {
@@ -224,7 +229,8 @@ public class GameSpace implements Serializable
                 ++this.ideallyObstacleTransformed;
                 this.transformObstacles();
                 this.transformColorBalls();
-                this.player.moveDown();
+                if(this.touched)
+                    this.player.moveDown();
                 lastTime=now;
             }
         }
@@ -486,7 +492,7 @@ public class GameSpace implements Serializable
     }
     private void initializePlayer()
     {
-        this.player=this.createPlayer(this.gameScene.getWidth()/2, 4*this.gameScene.getHeight()/5);
+        this.player=this.createPlayer(this.gameScene.getWidth()/2, 9*this.gameScene.getHeight()/10);
     }
     private Obstacle addNewObstacle()
     {
