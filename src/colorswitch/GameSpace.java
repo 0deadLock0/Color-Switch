@@ -41,8 +41,6 @@ public class GameSpace implements Serializable
 
     public GameSpace(ColorSwitch sourceApplication, Stage window, double desiredWidth, double desiredHeight)
     {
-        this.application=sourceApplication;
-        this.applicationWindow=window;
         this.gameActive=false;
         this.gameOver=false;
         this.ideallyObstacleTransformed=0;
@@ -50,15 +48,45 @@ public class GameSpace implements Serializable
         this.obstacles=new LinkedList<>();
         this.stars=new LinkedList<>();
         this.colorBalls=new LinkedList<>();
-        this.gameScene=this.createScene(desiredWidth,desiredHeight);
-        this.addObstacles();
-        this.addStars();
-        this.addColorBalls();
+        this.gamePane=this.createGamePane();
+        this.gameScene=this.createScene(desiredWidth,desiredHeight,this.gamePane);
+        this.initializePlayer();
+        this.addInitialObstacles();
+        this.addInitialStars();
+        this.addInitialColorBalls();
+
+        this.construct(sourceApplication,window,desiredWidth,desiredHeight);
+    }
+
+    public void construct(ColorSwitch sourceApplication, Stage window, double desiredWidth, double desiredHeight)
+    {
+        this.application=sourceApplication;
+        this.applicationWindow=window;
+
+        if(this.gameScene==null)
+        {
+            this.gamePane=this.createGamePane();
+            this.gameScene=this.createScene(desiredWidth,desiredHeight,this.gamePane);
+        }
+
+        this.initializeScoreLabel();
+        this.addLabelToPane(this.scoreLabel);
+
+        this.restoreProperties();
+
+        this.addPlayerToPane(this.player);
+        this.addObstaclesToPane();
+        this.addStarsToPane();
+        this.addColorBallsToPane();
     }
 
     public int getScore()
     {
         return this.player.getScore();
+    }
+    public int getStarsCollected()
+    {
+        return this.player.getStarsCollected();
     }
 
     public void start()
@@ -77,6 +105,28 @@ public class GameSpace implements Serializable
         };
         timer.start();
     }
+
+    private void restoreProperties()
+    {
+        this.player.construct();
+        for(Obstacle obstacle : this.obstacles)
+            obstacle.construct();
+        for(Star star : this.stars)
+            star.construct();
+        for(ColorBall colorBall : this.colorBalls)
+            colorBall.construct();
+    }
+    private void updateProperties()
+    {
+        this.player.updateProperties();
+        for(Obstacle obstacle : this.obstacles)
+            obstacle.updateProperties();
+        for(Star star : this.stars)
+            star.updateProperties();
+        for(ColorBall colorBall : this.colorBalls)
+            colorBall.updateProperties();
+    }
+
     private void setUserInput()
     {
         this.gameScene.setOnKeyPressed(keyPressedEvent ->
@@ -127,36 +177,36 @@ public class GameSpace implements Serializable
     {
         if(gameOver || !gameActive)
             return;
-        if(GameSpace.isPlayerInteractingStar(this.player, this.stars.peek()))
+        if(this.isPlayerInteractingStar(this.player, this.stars.peek()))
         {
             this.player.collectStar(this.stars.peek());
             this.gamePane.getChildren().remove(this.stars.peek());
             this.stars.remove();
-            this.addStar();
+            this.addNewStarToPane();
         }
-        if(GameSpace.isPlayerInteractingColorBall(this.player, this.colorBalls.peek()))
+        if(this.isPlayerInteractingColorBall(this.player, this.colorBalls.peek()))
         {
             this.player.changeColor(this.colorBalls.peek());
             this.gamePane.getChildren().remove(this.colorBalls.peek());
             this.colorBalls.remove();
-            this.addColorBall();
+            this.addNewColorBallToPane();
             this.colorBalls.peek().setColor(this.player.getColor());
         }
         if(this.isPlayerCollidingObstacles(this.player))
         {
             this.gameOver=true;
             this.gamePane.getChildren().remove(this.player);
-            this.addBrokenBallsWithAnimation(this.player.getPosition()[0],this.player.getPosition()[1]);
+            this.addBrokenBallsWithAnimationToPane(this.player.getPosition()[0],this.player.getPosition()[1]);
             //Proceed to Exit Game
         }
         if(this.isPlayerFallenDown(this.player))
         {
             this.gameOver=true;
             this.gamePane.getChildren().remove(this.player);
-            this.addBrokenBallsWithAnimation(this.player.getPosition()[0],this.player.getPosition()[1]);
+            this.addBrokenBallsWithAnimationToPane(this.player.getPosition()[0],this.player.getPosition()[1]);
             //Proceed to Exit Game
         }
-        
+
         this.updateObstacles();
         this.updateGUI();
         if (lastTime==0L)
@@ -185,7 +235,7 @@ public class GameSpace implements Serializable
         this.scoreLabel.setTranslateX(this.gameScene.getWidth()-this.scoreLabel.getWidth()-10);
         this.scoreLabel.setTranslateY(10);
     }
-    
+
     private void updateObstacles()
     {
         int count=0;
@@ -203,7 +253,7 @@ public class GameSpace implements Serializable
         }
 
         while(--count>=0)
-            this.addObstacle();
+            this.addNewObstacleToPane();
     }
 
     private void transformObstacles()
@@ -221,7 +271,6 @@ public class GameSpace implements Serializable
         else
             obstacle.transform();
     }
-
     private void transformColorBalls()
     {
         for(ColorBall colorBall : this.colorBalls)
@@ -256,11 +305,11 @@ public class GameSpace implements Serializable
             colorBall.moveDown();
     }
 
-    private static boolean isPlayerInteractingStar(Player player, Star star)
+    private boolean isPlayerInteractingStar(Player player, Star star)
     {
         return !Shape.intersect(player, star).getBoundsInLocal().isEmpty();
     }
-    private static boolean isPlayerInteractingColorBall(Player player, ColorBall colorBall)
+    private boolean isPlayerInteractingColorBall(Player player, ColorBall colorBall)
     {
         for (Node colorBallParts : colorBall.getChildren().toArray(new Node[0]))
         {
@@ -270,7 +319,6 @@ public class GameSpace implements Serializable
 
         return false;
     }
-
     private boolean isPlayerCollidingObstacles(Player player)
     {
         for(Obstacle obstacle : this.obstacles)
@@ -291,31 +339,65 @@ public class GameSpace implements Serializable
     {
         return obstacle.getTopPoint()>this.gameScene.getHeight();
     }
-
     private boolean isPlayerFallenDown(Player player)
     {
         return player.getPosition()[1]>this.gameScene.getHeight();
     }
 
-    private Scene createScene(double desiredWidth, double desiredHeight)
+    private double[] getNextObstaclePosition()
     {
-        this.gamePane=new Pane();
-        this.gamePane.setBackground(Background.EMPTY);
-
-        Scene scene=new Scene(this.gamePane,desiredWidth,desiredHeight,Color.BLACK);
-
-        this.scoreLabel=this.createScoreLabel(scene.getWidth(), 10);
-        this.gamePane.getChildren().add(this.scoreLabel);
-
-        this.player=this.createPlayer(scene.getWidth()/2, 4*scene.getHeight()/5);
-        this.gamePane.getChildren().add(this.player);
-
-        return scene;
+        int count=0;
+        int size=this.obstacles.size();
+        double[] position={this.gameScene.getWidth()/2,this.gameScene.getHeight()/2};
+        for(Obstacle obstacle : this.obstacles)
+        {
+            ++count;
+            if(count==size)
+                position[1]=obstacle.getCentrePosition()[1]-Settings.EntitiesGap;
+        }
+        return position;
+    }
+    private double[] getNextStarPosition()
+    {
+        int count=0;
+        int size=this.stars.size();
+        double[] position={this.gameScene.getWidth()/2,this.gameScene.getHeight()/2};
+        for(Star star : this.stars)
+        {
+            ++count;
+            if(count==size)
+                position[1]=star.getPosition()[1]-Settings.EntitiesGap;
+        }
+        return position;
+    }
+    private double[] getNextColorBallPosition()
+    {
+        int count=0;
+        int size=this.colorBalls.size();
+        double[] position={this.gameScene.getWidth()/2,this.gameScene.getHeight()/2-Settings.EntitiesGap/2};
+        for(ColorBall colorBall : this.colorBalls)
+        {
+            ++count;
+            if(count==size)
+                position[1]=colorBall.getPosition()[1]-Settings.EntitiesGap;
+        }
+        return position;
     }
 
+    private Pane createGamePane()
+    {
+        Pane pane = new Pane();
+        pane.setBackground(Background.EMPTY);
+        return pane;
+    }
+    private Scene createScene(double desiredWidth,double desiredHeight,Pane pane)
+    {
+        return new Scene(pane,desiredWidth,desiredHeight,Color.BLACK);
+    }
     private Label createScoreLabel(double xPosition, double yPosition)
     {
-        Label label=new Label("Score: 0");
+        Label label=new Label();
+        label.setText("Score: "+this.getScore());
         label.setPrefWidth(-1);
         label.setPrefHeight(-1);
         label.setTranslateX(xPosition-label.getWidth()-10);
@@ -323,17 +405,14 @@ public class GameSpace implements Serializable
         label.setTextFill(Color.YELLOW);
         return label;
     }
-
     private Player createPlayer(double xPosition, double yPosition)
     {
         return new Player(xPosition, yPosition);
     }
-
     private ColorBall createColorBall(double xPosition, double yPosition)
     {
         return new ColorBall(xPosition, yPosition);
     }
-
     private Star createStar(double xPosition, double yPosition)
     {
         Random rd=new Random();
@@ -344,7 +423,6 @@ public class GameSpace implements Serializable
             star=new SpecialStar(xPosition, yPosition);
         return star;
     }
-
     private Obstacle createObstacle(double xCenter, double yCenter)
     {
         Random rd=new Random();
@@ -364,69 +442,107 @@ public class GameSpace implements Serializable
         return obstacle;
     }
 
-    private void addObstacle()
-    {
-        int count=0;
-        int size=this.obstacles.size();
-        double[] position={this.gameScene.getWidth()/2,this.gameScene.getHeight()/2};
-        for(Obstacle obstacle : this.obstacles)
-        {
-            ++count;
-            if(count==size)
-                position[1]=obstacle.getCentrePosition()[1]-Settings.EntitiesGap;
-        }
-        Obstacle obstacle=this.createObstacle(position[0],position[1]);
-        this.obstacles.add(obstacle);
-        this.gamePane.getChildren().add(obstacle);
-    }
-    private void addObstacles()
+    private void addInitialObstacles()
     {
         for(int i=0;i<Settings.MinimumEntitiesCount;++i)
-            this.addObstacle();
+            this.addNewObstacle();
     }
-    private void addStar()
-    {
-        int count=0;
-        int size=this.stars.size();
-        double[] position={this.gameScene.getWidth()/2,this.gameScene.getHeight()/2};
-        for(Star star : this.stars)
-        {
-            ++count;
-            if(count==size)
-                position[1]=star.getPosition()[1]-Settings.EntitiesGap;
-        }
-        Star star=this.createStar(position[0],position[1]);
-        this.stars.add(star);
-        this.gamePane.getChildren().add(star);
-    }
-    private void addStars()
+    private void addInitialStars()
     {
         for(int i=0;i<Settings.MinimumEntitiesCount;++i)
-            this.addStar();
+            this.addNewStar();
     }
-    private void addColorBall()
-    {
-        int count=0;
-        int size=this.colorBalls.size();
-        double[] position={this.gameScene.getWidth()/2,this.gameScene.getHeight()/2-Settings.EntitiesGap/2};
-        for(ColorBall colorBall : this.colorBalls)
-        {
-            ++count;
-            if(count==size)
-                position[1]=colorBall.getPosition()[1]-Settings.EntitiesGap;
-        }
-        ColorBall colorBall=this.createColorBall(position[0],position[1]);
-        this.colorBalls.add(colorBall);
-        this.gamePane.getChildren().add(colorBall);
-    }
-    private void addColorBalls()
+    private void addInitialColorBalls()
     {
         for(int i=0;i<Settings.MinimumEntitiesCount;++i)
-            this.addColorBall();
+            this.addNewColorBall();
         this.colorBalls.peek().setColor(this.player.getColor()); //Not really worth to set other color-balls color
     }
 
-    private void addBrokenBallsWithAnimation(double xPosition, double yPosition)
+    private void addObstaclesToPane()
+    {
+        for(Obstacle obstacle : this.obstacles)
+            this.addObstacleToPane(obstacle);
+    }
+    private void addStarsToPane()
+    {
+        for(Star star : this.stars)
+            this.addStarToPane(star);
+    }
+    private void addColorBallsToPane()
+    {
+        for(ColorBall colorBall : this.colorBalls)
+            this.addColorBallToPane(colorBall);
+    }
+
+    private void initializeScoreLabel()
+    {
+        this.scoreLabel=this.createScoreLabel(this.gameScene.getWidth(), 10);
+    }
+    private void initializePlayer()
+    {
+        this.player=this.createPlayer(this.gameScene.getWidth()/2, 4*this.gameScene.getHeight()/5);
+    }
+    private Obstacle addNewObstacle()
+    {
+        double[] position=this.getNextObstaclePosition();
+        Obstacle obstacle=this.createObstacle(position[0],position[1]);
+        this.obstacles.add(obstacle);
+        return obstacle;
+    }
+    private Star addNewStar()
+    {
+        double[] position=this.getNextStarPosition();
+        Star star=this.createStar(position[0],position[1]);
+        this.stars.add(star);
+        return star;
+    }
+    private ColorBall addNewColorBall()
+    {
+        double[] position=this.getNextColorBallPosition();
+        ColorBall colorBall=this.createColorBall(position[0],position[1]);
+        this.colorBalls.add(colorBall);
+        return colorBall;
+    }
+
+    private void addNewObstacleToPane()
+    {
+        Obstacle obstacle=this.addNewObstacle();
+        this.addObstacleToPane(obstacle);
+    }
+    private void addNewStarToPane()
+    {
+        Star star=this.addNewStar();
+        this.addStarToPane(star);
+    }
+    private void addNewColorBallToPane()
+    {
+        ColorBall colorBall=this.addNewColorBall();
+        this.addColorBallToPane(colorBall);
+    }
+
+    private void addLabelToPane(Label label)
+    {
+        this.gamePane.getChildren().add(label);
+    }
+    private void addPlayerToPane(Player player)
+    {
+        this.gamePane.getChildren().add(player);
+    }
+    private void addObstacleToPane(Obstacle obstacle)
+    {
+        this.gamePane.getChildren().add(obstacle);
+    }
+    private void addStarToPane(Star star)
+    {
+        this.gamePane.getChildren().add(star);
+    }
+    private void addColorBallToPane(ColorBall colorBall)
+    {
+        this.gamePane.getChildren().add(colorBall);
+    }
+
+    private void addBrokenBallsWithAnimationToPane(double xPosition, double yPosition)
     {
         int count=Settings.BrokenBallsCount;
         double[] bounds={this.gameScene.getWidth(),this.gameScene.getHeight()};
