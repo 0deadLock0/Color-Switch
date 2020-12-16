@@ -12,12 +12,23 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class ColorSwitch extends Application
 {
     private Stage applicationWindow;
     private GameSpace currentGame;
+
+    private static final String recordsLocation;
+
+    static
+    {
+        recordsLocation="SavedRecords";
+    }
 
     private void setUpWindow()
     {
@@ -267,11 +278,68 @@ public class ColorSwitch extends Application
         this.applicationWindow.setScene(mainMenu);
     }
 
+    public void saveGame(GameSpace gameSpace)
+    {
+        String fileName=ColorSwitch.recordsLocation+"\\TestingFile";
+        GameRecord gameRecord=new GameRecord(gameSpace.getScore(),"Test",gameSpace);
+
+        try
+        {
+            FileOutputStream file = new FileOutputStream(fileName);
+            ObjectOutputStream out = new ObjectOutputStream(file);
+            out.writeObject(gameRecord);
+
+            out.close();
+            file.close();
+
+            System.out.println("Game Saved in file "+fileName);//To be removed
+        }
+        catch(IOException ex)
+        {
+            System.out.println("IOException is caught");
+            ex.printStackTrace(System.out);
+        }
+    }
 
     private void startNewGame()
     {
         this.currentGame=new GameSpace(this, this.applicationWindow, Settings.DesiredSceneWidth, Settings.DesiredSceneHeight);
+
+        //Uncomment below lines to test Save Game functionality
+//        this.currentGame=this.loadGame();
+//        this.currentGame.construct(this, this.applicationWindow, Settings.DesiredSceneWidth, Settings.DesiredSceneHeight);
+
         this.launchGame();
+    }
+
+    private GameSpace loadGame() //For testing, prototype needs to be changed
+    {
+        String fileName=ColorSwitch.recordsLocation+"\\TestingFile";
+
+        GameRecord gameRecord=null;
+
+        try
+        {
+            FileInputStream file = new FileInputStream(fileName);
+            ObjectInputStream in = new ObjectInputStream(file);
+
+            gameRecord = (GameRecord) in.readObject();
+
+            in.close();
+            file.close();
+
+            System.out.println("Game Load from file "+fileName);//To be removed
+        }
+        catch(IOException ex)
+        {
+            System.out.println("IOException is caught");
+        }
+        catch(ClassNotFoundException ex)
+        {
+            System.out.println("ClassNotFoundException is caught");
+        }
+
+        return gameRecord.getGameSpace();
     }
 
     private void launchGame()

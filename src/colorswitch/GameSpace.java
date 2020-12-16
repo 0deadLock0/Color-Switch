@@ -147,6 +147,11 @@ public class GameSpace implements Serializable
                         this.resume();
                     break;
                 }
+                case V: //Testing //Saving a Game
+                {
+                    this.updateProperties();
+                    this.application.saveGame(this);
+                }
                 case TAB:
                 {
                     //To return to Main Menu // just for testing purpose
