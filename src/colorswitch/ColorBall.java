@@ -11,8 +11,10 @@ import javafx.scene.shape.ArcType;
 
 public class ColorBall extends Group
 {
-    private final double radius;
-    private Color switchColor;
+    private int switchColor;
+
+    private double xCenter;
+    private double yCenter;
 
     private static final int SubParts;
 
@@ -24,10 +26,16 @@ public class ColorBall extends Group
     public ColorBall(double xCenter, double yCenter)
     {
         super();
+        this.xCenter = xCenter;
+        this.yCenter = yCenter;
+        this.switchColor = (new Random()).nextInt(Settings.IntersectionColors.length);
 
-        this.radius = 10;
-        this.switchColor = Settings.IntersectionColors[(new Random()).nextInt(Settings.IntersectionColors.length)];
+        this.construct();
+    }
 
+    public void construct()
+    {
+        double radius = 10;
         double[] startAngles = {0.0, 90.0, 180.0, 270.0};
         Arc[] arcs = new Arc[ColorBall.SubParts];
         for (int i = 0; i < ColorBall.SubParts; ++i)
@@ -35,10 +43,10 @@ public class ColorBall extends Group
 
         for (int i = 0; i < ColorBall.SubParts; ++i)
         {
-            arcs[i].setCenterX(xCenter);
-            arcs[i].setCenterY(yCenter);
-            arcs[i].setRadiusX(this.radius);
-            arcs[i].setRadiusY(this.radius);
+            arcs[i].setCenterX(this.xCenter);
+            arcs[i].setCenterY(this.yCenter);
+            arcs[i].setRadiusX(radius);
+            arcs[i].setRadiusY(radius);
             arcs[i].setStartAngle(startAngles[i]);
             arcs[i].setLength(90.37167f);
             arcs[i].setType(ArcType.ROUND);
@@ -47,11 +55,6 @@ public class ColorBall extends Group
 
         for (int i = 0; i < ColorBall.SubParts; ++i)
             this.getChildren().add(arcs[i]);
-    }
-    public ColorBall(double xCenter, double yCenter, Color ignoredColor)
-    {
-        this(xCenter,yCenter);
-        this.setColor(ignoredColor);
     }
 
     public void moveDown()
@@ -78,20 +81,28 @@ public class ColorBall extends Group
 
     public void setColor(Color ignoredColor)
     {
-        Color chosenColor=ignoredColor;
+        int chosenColor=-1;
         Random rd=new Random();
-        while(chosenColor.equals(ignoredColor))
-            chosenColor = Settings.IntersectionColors[rd.nextInt(Settings.IntersectionColors.length)];
+        do
+            chosenColor=rd.nextInt(Settings.IntersectionColors.length);
+        while(Settings.IntersectionColors[chosenColor].equals(ignoredColor));
         this.switchColor = chosenColor;
     }
     public Color getColor()
     {
-        return this.switchColor;
+        return Settings.IntersectionColors[this.switchColor];
     }
 
     public double[] getPosition()
     {
         Bounds boundsInScene=this.localToScene(this.getBoundsInLocal());
         return new double[]{boundsInScene.getCenterX(),boundsInScene.getCenterY()};
+    }
+
+    public void updateProperties()
+    {
+        double[] position=this.getPosition();
+        this.xCenter=position[0];
+        this.yCenter=position[1];
     }
 }
