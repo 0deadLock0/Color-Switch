@@ -81,6 +81,7 @@ public class GameSpace implements Serializable
         this.stars=new LinkedList<>();
         this.colorBalls=new LinkedList<>();
         this.gamePane=this.createGamePane();
+        this.gamePane.setStyle("-fx-border-color: white");
         this.gameScene=this.createScene(desiredWidth,desiredHeight,this.gamePane);
         this.initializePlayer();
         this.addInitialObstacles();

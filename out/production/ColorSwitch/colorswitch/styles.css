@@ -1,11 +1,11 @@
 .root{
     -fx-background-color: #000000;
-
+    -fx-border-color: white;
     -fx-font-size: 11pt;
 }
 .button{
     -fx-background-radius: 8;
-    -fx-font-weight: 600;
+    -fx-font-weight: 800;
 
 }
 .label{
@@ -19,4 +19,7 @@
     -fx-text-overrun: center-ellipsis;
     -fx-font: 40 italic;
     -fx-font-weight: bold;
+}
+.pane{
+    -fx-border-style: dashed;
 }
