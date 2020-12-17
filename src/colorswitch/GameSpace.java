@@ -687,7 +687,7 @@ public class GameSpace implements Serializable
     {
         Star starLabel=new Star(30,30);
         this.gamePane.getChildren().add(starLabel);
-        this.starsCollectedLabel=this.createLabel(50,15,"0",Color.DARKBLUE);
+        this.starsCollectedLabel=this.createLabel(50,15,"0",Color.CYAN);
     }
     private void initializePlayer()
     {
