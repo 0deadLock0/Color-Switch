@@ -180,7 +180,30 @@ public class GameSpace implements Serializable
         Media media=new Media(new File(path).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setAutoPlay(true);
-
+    }
+    private void interactingWithStarSound(){
+        String path = "resources/Sound Effects/star.wav";
+        Media media=new Media(new File(path).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setAutoPlay(true);
+    }
+    private void collidingWithObstaclesSound(){
+        String path = "resources/Sound Effects/dead.wav";
+        Media media=new Media(new File(path).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setAutoPlay(true);
+    }
+    private void interactingWithColorBallSound(){
+        String path = "resources/Sound Effects/victory.wav";
+        Media media=new Media(new File(path).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setAutoPlay(true);
+    }
+    private void playerFallenDownSound(){
+        String path = "resources/Sound Effects/fallen.wav";
+        Media media=new Media(new File(path).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setAutoPlay(true);
     }
 
     private void pause()
@@ -306,6 +329,7 @@ public class GameSpace implements Serializable
         }
         if(this.isPlayerInteractingStar(this.player, this.stars.peek()))
         {
+            this.interactingWithStarSound();
             this.player.collectStar(this.stars.peek());
             this.gamePane.getChildren().remove(this.stars.peek());
             this.stars.remove();
@@ -313,6 +337,7 @@ public class GameSpace implements Serializable
         }
         if(this.isPlayerInteractingColorBall(this.player, this.colorBalls.peek()))
         {
+            this.interactingWithColorBallSound();
             this.player.changeColor(this.colorBalls.peek());
             this.gamePane.getChildren().remove(this.colorBalls.peek());
             this.colorBalls.remove();
@@ -321,12 +346,14 @@ public class GameSpace implements Serializable
         }
         if(this.isPlayerCollidingObstacles(this.player))
         {
+            this.collidingWithObstaclesSound();
             this.gameOver=true;
             this.gamePane.getChildren().remove(this.player);
             this.addBrokenBallsWithAnimationToPane(this.player.getPosition()[0],this.player.getPosition()[1]);
         }
         if(this.isPlayerFallenDown(this.player))
         {
+            this.playerFallenDownSound();
             this.gameOver=true;
             this.gamePane.getChildren().remove(this.player);
             this.addBrokenBallsWithAnimationToPane(this.player.getPosition()[0],this.player.getPosition()[1]);
