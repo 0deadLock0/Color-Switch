@@ -53,6 +53,7 @@ public class ColorSwitch extends Application
     {
         this.applicationWindow.setTitle("Color Switch");
         this.applicationWindow.setResizable(false);
+        this.applicationWindow.setOnCloseRequest(closeEvent -> closeEvent.consume());
     }
 
     private void loadStats()
@@ -421,7 +422,7 @@ public class ColorSwitch extends Application
 
     private void startNewGame()
     {
-        ++this.gamesPlayed;
+        ++ColorSwitch.gamesPlayed;
         this.currentGame=new GameSpace(this, this.applicationWindow, Settings.DesiredSceneWidth, Settings.DesiredSceneHeight);
         this.launchGame();
     }
@@ -437,7 +438,7 @@ public class ColorSwitch extends Application
         this.currentGame.start();
     }
 
-    private void closeProgram()
+    void closeProgram()
     {
         this.updateStats();
         this.saveStats();
@@ -452,10 +453,6 @@ public class ColorSwitch extends Application
         this.loadStats();
 
         this.setUpWindow();
-        this.applicationWindow.setOnCloseRequest(closeEvent -> {
-            closeEvent.consume();
-            this.closeProgram();
-        });
 
         this.setUpMainMenu();
 
