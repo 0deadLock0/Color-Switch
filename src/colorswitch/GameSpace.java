@@ -7,39 +7,26 @@ import java.util.Random;
 import java.util.Queue;
 import java.util.LinkedList;
 
-import javafx.scene.Node;
+import javafx.animation.AnimationTimer;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Background;
 
-import javafx.scene.shape.Shape;
-import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
-
-
-
-
-import javafx.animation.AnimationTimer;
 import javafx.stage.StageStyle;
-
-import java.util.Iterator;
-import java.util.Random;
-import java.util.Queue;
-import java.util.LinkedList;
-
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.effect.GaussianBlur;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 
+import javafx.scene.Node;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.Background;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
+import javafx.scene.control.Label;
+import javafx.scene.control.Button;
+import javafx.scene.effect.GaussianBlur;
 
-
+import javafx.geometry.Pos;
 
 public class GameSpace implements Serializable
 {
