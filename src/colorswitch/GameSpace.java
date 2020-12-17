@@ -221,8 +221,7 @@ public class GameSpace implements Serializable
         Exit.setOnAction(event -> {
             gamePane.setEffect(null);
             popupStage.hide();
-            //ColorSwitch::gameOver needs to be called
-            application.setUpMainMenu();
+            application.gameFinished();
         });
 
         popupStage.show();

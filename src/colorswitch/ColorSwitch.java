@@ -445,9 +445,15 @@ public class ColorSwitch extends Application
         this.currentGame.start();
     }
 
-    void closeProgram()
+    void gameFinished()
     {
         this.updateStats();
+        this.currentGame=null;
+        this.setUpMainMenu();
+    }
+
+    void closeProgram()
+    {
         this.saveStats();
         this.applicationWindow.close();
     }
