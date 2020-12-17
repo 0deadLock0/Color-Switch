@@ -122,7 +122,10 @@ public class GameSpace implements Serializable
     {
         return this.player.getStarsCollected();
     }
-    public void reduceStars(int numStars){this.player.reduceStars(numStars);}
+    public void reduceStars(int numStars)
+    {
+        this.player.reduceStars(numStars);
+    }
 
     public void start()
     {

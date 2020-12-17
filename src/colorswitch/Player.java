@@ -83,7 +83,11 @@ class Player extends Circle implements Serializable
     {
         return this.starsCollected;
     }
-    public void reduceStars(int numStars){if(this.starsCollected>=numStars){this.starsCollected-=numStars;}}
+    public void reduceStars(int numStars)
+    {
+        if(this.starsCollected>=numStars)
+            this.starsCollected-=numStars;
+    }
 
     public void updateProperties()
     {
