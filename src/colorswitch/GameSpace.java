@@ -190,10 +190,6 @@ public class GameSpace implements Serializable
                         this.pause();
                     break;
                 }
-                case C:
-                {
-                    this.pause(); //Till the time proper action is taken on gameOver
-                }
             }
         });
     }
@@ -346,7 +342,6 @@ public class GameSpace implements Serializable
         {
             this.gameActive=false;
             application.gameOver();
-            //ColorSwitch::gamOver needs to be called
             return;
         }
         else if(this.gameOver)
