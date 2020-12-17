@@ -341,7 +341,13 @@ public class ColorSwitch extends Application
         menuOptions.setPrefWidth(100);
         menuOptions.setPrefHeight(50);
 
-
+        Label Tittle= new Label("LOAD GAME");
+        Tittle.getStyleClass().add("heading");
+        Tittle.setLayoutY(10);
+        Label dummy1= new Label(" ");
+        Tittle.getStyleClass().add("heading");
+        Tittle.setLayoutY(10);
+        Label dummy2= new Label(" ");
 
         Button File1=new Button("...");
         File1.setStyle("-fx-background-color: #AB4642");
@@ -388,7 +394,7 @@ public class ColorSwitch extends Application
             button.setMinHeight(menuOptions.getPrefHeight());
         }
 
-        menuOptions.getChildren().addAll(File1,File2,File3,File4,File5,Back);
+        menuOptions.getChildren().addAll(Tittle,dummy1,File1,File2,File3,File4,File5,Back);
         Scene mainMenu=new Scene(menuOptions,Settings.DesiredSceneWidth,Settings.DesiredSceneHeight);
         //changes1
         mainMenu.getStylesheets().add(ColorSwitch.class.getResource("styles.css").toExternalForm());
