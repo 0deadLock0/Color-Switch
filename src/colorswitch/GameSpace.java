@@ -159,21 +159,9 @@ public class GameSpace implements Serializable
                         this.pause();
                     break;
                 }
-                case V: //Testing //Saving a Game
-                {
-                    this.updateProperties();
-                    this.application.saveGame();
-                }
-                case TAB:
-                {
-                    //To return to Main Menu // just for testing purpose
-                    this.application.setUpMainMenu();
-                    break;
-                }
                 case C:
                 {
-                    this.application.closeProgram();
-                    break;
+                    this.pause(); //Till the time proper action is taken on gameOver
                 }
             }
         });
