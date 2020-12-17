@@ -467,10 +467,10 @@ public class ColorSwitch extends Application
         Tittle.getStyleClass().add("heading");
         Tittle.setLayoutY(10);
         Label dummy2= new Label(" ");
-        Label label1=new Label("Navigate through Buttons");
-        Label label2=new Label("Play using Spacebar ");
-        Label label3=new Label("Stay tuned for other updates and modifications");
-        Label label4=new Label("https://github.com/0deadLock0/Color-Switch/blob/master/Code/README.md");
+        Label label1=new Label("-> Collect stars while avoiding obstacles");
+        Label label2=new Label("-> Use following buttons to interact inside the game");
+        Label label3=new Label("1) Move up using Space-bar");
+        Label label4=new Label("2) Use Z to pause the game");
         Label label5 =new Label(" ");
         Label label6 =new Label(" ");
 
