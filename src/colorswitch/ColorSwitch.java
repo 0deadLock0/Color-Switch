@@ -1,6 +1,7 @@
 package colorswitch;
 
 import javafx.application.Application;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -428,12 +429,13 @@ public class ColorSwitch extends Application
         Label dummy2= new Label(" ");
         Tittle.getStyleClass().add("heading");
         Tittle.setLayoutY(10);
-        Label label1=new Label("This App is developed by Abhimanyu And Shubham");
-        Label label2=new Label("For getting the full info about the project ");
-        Label label3=new Label("Check the following");
-        Label label4=new Label("https://github.com/0deadLock0/Color-Switch/blob/master/Code/README.md");
+        Label label1=new Label("The App is developed by Abhimanyu And Shubham");
+        Label label2=new Label("To get full information about the project");
+        Label label3=new Label("Visit the following link");
+        Hyperlink repositoryLink=new Hyperlink("https://github.com/0deadLock0/Color-Switch");
+        repositoryLink.setOnAction(e ->	getHostServices().showDocument(repositoryLink.getText()));
+        Label label4 =new Label(" ");
         Label label5 =new Label(" ");
-        Label label6 =new Label(" ");
 
         Button Back= new Button("BACK");
         Back.setStyle("-fx-background-color: #ff4500");
@@ -443,7 +445,7 @@ public class ColorSwitch extends Application
         });
 
         Back.setMinWidth(menuOptions.getPrefWidth());
-        menuOptions.getChildren().addAll(Tittle,dummy1,dummy2,label1,label2,label3,label4,label5,label6,Back);
+        menuOptions.getChildren().addAll(Tittle,dummy1,dummy2,label1,label2,label3,repositoryLink,label4,label5,Back);
         Scene mainMenu=new Scene(menuOptions,Settings.DesiredSceneWidth,Settings.DesiredSceneHeight);
         //changes1
         mainMenu.getStylesheets().add(ColorSwitch.class.getResource("styles.css").toExternalForm());
