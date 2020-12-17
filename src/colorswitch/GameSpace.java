@@ -232,7 +232,7 @@ public class GameSpace implements Serializable
         });
         Save.setOnAction(event -> {
             this.updateProperties();
-            application.saveGame();
+            String savedName=application.saveGame();
         });
         Exit.setOnAction(event -> {
             gamePane.setEffect(null);

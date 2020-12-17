@@ -374,7 +374,7 @@ public class ColorSwitch extends Application
         this.applicationWindow.setScene(mainMenu);
     }
 
-    public void saveGame()
+    public String saveGame()
     {
         int fileId=ColorSwitch.savedGames.size();
         if(fileId==ColorSwitch.maxRecords)
@@ -396,6 +396,7 @@ public class ColorSwitch extends Application
             System.out.println("IOException is caught");
             ex.printStackTrace(System.out);
         }
+        return gameRecord.getName();
     }
     private void loadGame(int option)
     {
