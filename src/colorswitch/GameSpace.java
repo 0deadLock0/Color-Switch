@@ -177,7 +177,7 @@ public class GameSpace implements Serializable
                 }
                 case C:
                 {
-                    this.applicationWindow.close();
+                    this.application.closeProgram();
                     break;
                 }
             }
@@ -253,6 +253,11 @@ public class GameSpace implements Serializable
     {
         if(this.gameOver || !this.gameActive)
             return;
+//        else if(this.gameOver)
+//        {
+//            //ColorSwitch::gamOver needs to be called
+              //Remove this.gameOver from the previous if, if this else if is implemented
+//        }
         if(this.isPlayerInteractingStar(this.player, this.stars.peek()))
         {
             this.player.collectStar(this.stars.peek());
