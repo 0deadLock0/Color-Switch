@@ -1,4 +1,3 @@
-
 package colorswitch;
 
 import javafx.scene.paint.Color;

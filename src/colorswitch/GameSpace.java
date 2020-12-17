@@ -100,10 +100,12 @@ public class GameSpace implements Serializable
     {
         return this.player.getStarsCollected();
     }
+    public void reduceStars(int numStars){this.player.reduceStars(numStars);}
 
     public void start()
     {
         this.gameActive=true;
+        this.gameOver=false;
         this.applicationWindow.setScene(this.gameScene);
 
         this.setUserInput();
@@ -116,6 +118,10 @@ public class GameSpace implements Serializable
             }
         };
         timer.start();
+    }
+    public void restart(){
+        this.easeGameSpace();
+        this.start();
     }
 
     private void restoreProperties()
@@ -281,6 +287,7 @@ public class GameSpace implements Serializable
         else if(this.gameOver && RandomMotionBall.areAllBallsAnimationFinished())
         {
             this.gameActive=false;
+            application.gameOver();
             //ColorSwitch::gamOver needs to be called
             return;
         }
@@ -627,6 +634,32 @@ public class GameSpace implements Serializable
         ColorBall colorBall=this.addNewColorBall();
         this.addColorBallToPane(colorBall);
     }
+    private void removeFirstObstacleFromPane(){
+        Obstacle obstacle=this.obstacles.remove();
+        this.gamePane.getChildren().remove(obstacle);
+    }
+    private void removeFirstColorBallFromPane(){
+        ColorBall colorBall=this.colorBalls.remove();
+        this.gamePane.getChildren().remove(colorBall);
+    }
+    private void removeFirstStarFromPane(){
+        Star star=this.stars.remove();
+        this.gamePane.getChildren().remove(star);
+    }
+
+    void easeGameSpace(){
+
+        this.player.setPosition(this.gameScene.getWidth()/2, 9*this.gameScene.getHeight()/10);
+        this.gamePane.getChildren().add(this.player);
+        this.removeFirstObstacleFromPane();
+        this.addNewObstacleToPane();
+        this.removeFirstColorBallFromPane();
+        this.addNewColorBallToPane();
+        this.removeFirstStarFromPane();
+        this.addNewStarToPane();
+
+    }
+
 
     private void addLabelToPane(Label label)
     {

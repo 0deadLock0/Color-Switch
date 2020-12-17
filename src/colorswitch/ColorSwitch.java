@@ -1,6 +1,10 @@
 package colorswitch;
 
 import javafx.application.Application;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
@@ -10,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.geometry.Pos;
+import javafx.stage.StageStyle;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -19,6 +24,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class ColorSwitch extends Application
 {
@@ -123,6 +130,93 @@ public class ColorSwitch extends Application
     private void updateHighScore()
     {
         ColorSwitch.highScore=Math.max(ColorSwitch.highScore,this.currentGame.getScore());
+    }
+
+    public void gameOver(){
+        VBox gameover = new VBox();
+        gameover.setSpacing(10);
+        gameover.setAlignment(Pos.CENTER);
+        gameover.setPrefWidth(600);
+        gameover.setPrefHeight(50);
+
+        Label dummyA= new Label("");
+        dummyA.setFont(Font.font("Arial", FontWeight.BOLD,130));
+        Label dummyB= new Label("");
+        dummyB.setFont(Font.font("Arial", FontWeight.BOLD,10));
+        Label Over= new Label("Game Over");
+        Over.setTextFill(Color.ALICEBLUE);
+        Over.setFont(Font.font("Arial", FontWeight.BOLD,20));
+
+        Label Message= new Label("Do you wish to continue using 5 Stars?");
+        Message.setTextFill(Color.ALICEBLUE);
+        Message.setFont(Font.font("Arial", FontWeight.BOLD,20));
+
+        Button Continue = new Button("Continue");
+        Continue.setStyle("-fx-background-color: #ff4500");
+        Continue.setFont(Font.font("Arial", FontWeight.BOLD,30));
+        Continue.setMinWidth(160);
+
+        Button Exit = new Button("Exit");
+        Exit.setStyle("-fx-background-color: #ff4500");
+        Exit.setFont(Font.font("Arial", FontWeight.BOLD,30));
+        Exit.setMinWidth(160);
+
+        gameover.getChildren().addAll(dummyA,Message,dummyB, Continue,Exit);
+        gameover.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0);");
+
+        Stage popupStage = new Stage(StageStyle.TRANSPARENT);
+        popupStage.initOwner(applicationWindow);
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setScene(new Scene(gameover,Color.TRANSPARENT));
+        popupStage.show();
+        Continue.setOnAction(event -> {
+            if(currentGame.getStarsCollected()>=5){
+                currentGame.reduceStars(5);
+                popupStage.hide();
+                //currentGame.easeGameSpace();
+                currentGame.restart();
+                //currentGame.start();
+            }
+            else {
+                popupStage.hide();
+                VBox vbox = new VBox();
+                vbox.setSpacing(10);
+                vbox.setAlignment(Pos.CENTER);
+                vbox.setPrefWidth(600);
+                vbox.setPrefHeight(50);
+
+                Label dummy1= new Label("");
+                dummy1.setFont(Font.font("Arial", FontWeight.BOLD,130));
+                Label dummy2= new Label("");
+                dummy2.setFont(Font.font("Arial", FontWeight.BOLD,10));
+
+                Label InsufficientstarMessage= new Label("Not Sufficient Stars");
+                InsufficientstarMessage.setTextFill(Color.ALICEBLUE);
+                InsufficientstarMessage.setFont(Font.font("Arial", FontWeight.BOLD,20));
+
+                Button exit = new Button("Exit");
+                exit.setStyle("-fx-background-color: #ff4500");
+                exit.setFont(Font.font("Arial", FontWeight.BOLD,30));
+                exit.setMinWidth(160);
+                vbox.getChildren().addAll(dummy1,InsufficientstarMessage,dummy2, exit);
+                vbox.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0);");
+
+                Stage popupStage2 = new Stage(StageStyle.TRANSPARENT);
+                popupStage2.initOwner(applicationWindow);
+                popupStage2.initModality(Modality.APPLICATION_MODAL);
+                popupStage2.setScene(new Scene(vbox,Color.TRANSPARENT));
+                popupStage2.show();
+                exit.setOnAction(insufficientStarsevent -> {
+                    popupStage2.hide();
+                    this.setUpMainMenu();
+                });
+            }
+        });
+        Exit.setOnAction(event -> {
+            popupStage.hide();
+            this.setUpMainMenu();
+
+        });
     }
 
     public void setUpMainMenu()
