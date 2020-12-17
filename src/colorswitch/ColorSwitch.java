@@ -21,8 +21,6 @@ import javafx.stage.StageStyle;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 public class ColorSwitch extends Application
 {
@@ -52,6 +50,11 @@ public class ColorSwitch extends Application
         totalStarsCollected=0;
         highScore=0;
         savedGames=new ArrayList<>(maxRecords);
+    }
+
+    public static int getHighScore()
+    {
+        return ColorSwitch.highScore;
     }
 
     private void setUpWindow()
