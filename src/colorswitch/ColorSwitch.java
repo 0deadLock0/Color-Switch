@@ -189,7 +189,7 @@ public class ColorSwitch extends Application
                 currentGame.reduceStars(5);
                 popupStage.hide();
                 //currentGame.easeGameSpace();
-                currentGame.restart();
+                this.restart();
                 //currentGame.start();
             }
             else {
@@ -233,6 +233,10 @@ public class ColorSwitch extends Application
             popupStage.hide();
             this.gameFinished();
         });
+    }
+    public void restart(){
+        currentGame.easeGameSpace();
+        currentGame.start();
     }
 
     public void setUpMainMenu()

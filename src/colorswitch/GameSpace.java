@@ -145,10 +145,6 @@ public class GameSpace implements Serializable
         };
         timer.start();
     }
-    public void restart(){
-        this.easeGameSpace();
-        this.start();
-    }
 
     private void restoreProperties()
     {
