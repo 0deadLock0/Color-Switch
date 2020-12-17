@@ -227,8 +227,8 @@ public class GameSpace implements Serializable
 
         resume.setOnAction(event -> {
             gamePane.setEffect(null);
-            this.resume();
             popupStage.hide();
+            this.resume();
         });
         Save.setOnAction(event -> {
             this.updateProperties();
