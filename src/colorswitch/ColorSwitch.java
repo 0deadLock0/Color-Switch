@@ -1,6 +1,8 @@
 package colorswitch;
 
 import javafx.application.Application;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -16,12 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.geometry.Pos;
 import javafx.stage.StageStyle;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -131,6 +128,13 @@ public class ColorSwitch extends Application
     {
         ColorSwitch.highScore=Math.max(ColorSwitch.highScore,this.currentGame.getScore());
     }
+    private void buttonSound(){
+        String path = "resources/Sound Effects/button.wav";
+        Media media=new Media(new File(path).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setAutoPlay(true);
+
+    }
 
     public void gameOver(){
         VBox gameover = new VBox();
@@ -170,6 +174,7 @@ public class ColorSwitch extends Application
         popupStage.setScene(new Scene(gameover,Color.TRANSPARENT));
         popupStage.show();
         Continue.setOnAction(event -> {
+            this.buttonSound();
             if(currentGame.getStarsCollected()>=5){
                 currentGame.reduceStars(5);
                 popupStage.hide();
@@ -207,12 +212,14 @@ public class ColorSwitch extends Application
                 popupStage2.setScene(new Scene(vbox,Color.TRANSPARENT));
                 popupStage2.show();
                 exit.setOnAction(insufficientStarsevent -> {
+                    this.buttonSound();
                     popupStage2.hide();
                     this.setUpMainMenu();
                 });
             }
         });
         Exit.setOnAction(event -> {
+            this.buttonSound();
             popupStage.hide();
             this.setUpMainMenu();
 
@@ -261,27 +268,45 @@ public class ColorSwitch extends Application
         newGameButton.setStyle("-fx-font-weight: bold");
         newGameButton.setStyle("-fx-background-color: #AB4642");
 
-        newGameButton.setOnAction(newGameEvent -> this.startNewGame());
+        newGameButton.setOnAction(newGameEvent ->{
+            this.buttonSound();
+            this.startNewGame();
+        });
 
         Button loadGameButton=new Button("LOAD GAME");
         loadGameButton.setStyle("-fx-background-color: #00bfff");
-        loadGameButton.setOnAction(loadGameEvent -> this.setUpLoadMenu());
+        loadGameButton.setOnAction(loadGameEvent -> {
+            this.buttonSound();
+            this.setUpLoadMenu();
+        });
 
         Button statsButton=new Button("STATS");
         statsButton.setStyle("-fx-background-color: #e9967a");
-        statsButton.setOnAction(statsevent -> setUpStatsMenu());
+        statsButton.setOnAction(statsevent -> {
+            this.buttonSound();
+            setUpStatsMenu();
+        });
 
         Button helpButton=new Button("HELP");
         helpButton.setStyle("-fx-background-color: #00fa9a");
-        helpButton.setOnAction(helpevent -> setUpHelpMenu());
+        helpButton.setOnAction(helpevent -> {
+            this.buttonSound();
+            setUpHelpMenu();
+        });
 
         Button creditsButton=new Button("CREDITS");
         creditsButton.setStyle("-fx-background-color: #F7CA88");
-        creditsButton.setOnAction(creditsevent -> this.setUpCreditsMenu());
+        creditsButton.setOnAction(creditsevent -> {
+            this.buttonSound();
+            this.setUpCreditsMenu();
+        });
 
         Button exitButton=new Button("EXIT");
         exitButton.setStyle("-fx-background-color: #f08080");
-        exitButton.setOnAction(exitEvent -> this.closeProgram());
+        exitButton.setOnAction(exitEvent -> {
+            this.buttonSound();
+            this.closeProgram();
+        });
 
         Button[] menuButtons={newGameButton,loadGameButton,statsButton,helpButton,creditsButton,exitButton};
 
@@ -326,7 +351,10 @@ public class ColorSwitch extends Application
 
         Button Back= new Button("BACK");
         Back.setStyle("-fx-background-color: #ff4500");
-        Back.setOnAction(event -> this.setUpMainMenu());
+        Back.setOnAction(event -> {
+            this.buttonSound();
+            this.setUpMainMenu();
+        });
 
         Button[] Files={File1,File2,File3,File4,File5};
         int fileID=0;
@@ -336,7 +364,10 @@ public class ColorSwitch extends Application
             {
                 int finalFileID=fileID;
                 File.setText("Saved State "+fileID);
-                File.setOnAction(newGameEvent -> this.loadGame(finalFileID));
+                File.setOnAction(newGameEvent -> {
+                    this.buttonSound();
+                    this.loadGame(finalFileID);
+                });
             }
             ++fileID;
         }
@@ -382,7 +413,10 @@ public class ColorSwitch extends Application
 
         Button Back= new Button("BACK");
         Back.setStyle("-fx-background-color: #ff4500");
-        Back.setOnAction(event -> this.setUpMainMenu());
+        Back.setOnAction(event -> {
+            this.buttonSound();
+            this.setUpMainMenu();
+        });
 
         Back.setMinWidth(menuOptions.getPrefWidth());
         menuOptions.getChildren().addAll(Tittle,dummy1,dummy2,label1,label2,label3,label4,label5,label6,Back);
@@ -418,7 +452,10 @@ public class ColorSwitch extends Application
 
         Button Back= new Button("BACK");
         Back.setStyle("-fx-background-color: #ff4500");
-        Back.setOnAction(event -> this.setUpMainMenu());
+        Back.setOnAction(event -> {
+            this.buttonSound();
+            this.setUpMainMenu();
+        });
 
         Back.setMinWidth(menuOptions.getPrefWidth());
 //      Back.setMinHeight(menuOptions.getPrefHeight());
@@ -455,7 +492,10 @@ public class ColorSwitch extends Application
 
         Button Back= new Button("BACK");
         Back.setStyle("-fx-background-color: #ff4500");
-        Back.setOnAction(event -> this.setUpMainMenu());
+        Back.setOnAction(event -> {
+            this.buttonSound();
+            this.setUpMainMenu();
+        });
 
 
         Back.setMinWidth(menuOptions.getPrefWidth());

@@ -1,6 +1,7 @@
 
 package colorswitch;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Random;
@@ -8,6 +9,8 @@ import java.util.Queue;
 import java.util.LinkedList;
 
 import javafx.animation.AnimationTimer;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 
@@ -172,6 +175,13 @@ public class GameSpace implements Serializable
             }
         });
     }
+    private void buttonSound(){
+        String path = "resources/Sound Effects/button.wav";
+        Media media=new Media(new File(path).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setAutoPlay(true);
+
+    }
 
     private void pause()
     {
@@ -215,13 +225,14 @@ public class GameSpace implements Serializable
         final boolean[] saved = {false};
 
         resume.setOnAction(event -> {
+            this.buttonSound();
             gamePane.setEffect(null);
             popupStage.hide();
             this.touched=false;
             this.resume();
         });
         Save.setOnAction(event -> {
-
+            this.buttonSound();
             if(!saved[0]){
                 this.updateProperties();
                 String savedName=application.saveGame();
@@ -233,6 +244,7 @@ public class GameSpace implements Serializable
             }
         });
         Exit.setOnAction(event -> {
+            this.buttonSound();
             gamePane.setEffect(null);
             popupStage.hide();
             application.gameFinished();
@@ -275,6 +287,7 @@ public class GameSpace implements Serializable
         popupStage.hide();
         popupStage2.show();
         Ok.setOnAction(confirmevent -> {
+            this.buttonSound();
             popupStage2.hide();
             popupStage.show();
         });
