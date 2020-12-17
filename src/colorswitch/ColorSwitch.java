@@ -57,8 +57,7 @@ public class ColorSwitch extends Application
     private void setUpWindow()
     {
         this.applicationWindow.setTitle("Color Switch");
-        this.applicationWindow.setResizable(false);
-        this.applicationWindow.setOnCloseRequest(closeEvent -> closeEvent.consume());
+        this.applicationWindow.initStyle(StageStyle.UNDECORATED);
     }
 
     private void loadStats()
