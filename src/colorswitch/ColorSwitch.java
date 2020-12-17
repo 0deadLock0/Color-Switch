@@ -134,8 +134,8 @@ public class ColorSwitch extends Application
         mediaPlayer.setAutoPlay(true);
 
     }
-
-    public void gameOver(){
+    public void gameOver()
+    {
         VBox gameover = new VBox();
         gameover.setSpacing(10);
         gameover.setAlignment(Pos.CENTER);
@@ -220,8 +220,7 @@ public class ColorSwitch extends Application
         Exit.setOnAction(event -> {
             this.buttonSound();
             popupStage.hide();
-            this.setUpMainMenu();
-
+            this.gameFinished();
         });
     }
 
