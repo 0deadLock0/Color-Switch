@@ -132,8 +132,19 @@ public class ColorSwitch extends Application
         Media media=new Media(new File(path).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setAutoPlay(true);
+        mediaPlayer.setVolume(1.0);
 
     }
+    private void backgroundSound(){
+        String path = "resources/Sound Effects/background.mp3";
+        Media media=new Media(new File(path).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setAutoPlay(true);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.setVolume(0.4);
+
+    }
+
     public void gameOver()
     {
         VBox gameover = new VBox();
@@ -593,6 +604,7 @@ public class ColorSwitch extends Application
     @Override
     public void start(Stage primaryStage)
     {
+        this.backgroundSound();
         this.applicationWindow=primaryStage;
 
         this.loadStats();

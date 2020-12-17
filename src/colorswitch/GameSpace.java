@@ -198,30 +198,35 @@ public class GameSpace implements Serializable
         Media media=new Media(new File(path).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setAutoPlay(true);
+        mediaPlayer.setVolume(1.0);
     }
     private void interactingWithStarSound(){
         String path = "resources/Sound Effects/star.wav";
         Media media=new Media(new File(path).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setAutoPlay(true);
+        mediaPlayer.setVolume(1.0);
     }
     private void collidingWithObstaclesSound(){
         String path = "resources/Sound Effects/dead.wav";
         Media media=new Media(new File(path).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setAutoPlay(true);
+        mediaPlayer.setVolume(1.0);
     }
     private void interactingWithColorBallSound(){
         String path = "resources/Sound Effects/victory.wav";
         Media media=new Media(new File(path).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setAutoPlay(true);
+        mediaPlayer.setVolume(1.0);
     }
     private void playerFallenDownSound(){
         String path = "resources/Sound Effects/fallen.wav";
         Media media=new Media(new File(path).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setAutoPlay(true);
+        mediaPlayer.setVolume(1.0);
     }
 
     private void pause()
