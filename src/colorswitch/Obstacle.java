@@ -9,7 +9,7 @@ import java.io.Serializable;
 abstract class Obstacle extends Group implements Serializable
 {
     protected double obstacleSize;
-    protected boolean advanced;
+    protected static boolean advanced;
 
     protected double xCenter;
     protected double yCenter;
@@ -18,8 +18,8 @@ abstract class Obstacle extends Group implements Serializable
     {
         super();
         this.getChildren().clear();
-        this.obstacleSize=Settings.ObstacleSize;
-        this.advanced=false;
+        this.obstacleSize=GameSpace.ObstacleSize;
+        Obstacle.advanced=false;
         this.xCenter=0;
         this.yCenter=0;
     }
@@ -27,7 +27,7 @@ abstract class Obstacle extends Group implements Serializable
     public abstract void transform();
     public void moveDown()
     {
-        this.setTranslateY(this.getTranslateY()+Settings.MotionSpeed);
+        this.setTranslateY(this.getTranslateY()+GameSpace.MotionSpeed);
     }
     public abstract void construct();
 
@@ -38,9 +38,9 @@ abstract class Obstacle extends Group implements Serializable
         this.yCenter=position[1];
     }
 
-    public void enableAdvanceMode()
+    public static void enableAdvanceMode()
     {
-        this.advanced =true;
+        Obstacle.advanced=true;
     }
 
     public double[] getCentrePosition()

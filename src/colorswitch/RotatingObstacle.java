@@ -21,7 +21,7 @@ abstract class RotatingObstacle extends Obstacle
     }
     private void rotate()
     {
-        this.setRotate(this.getRotate()+Settings.TransformationSpeed*this.factor);
+        this.setRotate(this.getRotate()+GameSpace.TransformationSpeed*this.factor);
     }
 
     public void updateProperties()

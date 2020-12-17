@@ -50,14 +50,33 @@ public class GameSpace implements Serializable
     private boolean gameOver;
     private long lastTime;
 
-    private long ideallyObstacleTransformed;
+    private long difficultyRaiseTarget;
 
+    private long ideallyObstacleTransformed;
+    static double ObstacleSize;
+    static double EntitiesGap;
+    static double TransformationSpeed;
+    static double ObstacleTransformationSpeed;
+    static double MotionSpeed;
+    static double Gravity;
+
+    static
+    {
+        ObstacleSize=Settings.ObstacleSize;
+        EntitiesGap=Settings.EntitiesGap;
+        TransformationSpeed=Settings.TransformationSpeed;
+        ObstacleTransformationSpeed=Settings.ObstacleTransformationSpeed;
+        MotionSpeed=Settings.MotionSpeed;
+        Gravity=Settings.Gravity;
+    }
+    
     public GameSpace(ColorSwitch sourceApplication, Stage window, double desiredWidth, double desiredHeight)
     {
         this.gameActive=false;
         this.gameOver=false;
         this.ideallyObstacleTransformed=0;
         this.lastTime=0;
+        this.difficultyRaiseTarget=5;
         this.obstacles=new LinkedList<>();
         this.stars=new LinkedList<>();
         this.colorBalls=new LinkedList<>();
@@ -103,7 +122,10 @@ public class GameSpace implements Serializable
     {
         return this.player.getStarsCollected();
     }
-    public void reduceStars(int numStars){this.player.reduceStars(numStars);}
+    public void reduceStars(int numStars)
+    {
+        this.player.reduceStars(numStars);
+    }
 
     public void start()
     {
@@ -168,10 +190,6 @@ public class GameSpace implements Serializable
                         this.pause();
                     break;
                 }
-                case C:
-                {
-                    this.pause(); //Till the time proper action is taken on gameOver
-                }
             }
         });
     }
@@ -216,7 +234,7 @@ public class GameSpace implements Serializable
         pauseRoot.setAlignment(Pos.CENTER);
         pauseRoot.setPrefWidth(250);
         pauseRoot.setPrefHeight(50);
-        
+
         Label Tittle= new Label("PAUSED");
         Label dummy= new Label("");
         dummy.setFont(Font.font("Arial", FontWeight.BOLD,30));
@@ -320,13 +338,14 @@ public class GameSpace implements Serializable
     {
         if(!this.gameActive)
             return;
-        else if(this.gameOver && RandomMotionBall.areAllBallsAnimationFinished())
+        if(this.gameOver && RandomMotionBall.areAllBallsAnimationFinished())
         {
             this.gameActive=false;
             application.gameOver();
-            //ColorSwitch::gamOver needs to be called
             return;
         }
+        else if(this.gameOver)
+            return;
         if(this.isPlayerInteractingStar(this.player, this.stars.peek()))
         {
             this.interactingWithStarSound();
@@ -376,6 +395,9 @@ public class GameSpace implements Serializable
                 lastTime=now;
             }
         }
+
+        if(this.isDifficultyUpCriteriaFulfilled())
+            this.increaseDifficulty();
     }
 
     private void updateGUI()
@@ -418,7 +440,7 @@ public class GameSpace implements Serializable
     {
         if((obstacle instanceof ColorChangingObstacle) || (obstacle instanceof ColorSwappingObstacle))
         {
-            if(this.ideallyObstacleTransformed % Settings.ObstacleTransformationSpeed == 0)
+            if(this.ideallyObstacleTransformed % GameSpace.ObstacleTransformationSpeed == 0)
                 obstacle.transform();
         }
         else
@@ -506,7 +528,7 @@ public class GameSpace implements Serializable
         {
             ++count;
             if(count==size)
-                position[1]=obstacle.getCentrePosition()[1]-Settings.EntitiesGap;
+                position[1]=obstacle.getCentrePosition()[1]-GameSpace.EntitiesGap;
         }
         return position;
     }
@@ -519,7 +541,7 @@ public class GameSpace implements Serializable
         {
             ++count;
             if(count==size)
-                position[1]=star.getPosition()[1]-Settings.EntitiesGap;
+                position[1]=star.getPosition()[1]-GameSpace.EntitiesGap;
         }
         return position;
     }
@@ -527,12 +549,12 @@ public class GameSpace implements Serializable
     {
         int count=0;
         int size=this.colorBalls.size();
-        double[] position={this.gameScene.getWidth()/2,this.gameScene.getHeight()/2-Settings.EntitiesGap/2};
+        double[] position={this.gameScene.getWidth()/2,this.gameScene.getHeight()/2-GameSpace.EntitiesGap/2};
         for(ColorBall colorBall : this.colorBalls)
         {
             ++count;
             if(count==size)
-                position[1]=colorBall.getPosition()[1]-Settings.EntitiesGap;
+                position[1]=colorBall.getPosition()[1]-GameSpace.EntitiesGap;
         }
         return position;
     }
@@ -580,19 +602,16 @@ public class GameSpace implements Serializable
     {
         Random rd=new Random();
 
-        Obstacle obstacle;
-        switch(rd.nextInt(Settings.ObstaclesCount))
-        {
-            // To add new obstacles, also update Settings.ObstaclesCount
-
-            case 0 : obstacle = new CircularRotatingObstacle(xCenter, yCenter); break;
-            case 1 : obstacle = new SquareRotatingObstacle(xCenter, yCenter); break;
-            case 2 : obstacle = new CircularColorChangingObstacle(xCenter, yCenter); break;
-            case 3 : obstacle = new LineColorSwappingObstacle(xCenter, yCenter); break;
-            case 4 : obstacle = new SquareColorSwappingObstacle(xCenter, yCenter); break;
-            case 5 : obstacle = new PlusRotatingObstacle(xCenter, yCenter); break;
-            default : obstacle = null;
-        }
+        // To add new obstacles, also update Settings.ObstaclesCount
+        Obstacle obstacle = switch (rd.nextInt(Settings.ObstaclesCount)) {
+            case 0 -> new CircularRotatingObstacle(xCenter, yCenter);
+            case 1 -> new SquareRotatingObstacle(xCenter, yCenter);
+            case 2 -> new CircularColorChangingObstacle(xCenter, yCenter);
+            case 3 -> new LineColorSwappingObstacle(xCenter, yCenter);
+            case 4 -> new SquareColorSwappingObstacle(xCenter, yCenter);
+            case 5 -> new PlusRotatingObstacle(xCenter, yCenter);
+            default -> null;
+        };
         return obstacle;
     }
 
@@ -729,5 +748,25 @@ public class GameSpace implements Serializable
         Random rd=new Random();
 		for(int i=0;i<count;++i)
 			new RandomMotionBall(xPosition, yPosition,2+rd.nextInt(3),bounds,this.gamePane);
+    }
+
+    private boolean isDifficultyUpCriteriaFulfilled()
+    {
+        return this.player.getStarsCollected()>this.difficultyRaiseTarget;
+    }
+    private void increaseDifficulty()
+    {
+        double increaseFactor = 0.1;
+        if(this.difficultyRaiseTarget == 5)
+            GameSpace.ObstacleSize -= GameSpace.ObstacleSize * increaseFactor;
+        else if(this.difficultyRaiseTarget == 15)
+            Obstacle.enableAdvanceMode();
+        else
+        {
+            GameSpace.TransformationSpeed += GameSpace.TransformationSpeed * increaseFactor;
+            GameSpace.ObstacleTransformationSpeed += GameSpace.ObstacleTransformationSpeed * increaseFactor;
+            GameSpace.Gravity += GameSpace.Gravity * increaseFactor;
+        }
+        this.difficultyRaiseTarget += 5;
     }
 }
