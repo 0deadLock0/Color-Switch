@@ -177,8 +177,7 @@ public class GameSpace implements Serializable
         pauseRoot.setAlignment(Pos.CENTER);
         pauseRoot.setPrefWidth(250);
         pauseRoot.setPrefHeight(50);
-        //pauseRoot.setPadding(new Insets(100));
-
+        
         Label Tittle= new Label("PAUSED");
         Label dummy= new Label("");
         dummy.setFont(Font.font("Arial", FontWeight.BOLD,30));
@@ -235,24 +234,17 @@ public class GameSpace implements Serializable
 
         popupStage.show();
     }
-    private void resume() // should be called using an action listener //like clicking resume Button
+    private void resume()
     {
         this.gameActive=true;
-//        this.applicationWindow.setScene(this.gameScene);
     }
-    private void confirmSavedGame(Stage popupStage, String message){
-//        try {
-//            TimeUnit.SECONDS.sleep(1);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
+    private void confirmSavedGame(Stage popupStage, String message)
+    {
         VBox confirmSaveRoot = new VBox();
         confirmSaveRoot.setSpacing(10);
         confirmSaveRoot.setAlignment(Pos.CENTER);
         confirmSaveRoot.setPrefWidth(600);
         confirmSaveRoot.setPrefHeight(50);
-
 
         Label dummyA= new Label("");
         dummyA.setFont(Font.font("Arial", FontWeight.BOLD,130));
@@ -267,7 +259,6 @@ public class GameSpace implements Serializable
         Ok.setFont(Font.font("Arial", FontWeight.BOLD,30));
         Ok.setMinWidth(160);
 
-
         confirmSaveRoot.getChildren().addAll(dummyA,Message,dummyB, Ok);
         confirmSaveRoot.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0);");
 
@@ -275,12 +266,10 @@ public class GameSpace implements Serializable
         popupStage2.initOwner(popupStage);
         popupStage2.initModality(Modality.APPLICATION_MODAL);
         popupStage2.setScene(new Scene(confirmSaveRoot,Color.TRANSPARENT));
-        //popupStage.setOpacity(0.0);
         popupStage.hide();
         popupStage2.show();
         Ok.setOnAction(confirmevent -> {
             popupStage2.hide();
-            //popupStage.setOpacity(1.0);
             popupStage.show();
         });
     }
@@ -315,14 +304,12 @@ public class GameSpace implements Serializable
             this.gameOver=true;
             this.gamePane.getChildren().remove(this.player);
             this.addBrokenBallsWithAnimationToPane(this.player.getPosition()[0],this.player.getPosition()[1]);
-            //Proceed to Exit Game
         }
         if(this.isPlayerFallenDown(this.player))
         {
             this.gameOver=true;
             this.gamePane.getChildren().remove(this.player);
             this.addBrokenBallsWithAnimationToPane(this.player.getPosition()[0],this.player.getPosition()[1]);
-            //Proceed to Exit Game
         }
 
         this.updateObstacles();
