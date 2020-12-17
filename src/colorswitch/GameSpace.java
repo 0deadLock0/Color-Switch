@@ -293,6 +293,7 @@ public class GameSpace implements Serializable
         {
             this.gameActive=false;
             //ColorSwitch::gamOver needs to be called
+            return;
         }
         if(this.isPlayerInteractingStar(this.player, this.stars.peek()))
         {
