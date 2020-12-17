@@ -153,15 +153,10 @@ public class GameSpace implements Serializable
                         this.movePlayerUp();
                     break;
                 }
-                case X:
+                case Z:
                 {
                     if(this.gameActive && !gameOver)
-                        this.stop();
-                    else { // To be removed when Action Listener is created
-                        this.resume();
-                        gamePane.setEffect(null);
-                    }
-
+                        this.pause();
                     break;
                 }
                 case V: //Testing //Saving a Game
@@ -184,7 +179,7 @@ public class GameSpace implements Serializable
         });
     }
 
-    private void stop()
+    private void pause()
     {
         this.gameActive=false;
         gamePane.setEffect(new GaussianBlur());
@@ -228,6 +223,7 @@ public class GameSpace implements Serializable
         resume.setOnAction(event -> {
             gamePane.setEffect(null);
             popupStage.hide();
+            this.touched=false;
             this.resume();
         });
         Save.setOnAction(event -> {
@@ -309,7 +305,7 @@ public class GameSpace implements Serializable
 
     private void updateGUI()
     {
-        updateScore();
+        this.updateScore();
     }
     private void updateScore()
     {
