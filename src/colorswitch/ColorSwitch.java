@@ -380,7 +380,8 @@ public class ColorSwitch extends Application
         if(fileId==ColorSwitch.maxRecords)
             fileId=(new Random()).nextInt(ColorSwitch.maxRecords);
         String fileName=ColorSwitch.recordsDirectory +"\\Record"+fileId+".ser";
-        ColorSwitch.savedGames.add(fileName);
+        if(fileId==ColorSwitch.savedGames.size())
+            ColorSwitch.savedGames.add(fileName);
         GameRecord gameRecord=new GameRecord(this.currentGame.getScore(),("Saved State "+fileId),this.currentGame);
 
         try
