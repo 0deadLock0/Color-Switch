@@ -233,6 +233,7 @@ public class GameSpace implements Serializable
         Save.setOnAction(event -> {
             this.updateProperties();
             String savedName=application.saveGame();
+            this.confirmSavedGame(popupStage, savedName);
         });
         Exit.setOnAction(event -> {
             gamePane.setEffect(null);
@@ -247,6 +248,50 @@ public class GameSpace implements Serializable
     {
         this.gameActive=true;
 //        this.applicationWindow.setScene(this.gameScene);
+    }
+    private void confirmSavedGame(Stage popupStage, String savedName){
+//        try {
+//            TimeUnit.SECONDS.sleep(1);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
+        VBox confirmSaveRoot = new VBox();
+        confirmSaveRoot.setSpacing(10);
+        confirmSaveRoot.setAlignment(Pos.CENTER);
+        confirmSaveRoot.setPrefWidth(600);
+        confirmSaveRoot.setPrefHeight(50);
+
+
+        Label dummyA= new Label("");
+        dummyA.setFont(Font.font("Arial", FontWeight.BOLD,30));
+        Label dummyB= new Label("");
+        dummyB.setFont(Font.font("Arial", FontWeight.BOLD,30));
+        Label Message= new Label("The game has been Saved to "+savedName);
+        Message.setTextFill(Color.ALICEBLUE);
+        Message.setFont(Font.font("Arial", FontWeight.BOLD,10));
+
+        Button Ok = new Button("OK");
+        Ok.setStyle("-fx-background-color: #ff4500");
+        Ok.setFont(Font.font("Arial", FontWeight.BOLD,30));
+        Ok.setMinWidth(160);
+
+
+        confirmSaveRoot.getChildren().addAll(dummyA,Message,dummyB, Ok);
+        confirmSaveRoot.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0);");
+
+        Stage popupStage2 = new Stage(StageStyle.TRANSPARENT);
+        popupStage2.initOwner(popupStage);
+        popupStage2.initModality(Modality.APPLICATION_MODAL);
+        popupStage2.setScene(new Scene(confirmSaveRoot,Color.TRANSPARENT));
+        //popupStage.setOpacity(0.0);
+        popupStage.hide();
+        popupStage2.show();
+        Ok.setOnAction(confirmevent -> {
+            popupStage2.hide();
+            //popupStage.setOpacity(1.0);
+            popupStage.show();
+        });
     }
 
     private void backgroundProcess(long now)
