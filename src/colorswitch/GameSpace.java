@@ -234,6 +234,12 @@ public class GameSpace implements Serializable
             this.updateProperties();
             application.saveGame();
         });
+        Exit.setOnAction(event -> {
+            gamePane.setEffect(null);
+            popupStage.hide();
+            //ColorSwitch::gameOver needs to be called
+            application.setUpMainMenu();
+        });
 
         popupStage.show();
     }
