@@ -48,7 +48,23 @@ public class GameSpace implements Serializable
     private long lastTime;
 
     private long ideallyObstacleTransformed;
+    static double ObstacleSize;
+    static double EntitiesGap;
+    static double TransformationSpeed;
+    static double ObstacleTransformationSpeed;
+    static double MotionSpeed;
+    static double Gravity;
 
+    static
+    {
+        ObstacleSize=Settings.ObstacleSize;
+        EntitiesGap=Settings.EntitiesGap;
+        TransformationSpeed=Settings.TransformationSpeed;
+        ObstacleTransformationSpeed=Settings.ObstacleTransformationSpeed;
+        MotionSpeed=Settings.MotionSpeed;
+        Gravity=Settings.Gravity;
+    }
+    
     public GameSpace(ColorSwitch sourceApplication, Stage window, double desiredWidth, double desiredHeight)
     {
         this.gameActive=false;
@@ -371,7 +387,7 @@ public class GameSpace implements Serializable
     {
         if((obstacle instanceof ColorChangingObstacle) || (obstacle instanceof ColorSwappingObstacle))
         {
-            if(this.ideallyObstacleTransformed % Settings.ObstacleTransformationSpeed == 0)
+            if(this.ideallyObstacleTransformed % GameSpace.ObstacleTransformationSpeed == 0)
                 obstacle.transform();
         }
         else
@@ -459,7 +475,7 @@ public class GameSpace implements Serializable
         {
             ++count;
             if(count==size)
-                position[1]=obstacle.getCentrePosition()[1]-Settings.EntitiesGap;
+                position[1]=obstacle.getCentrePosition()[1]-GameSpace.EntitiesGap;
         }
         return position;
     }
@@ -472,7 +488,7 @@ public class GameSpace implements Serializable
         {
             ++count;
             if(count==size)
-                position[1]=star.getPosition()[1]-Settings.EntitiesGap;
+                position[1]=star.getPosition()[1]-GameSpace.EntitiesGap;
         }
         return position;
     }
@@ -480,12 +496,12 @@ public class GameSpace implements Serializable
     {
         int count=0;
         int size=this.colorBalls.size();
-        double[] position={this.gameScene.getWidth()/2,this.gameScene.getHeight()/2-Settings.EntitiesGap/2};
+        double[] position={this.gameScene.getWidth()/2,this.gameScene.getHeight()/2-GameSpace.EntitiesGap/2};
         for(ColorBall colorBall : this.colorBalls)
         {
             ++count;
             if(count==size)
-                position[1]=colorBall.getPosition()[1]-Settings.EntitiesGap;
+                position[1]=colorBall.getPosition()[1]-GameSpace.EntitiesGap;
         }
         return position;
     }

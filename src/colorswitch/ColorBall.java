@@ -62,7 +62,7 @@ public class ColorBall extends Group implements Serializable
 
     public void moveDown()
     {
-        this.setTranslateY(this.getTranslateY()+Settings.MotionSpeed);
+        this.setTranslateY(this.getTranslateY()+GameSpace.MotionSpeed);
     }
     public void changeColors()
     {

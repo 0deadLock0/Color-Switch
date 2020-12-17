@@ -94,7 +94,7 @@ class Star extends Polygon implements Serializable
 
     public void moveDown()
     {
-        this.translatePosition(0,Settings.MotionSpeed);
+        this.translatePosition(0,GameSpace.MotionSpeed);
     }
 
     public void updateProperties()

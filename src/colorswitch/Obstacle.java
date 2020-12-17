@@ -18,7 +18,7 @@ abstract class Obstacle extends Group implements Serializable
     {
         super();
         this.getChildren().clear();
-        this.obstacleSize=Settings.ObstacleSize;
+        this.obstacleSize=GameSpace.ObstacleSize;
         this.advanced=false;
         this.xCenter=0;
         this.yCenter=0;
@@ -27,7 +27,7 @@ abstract class Obstacle extends Group implements Serializable
     public abstract void transform();
     public void moveDown()
     {
-        this.setTranslateY(this.getTranslateY()+Settings.MotionSpeed);
+        this.setTranslateY(this.getTranslateY()+GameSpace.MotionSpeed);
     }
     public abstract void construct();
 

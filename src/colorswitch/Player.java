@@ -60,11 +60,11 @@ class Player extends Circle implements Serializable
 
     public void moveUp()
     {
-        this.setCenterY(this.getCenterY()-Settings.MotionSpeed);
+        this.setCenterY(this.getCenterY()-GameSpace.MotionSpeed);
     }
     public void moveDown()
     {
-        this.setCenterY(this.getCenterY()+Settings.Gravity);
+        this.setCenterY(this.getCenterY()+GameSpace.Gravity);
     }
 
     public double[] getPosition()
