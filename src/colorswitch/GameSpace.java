@@ -1,6 +1,7 @@
 
 package colorswitch;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Random;
@@ -8,6 +9,8 @@ import java.util.Queue;
 import java.util.LinkedList;
 
 import javafx.animation.AnimationTimer;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 
@@ -119,10 +122,12 @@ public class GameSpace implements Serializable
     {
         return this.player.getStarsCollected();
     }
+    public void reduceStars(int numStars){this.player.reduceStars(numStars);}
 
     public void start()
     {
         this.gameActive=true;
+        this.gameOver=false;
         this.applicationWindow.setScene(this.gameScene);
 
         this.setUserInput();
@@ -135,6 +140,10 @@ public class GameSpace implements Serializable
             }
         };
         timer.start();
+    }
+    public void restart(){
+        this.easeGameSpace();
+        this.start();
     }
 
     private void restoreProperties()
@@ -185,6 +194,13 @@ public class GameSpace implements Serializable
             }
         });
     }
+    private void buttonSound(){
+        String path = "resources/Sound Effects/button.wav";
+        Media media=new Media(new File(path).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setAutoPlay(true);
+
+    }
 
     private void pause()
     {
@@ -228,13 +244,14 @@ public class GameSpace implements Serializable
         final boolean[] saved = {false};
 
         resume.setOnAction(event -> {
+            this.buttonSound();
             gamePane.setEffect(null);
             popupStage.hide();
             this.touched=false;
             this.resume();
         });
         Save.setOnAction(event -> {
-
+            this.buttonSound();
             if(!saved[0]){
                 this.updateProperties();
                 String savedName=application.saveGame();
@@ -246,6 +263,7 @@ public class GameSpace implements Serializable
             }
         });
         Exit.setOnAction(event -> {
+            this.buttonSound();
             gamePane.setEffect(null);
             popupStage.hide();
             application.gameFinished();
@@ -288,6 +306,7 @@ public class GameSpace implements Serializable
         popupStage.hide();
         popupStage2.show();
         Ok.setOnAction(confirmevent -> {
+            this.buttonSound();
             popupStage2.hide();
             popupStage.show();
         });
@@ -300,6 +319,7 @@ public class GameSpace implements Serializable
         if(this.gameOver && RandomMotionBall.areAllBallsAnimationFinished())
         {
             this.gameActive=false;
+            application.gameOver();
             //ColorSwitch::gamOver needs to be called
             return;
         }
@@ -648,6 +668,32 @@ public class GameSpace implements Serializable
         ColorBall colorBall=this.addNewColorBall();
         this.addColorBallToPane(colorBall);
     }
+    private void removeFirstObstacleFromPane(){
+        Obstacle obstacle=this.obstacles.remove();
+        this.gamePane.getChildren().remove(obstacle);
+    }
+    private void removeFirstColorBallFromPane(){
+        ColorBall colorBall=this.colorBalls.remove();
+        this.gamePane.getChildren().remove(colorBall);
+    }
+    private void removeFirstStarFromPane(){
+        Star star=this.stars.remove();
+        this.gamePane.getChildren().remove(star);
+    }
+
+    void easeGameSpace(){
+
+        this.player.setPosition(this.gameScene.getWidth()/2, 9*this.gameScene.getHeight()/10);
+        this.gamePane.getChildren().add(this.player);
+        this.removeFirstObstacleFromPane();
+        this.addNewObstacleToPane();
+        this.removeFirstColorBallFromPane();
+        this.addNewColorBallToPane();
+        this.removeFirstStarFromPane();
+        this.addNewStarToPane();
+
+    }
+
 
     private void addLabelToPane(Label label)
     {

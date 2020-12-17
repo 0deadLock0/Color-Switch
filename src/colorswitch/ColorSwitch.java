@@ -1,6 +1,12 @@
 package colorswitch;
 
 import javafx.application.Application;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
@@ -10,15 +16,13 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.geometry.Pos;
+import javafx.stage.StageStyle;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class ColorSwitch extends Application
 {
@@ -124,6 +128,103 @@ public class ColorSwitch extends Application
     {
         ColorSwitch.highScore=Math.max(ColorSwitch.highScore,this.currentGame.getScore());
     }
+    private void buttonSound(){
+        String path = "resources/Sound Effects/button.wav";
+        Media media=new Media(new File(path).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setAutoPlay(true);
+
+    }
+
+    public void gameOver(){
+        VBox gameover = new VBox();
+        gameover.setSpacing(10);
+        gameover.setAlignment(Pos.CENTER);
+        gameover.setPrefWidth(600);
+        gameover.setPrefHeight(50);
+
+        Label dummyA= new Label("");
+        dummyA.setFont(Font.font("Arial", FontWeight.BOLD,130));
+        Label dummyB= new Label("");
+        dummyB.setFont(Font.font("Arial", FontWeight.BOLD,10));
+        Label Over= new Label("Game Over");
+        Over.setTextFill(Color.ALICEBLUE);
+        Over.setFont(Font.font("Arial", FontWeight.BOLD,20));
+
+        Label Message= new Label("Do you wish to continue using 5 Stars?");
+        Message.setTextFill(Color.ALICEBLUE);
+        Message.setFont(Font.font("Arial", FontWeight.BOLD,20));
+
+        Button Continue = new Button("Continue");
+        Continue.setStyle("-fx-background-color: #ff4500");
+        Continue.setFont(Font.font("Arial", FontWeight.BOLD,30));
+        Continue.setMinWidth(160);
+
+        Button Exit = new Button("Exit");
+        Exit.setStyle("-fx-background-color: #ff4500");
+        Exit.setFont(Font.font("Arial", FontWeight.BOLD,30));
+        Exit.setMinWidth(160);
+
+        gameover.getChildren().addAll(dummyA,Message,dummyB, Continue,Exit);
+        gameover.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0);");
+
+        Stage popupStage = new Stage(StageStyle.TRANSPARENT);
+        popupStage.initOwner(applicationWindow);
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setScene(new Scene(gameover,Color.TRANSPARENT));
+        popupStage.show();
+        Continue.setOnAction(event -> {
+            this.buttonSound();
+            if(currentGame.getStarsCollected()>=5){
+                currentGame.reduceStars(5);
+                popupStage.hide();
+                //currentGame.easeGameSpace();
+                currentGame.restart();
+                //currentGame.start();
+            }
+            else {
+                popupStage.hide();
+                VBox vbox = new VBox();
+                vbox.setSpacing(10);
+                vbox.setAlignment(Pos.CENTER);
+                vbox.setPrefWidth(600);
+                vbox.setPrefHeight(50);
+
+                Label dummy1= new Label("");
+                dummy1.setFont(Font.font("Arial", FontWeight.BOLD,130));
+                Label dummy2= new Label("");
+                dummy2.setFont(Font.font("Arial", FontWeight.BOLD,10));
+
+                Label InsufficientstarMessage= new Label("Not Sufficient Stars");
+                InsufficientstarMessage.setTextFill(Color.ALICEBLUE);
+                InsufficientstarMessage.setFont(Font.font("Arial", FontWeight.BOLD,20));
+
+                Button exit = new Button("Exit");
+                exit.setStyle("-fx-background-color: #ff4500");
+                exit.setFont(Font.font("Arial", FontWeight.BOLD,30));
+                exit.setMinWidth(160);
+                vbox.getChildren().addAll(dummy1,InsufficientstarMessage,dummy2, exit);
+                vbox.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0);");
+
+                Stage popupStage2 = new Stage(StageStyle.TRANSPARENT);
+                popupStage2.initOwner(applicationWindow);
+                popupStage2.initModality(Modality.APPLICATION_MODAL);
+                popupStage2.setScene(new Scene(vbox,Color.TRANSPARENT));
+                popupStage2.show();
+                exit.setOnAction(insufficientStarsevent -> {
+                    this.buttonSound();
+                    popupStage2.hide();
+                    this.setUpMainMenu();
+                });
+            }
+        });
+        Exit.setOnAction(event -> {
+            this.buttonSound();
+            popupStage.hide();
+            this.setUpMainMenu();
+
+        });
+    }
 
     public void setUpMainMenu()
     {
@@ -167,27 +268,45 @@ public class ColorSwitch extends Application
         newGameButton.setStyle("-fx-font-weight: bold");
         newGameButton.setStyle("-fx-background-color: #AB4642");
 
-        newGameButton.setOnAction(newGameEvent -> this.startNewGame());
+        newGameButton.setOnAction(newGameEvent ->{
+            this.buttonSound();
+            this.startNewGame();
+        });
 
         Button loadGameButton=new Button("LOAD GAME");
         loadGameButton.setStyle("-fx-background-color: #00bfff");
-        loadGameButton.setOnAction(loadGameEvent -> this.setUpLoadMenu());
+        loadGameButton.setOnAction(loadGameEvent -> {
+            this.buttonSound();
+            this.setUpLoadMenu();
+        });
 
         Button statsButton=new Button("STATS");
         statsButton.setStyle("-fx-background-color: #e9967a");
-        statsButton.setOnAction(statsevent -> setUpStatsMenu());
+        statsButton.setOnAction(statsevent -> {
+            this.buttonSound();
+            setUpStatsMenu();
+        });
 
         Button helpButton=new Button("HELP");
         helpButton.setStyle("-fx-background-color: #00fa9a");
-        helpButton.setOnAction(helpevent -> setUpHelpMenu());
+        helpButton.setOnAction(helpevent -> {
+            this.buttonSound();
+            setUpHelpMenu();
+        });
 
         Button creditsButton=new Button("CREDITS");
         creditsButton.setStyle("-fx-background-color: #F7CA88");
-        creditsButton.setOnAction(creditsevent -> this.setUpCreditsMenu());
+        creditsButton.setOnAction(creditsevent -> {
+            this.buttonSound();
+            this.setUpCreditsMenu();
+        });
 
         Button exitButton=new Button("EXIT");
         exitButton.setStyle("-fx-background-color: #f08080");
-        exitButton.setOnAction(exitEvent -> this.closeProgram());
+        exitButton.setOnAction(exitEvent -> {
+            this.buttonSound();
+            this.closeProgram();
+        });
 
         Button[] menuButtons={newGameButton,loadGameButton,statsButton,helpButton,creditsButton,exitButton};
 
@@ -232,7 +351,10 @@ public class ColorSwitch extends Application
 
         Button Back= new Button("BACK");
         Back.setStyle("-fx-background-color: #ff4500");
-        Back.setOnAction(event -> this.setUpMainMenu());
+        Back.setOnAction(event -> {
+            this.buttonSound();
+            this.setUpMainMenu();
+        });
 
         Button[] Files={File1,File2,File3,File4,File5};
         int fileID=0;
@@ -242,7 +364,10 @@ public class ColorSwitch extends Application
             {
                 int finalFileID=fileID;
                 File.setText("Saved State "+fileID);
-                File.setOnAction(newGameEvent -> this.loadGame(finalFileID));
+                File.setOnAction(newGameEvent -> {
+                    this.buttonSound();
+                    this.loadGame(finalFileID);
+                });
             }
             ++fileID;
         }
@@ -288,7 +413,10 @@ public class ColorSwitch extends Application
 
         Button Back= new Button("BACK");
         Back.setStyle("-fx-background-color: #ff4500");
-        Back.setOnAction(event -> this.setUpMainMenu());
+        Back.setOnAction(event -> {
+            this.buttonSound();
+            this.setUpMainMenu();
+        });
 
         Back.setMinWidth(menuOptions.getPrefWidth());
         menuOptions.getChildren().addAll(Tittle,dummy1,dummy2,label1,label2,label3,label4,label5,label6,Back);
@@ -324,7 +452,10 @@ public class ColorSwitch extends Application
 
         Button Back= new Button("BACK");
         Back.setStyle("-fx-background-color: #ff4500");
-        Back.setOnAction(event -> this.setUpMainMenu());
+        Back.setOnAction(event -> {
+            this.buttonSound();
+            this.setUpMainMenu();
+        });
 
         Back.setMinWidth(menuOptions.getPrefWidth());
 //      Back.setMinHeight(menuOptions.getPrefHeight());
@@ -361,7 +492,10 @@ public class ColorSwitch extends Application
 
         Button Back= new Button("BACK");
         Back.setStyle("-fx-background-color: #ff4500");
-        Back.setOnAction(event -> this.setUpMainMenu());
+        Back.setOnAction(event -> {
+            this.buttonSound();
+            this.setUpMainMenu();
+        });
 
 
         Back.setMinWidth(menuOptions.getPrefWidth());
