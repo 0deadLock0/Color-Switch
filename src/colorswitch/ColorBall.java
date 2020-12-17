@@ -99,7 +99,7 @@ public class ColorBall extends Group implements Serializable
     public double[] getPosition()
     {
         Bounds boundsInScene=this.localToScene(this.getBoundsInLocal());
-        return new double[]{boundsInScene.getCenterX(),boundsInScene.getCenterY()};
+        return new double[]{(boundsInScene.getMaxX()+boundsInScene.getMinX())/2,(boundsInScene.getMaxY()+boundsInScene.getMinY())/2};
     }
 
     public void updateProperties()

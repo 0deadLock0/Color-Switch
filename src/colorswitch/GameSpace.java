@@ -17,7 +17,29 @@ import javafx.scene.shape.Shape;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 
+
+
+
 import javafx.animation.AnimationTimer;
+import javafx.stage.StageStyle;
+
+import java.util.Iterator;
+import java.util.Random;
+import java.util.Queue;
+import java.util.LinkedList;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
+
+
+
 
 public class GameSpace implements Serializable
 {
@@ -148,8 +170,11 @@ public class GameSpace implements Serializable
                 {
                     if(this.gameActive && !gameOver)
                         this.stop();
-                    else // To be removed when Action Listener is created
+                    else { // To be removed when Action Listener is created
                         this.resume();
+                        gamePane.setEffect(null);
+                    }
+
                     break;
                 }
                 case V: //Testing //Saving a Game
@@ -175,7 +200,55 @@ public class GameSpace implements Serializable
     private void stop()
     {
         this.gameActive=false;
-        //Pause Menu to be generated
+        gamePane.setEffect(new GaussianBlur());
+
+        VBox pauseRoot = new VBox();
+        pauseRoot.setSpacing(10);
+        pauseRoot.setAlignment(Pos.CENTER);
+        pauseRoot.setPrefWidth(250);
+        pauseRoot.setPrefHeight(50);
+        //pauseRoot.setPadding(new Insets(100));
+
+        Label Tittle= new Label("PAUSED");
+        Label dummy= new Label("");
+        dummy.setFont(Font.font("Arial", FontWeight.BOLD,30));
+        Label dummy2= new Label("");
+        dummy2.setFont(Font.font("Arial", FontWeight.BOLD,30));
+        Tittle.setTextFill(Color.ALICEBLUE);
+        Tittle.setFont(Font.font("Arial", FontWeight.BOLD,60));
+
+        Button resume = new Button("Resume");
+        resume.setStyle("-fx-background-color: #ff4500");
+        resume.setFont(Font.font("Arial", FontWeight.BOLD,30));
+        resume.setMinWidth(160);
+        Button Save= new Button("Save");
+        Save.setStyle("-fx-background-color: #ff4500");
+        Save.setFont(Font.font("Arial", FontWeight.BOLD,30));
+        Save.setMinWidth(160);
+        Button Exit= new Button("Exit");
+        Exit.setStyle("-fx-background-color: #ff4500");
+        Exit.setFont(Font.font("Arial", FontWeight.BOLD,30));
+        Exit.setMinWidth(160);
+
+        pauseRoot.getChildren().addAll(dummy,Tittle,dummy2, resume, Save, Exit);
+        pauseRoot.setStyle("-fx-background-color: rgba(255, 255, 255, 0.0);");
+
+        Stage popupStage = new Stage(StageStyle.TRANSPARENT);
+        popupStage.initOwner(applicationWindow);
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setScene(new Scene(pauseRoot,Color.TRANSPARENT));
+
+        resume.setOnAction(event -> {
+            gamePane.setEffect(null);
+            this.resume();
+            popupStage.hide();
+        });
+        Save.setOnAction(event -> {
+            this.updateProperties();
+            application.saveGame();
+        });
+
+        popupStage.show();
     }
     private void resume() // should be called using an action listener //like clicking resume Button
     {
