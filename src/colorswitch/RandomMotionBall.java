@@ -10,8 +10,19 @@ import java.util.Random;
 
 public class RandomMotionBall extends Circle
 {
+	private static int instancesCount;
+	private static int instancesAnimationFinished;
+
+	static
+	{
+		instancesCount=0;
+		instancesAnimationFinished=0;
+	}
+
 	public RandomMotionBall(double xPosition, double yPosition, double radius, double[] bounds, final Pane gamePane)
 	{
+		++RandomMotionBall.instancesCount;
+
 		Random rd=new Random();
 
 		this.setCenterX(xPosition);
@@ -47,8 +58,16 @@ public class RandomMotionBall extends Circle
 		translate.setToX(transX);
 		translate.setToY(transY);
 		translate.play();
-		translate.setOnFinished(finishedEvent -> gamePane.getChildren().remove(this));
+		translate.setOnFinished(finishedEvent -> {
+			++RandomMotionBall.instancesAnimationFinished;
+			gamePane.getChildren().remove(this);
+		});
 
 		gamePane.getChildren().add(this);
+	}
+
+	public static boolean areAllBallsAnimationFinished()
+	{
+		return RandomMotionBall.instancesCount==RandomMotionBall.instancesAnimationFinished;
 	}
 }
