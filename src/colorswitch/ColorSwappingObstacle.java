@@ -24,7 +24,7 @@ abstract class ColorSwappingObstacle extends Obstacle
 	}
 	private void swapColors()
 	{
-		if(!this.advanced)
+		if(!Obstacle.advanced)
 			this.swapColorsOrderly();
 		else
 			this.swapColorsRandomly();
