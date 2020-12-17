@@ -596,7 +596,6 @@ public class ColorSwitch extends Application
     {
         if(currentGame==null)
         {
-            //Need to be handled through Exceptions later
             System.out.println("No game currently active");
             return;
         }
