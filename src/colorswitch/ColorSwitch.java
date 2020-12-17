@@ -18,6 +18,7 @@ import java.io.ObjectOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class ColorSwitch extends Application
 {
@@ -214,19 +215,19 @@ public class ColorSwitch extends Application
 
 
 
-        Button File1=new Button("Saved state 1");
+        Button File1=new Button("...");
         File1.setStyle("-fx-background-color: #AB4642");
 
-        Button File2=new Button("Saved State 2");
+        Button File2=new Button("...");
         File2.setStyle("-fx-background-color: #00bfff");
 
-        Button File3 =new Button("Saved State 3");
+        Button File3 =new Button("...");
         File3.setStyle("-fx-background-color: #e9967a");
 
-        Button File4=new Button("Saved State 4");
+        Button File4=new Button("...");
         File4.setStyle("-fx-background-color: #00fa9a");
 
-        Button File5=new Button("Saved State 5");
+        Button File5=new Button("...");
         File5.setStyle("-fx-background-color: #F7CA88");
 
         Button Back= new Button("BACK");
@@ -240,6 +241,7 @@ public class ColorSwitch extends Application
             if(ColorSwitch.savedGames.size()>fileID)
             {
                 int finalFileID=fileID;
+                File.setText("Saved State "+fileID);
                 File.setOnAction(newGameEvent -> this.loadGame(finalFileID));
             }
             ++fileID;
@@ -374,9 +376,12 @@ public class ColorSwitch extends Application
 
     public void saveGame()
     {
-        String fileName=ColorSwitch.recordsDirectory +"\\Record"+(ColorSwitch.savedGames.size())+".ser";
+        int fileId=ColorSwitch.savedGames.size();
+        if(fileId==ColorSwitch.maxRecords)
+            fileId=(new Random()).nextInt(ColorSwitch.maxRecords);
+        String fileName=ColorSwitch.recordsDirectory +"\\Record"+fileId+".ser";
         ColorSwitch.savedGames.add(fileName);
-        GameRecord gameRecord=new GameRecord(this.currentGame.getScore(),("Saved Game "+ColorSwitch.savedGames.size()),this.currentGame);
+        GameRecord gameRecord=new GameRecord(this.currentGame.getScore(),("Saved State "+fileId),this.currentGame);
 
         try
         {
