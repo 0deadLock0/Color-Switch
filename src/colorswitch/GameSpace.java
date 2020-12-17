@@ -264,12 +264,12 @@ public class GameSpace implements Serializable
 
 
         Label dummyA= new Label("");
-        dummyA.setFont(Font.font("Arial", FontWeight.BOLD,30));
+        dummyA.setFont(Font.font("Arial", FontWeight.BOLD,130));
         Label dummyB= new Label("");
-        dummyB.setFont(Font.font("Arial", FontWeight.BOLD,30));
+        dummyB.setFont(Font.font("Arial", FontWeight.BOLD,10));
         Label Message= new Label("The game has been Saved to "+savedName);
         Message.setTextFill(Color.ALICEBLUE);
-        Message.setFont(Font.font("Arial", FontWeight.BOLD,10));
+        Message.setFont(Font.font("Arial", FontWeight.BOLD,20));
 
         Button Ok = new Button("OK");
         Ok.setStyle("-fx-background-color: #ff4500");
