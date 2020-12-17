@@ -192,7 +192,7 @@ public class ColorSwitch extends Application
                 currentGame.reduceStars(5);
                 popupStage.hide();
                 //currentGame.easeGameSpace();
-                currentGame.restart();
+                this.restart();
                 //currentGame.start();
             }
             else {
@@ -236,6 +236,10 @@ public class ColorSwitch extends Application
             popupStage.hide();
             this.gameFinished();
         });
+    }
+    public void restart(){
+        currentGame.easeGameSpace();
+        currentGame.start();
     }
 
     public void setUpMainMenu()
@@ -330,8 +334,10 @@ public class ColorSwitch extends Application
         title.getChildren().add(imageView);
         menuOptions.getChildren().addAll(title,newGameButton,loadGameButton,statsButton,helpButton,creditsButton,exitButton);
         Scene mainMenu=new Scene(menuOptions,Settings.DesiredSceneWidth,Settings.DesiredSceneHeight);
+
         //changes1
         mainMenu.getStylesheets().add(ColorSwitch.class.getResource("styles.css").toExternalForm());
+
 
         this.applicationWindow.setScene(mainMenu);
     }
