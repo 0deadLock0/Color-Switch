@@ -38,7 +38,7 @@ class Settings
         IntersectionColors = new Color[]{Color.RED,Color.YELLOW,Color.MAGENTA,Color.AQUAMARINE};
 
         ObstacleTransformationSpeed = 3 * (long)(TimeDelay*TransformationSpeed)/(long)1e5;
-        ObstaclesCount = 5; //update according to number of obstacles available //check children of Obstacle class
+        ObstaclesCount = 6; //update according to number of obstacles available //check children of Obstacle class
         ObstacleSize = 150;
 
         BrokenBallsCount = 100;

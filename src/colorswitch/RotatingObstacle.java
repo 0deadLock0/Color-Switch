@@ -5,7 +5,7 @@ import java.util.Random;
 
 abstract class RotatingObstacle extends Obstacle
 {
-    private double factor;
+    protected double factor;
     protected double rotateAngle;
 
     public RotatingObstacle()
