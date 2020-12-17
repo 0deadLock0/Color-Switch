@@ -224,6 +224,7 @@ public class GameSpace implements Serializable
         popupStage.initOwner(applicationWindow);
         popupStage.initModality(Modality.APPLICATION_MODAL);
         popupStage.setScene(new Scene(pauseRoot,Color.TRANSPARENT));
+        final boolean[] saved = {false};
 
         resume.setOnAction(event -> {
             gamePane.setEffect(null);
@@ -231,9 +232,16 @@ public class GameSpace implements Serializable
             this.resume();
         });
         Save.setOnAction(event -> {
-            this.updateProperties();
-            String savedName=application.saveGame();
-            this.confirmSavedGame(popupStage, savedName);
+
+            if(!saved[0]){
+                this.updateProperties();
+                String savedName=application.saveGame();
+                this.confirmSavedGame(popupStage, "The game has been saved to "+savedName);
+                saved[0] = true;
+            }
+            else {
+                this.confirmSavedGame(popupStage, "The game has been saved already ");
+            }
         });
         Exit.setOnAction(event -> {
             gamePane.setEffect(null);
@@ -249,7 +257,7 @@ public class GameSpace implements Serializable
         this.gameActive=true;
 //        this.applicationWindow.setScene(this.gameScene);
     }
-    private void confirmSavedGame(Stage popupStage, String savedName){
+    private void confirmSavedGame(Stage popupStage, String message){
 //        try {
 //            TimeUnit.SECONDS.sleep(1);
 //        } catch (InterruptedException e) {
@@ -267,7 +275,7 @@ public class GameSpace implements Serializable
         dummyA.setFont(Font.font("Arial", FontWeight.BOLD,130));
         Label dummyB= new Label("");
         dummyB.setFont(Font.font("Arial", FontWeight.BOLD,10));
-        Label Message= new Label("The game has been Saved to "+savedName);
+        Label Message= new Label(message);
         Message.setTextFill(Color.ALICEBLUE);
         Message.setFont(Font.font("Arial", FontWeight.BOLD,20));
 
