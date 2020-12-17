@@ -39,6 +39,7 @@ public class GameSpace implements Serializable
     private transient Scene gameScene;
     private transient Pane gamePane;
     private transient Label scoreLabel;
+    private transient Label starsCollectedLabel;
 
     private Player player;
     private final Queue<Star> stars;
@@ -105,6 +106,9 @@ public class GameSpace implements Serializable
 
         this.initializeScoreLabel();
         this.addLabelToPane(this.scoreLabel);
+
+        this.initializeStarsCollectedLabel();
+        this.addLabelToPane(this.starsCollectedLabel);
 
         this.restoreProperties();
 
@@ -407,13 +411,20 @@ public class GameSpace implements Serializable
 
     private void updateGUI()
     {
-        this.updateScore();
+        this.updateScoreLabel();
+        this.updateStarsCollectedLabel();
     }
-    private void updateScore()
+    private void updateScoreLabel()
     {
         this.scoreLabel.setText("Score: "+this.getScore());
         this.scoreLabel.setTranslateX(this.gameScene.getWidth()-this.scoreLabel.getWidth()-10);
         this.scoreLabel.setTranslateY(10);
+    }
+    private void updateStarsCollectedLabel()
+    {
+        this.starsCollectedLabel.setText(""+this.getStarsCollected());
+        this.starsCollectedLabel.setTranslateX(50);
+        this.starsCollectedLabel.setTranslateY(25);
     }
 
     private void updateObstacles()
@@ -574,15 +585,15 @@ public class GameSpace implements Serializable
     {
         return new Scene(pane,desiredWidth,desiredHeight,Color.BLACK);
     }
-    private Label createScoreLabel(double xPosition, double yPosition)
+    private Label createLabel(double xPosition, double yPosition, String text, Color color)
     {
         Label label=new Label();
-        label.setText("Score: "+this.getScore());
+        label.setText(text+": "+this.getScore());
         label.setPrefWidth(-1);
         label.setPrefHeight(-1);
         label.setTranslateX(xPosition-label.getWidth()-10);
         label.setTranslateY(yPosition);
-        label.setTextFill(Color.YELLOW);
+        label.setTextFill(color);
         return label;
     }
     private Player createPlayer(double xPosition, double yPosition)
@@ -655,7 +666,13 @@ public class GameSpace implements Serializable
 
     private void initializeScoreLabel()
     {
-        this.scoreLabel=this.createScoreLabel(this.gameScene.getWidth(), 10);
+        this.scoreLabel=this.createLabel(this.gameScene.getWidth(), 10,"Score",Color.YELLOW);
+    }
+    private void initializeStarsCollectedLabel()
+    {
+        Star starLabel=new Star(30,30);
+        this.gamePane.getChildren().add(starLabel);
+        this.starsCollectedLabel=this.createLabel(70,30,"0",Color.DARKBLUE);
     }
     private void initializePlayer()
     {
