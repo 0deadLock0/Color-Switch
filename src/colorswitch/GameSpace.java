@@ -196,7 +196,7 @@ public class GameSpace implements Serializable
         pauseRoot.setAlignment(Pos.CENTER);
         pauseRoot.setPrefWidth(250);
         pauseRoot.setPrefHeight(50);
-        
+
         Label Tittle= new Label("PAUSED");
         Label dummy= new Label("");
         dummy.setFont(Font.font("Arial", FontWeight.BOLD,30));
@@ -297,12 +297,14 @@ public class GameSpace implements Serializable
     {
         if(!this.gameActive)
             return;
-        else if(this.gameOver && RandomMotionBall.areAllBallsAnimationFinished())
+        if(this.gameOver && RandomMotionBall.areAllBallsAnimationFinished())
         {
             this.gameActive=false;
             //ColorSwitch::gamOver needs to be called
             return;
         }
+        else if(this.gameOver)
+            return;
         if(this.isPlayerInteractingStar(this.player, this.stars.peek()))
         {
             this.player.collectStar(this.stars.peek());
