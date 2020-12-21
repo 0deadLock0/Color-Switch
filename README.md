@@ -1,17 +1,13 @@
-#Color Switch
+# Color Switch
 
-CSE231: Advanced Programming
+Course: [Advanced Programming](http://techtree.iiitd.edu.in/viewDescription/filename?=CSE201)
 
 Contributors:
 
-[Abhimanyu Gupta](abhimanyu19226@iiitd.ac.in)
+[Abhimanyu Gupta](https://github.com/0deadLock0)
 
-[Shubham Garg](shubham2019336@iiitd.ac.in)
+[Shubham Garg](https://github.com/shubham19336)
 
-Instructions:
+[Instructions](https://drive.google.com/file/d/1I3G6xzSPOAEdxKNT5Zmw-2wCCWRuIBu6/view)
 
-https://drive.google.com/file/d/1I3G6xzSPOAEdxKNT5Zmw-2wCCWRuIBu6/view
-
-GitHub Repository:
-
-https://github.com/0deadLock0/Color-Switch
+[GitHub Repository](https://github.com/0deadLock0/Color-Switch)
