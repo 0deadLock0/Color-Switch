@@ -466,7 +466,7 @@ public class GameSpace implements Serializable
     {
         if((obstacle instanceof ColorChangingObstacle) || (obstacle instanceof ColorSwappingObstacle))
         {
-            if(this.ideallyObstacleTransformed % GameSpace.ObstacleTransformationSpeed == 0)
+            if(this.ideallyObstacleTransformed % (long)GameSpace.ObstacleTransformationSpeed == 0)
                 obstacle.transform();
         }
         else
@@ -793,17 +793,16 @@ public class GameSpace implements Serializable
     }
     private void increaseDifficulty()
     {
-        double increaseFactor = 0.1;
-        if(this.difficultyRaiseTarget == 5)
-            GameSpace.ObstacleSize -= GameSpace.ObstacleSize * increaseFactor;
-        else if(this.difficultyRaiseTarget >= 15)
+        if(this.difficultyRaiseTarget >= 15)
             Obstacle.enableAdvanceMode();
-        else
-        {
-            GameSpace.TransformationSpeed += GameSpace.TransformationSpeed * increaseFactor;
-            GameSpace.ObstacleTransformationSpeed += GameSpace.ObstacleTransformationSpeed * increaseFactor;
-            GameSpace.Gravity += GameSpace.Gravity * increaseFactor;
-        }
+
+        double increaseFactor = 0.05;
+        if(GameSpace.ObstacleSize>100)
+            GameSpace.ObstacleSize -= GameSpace.ObstacleSize * increaseFactor;
+        GameSpace.TransformationSpeed += GameSpace.TransformationSpeed * increaseFactor;
+        GameSpace.ObstacleTransformationSpeed -= GameSpace.ObstacleTransformationSpeed * increaseFactor;
+        GameSpace.Gravity += GameSpace.Gravity * increaseFactor;
+
         this.difficultyRaiseTarget += 5;
     }
 }
