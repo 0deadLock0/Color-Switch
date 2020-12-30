@@ -796,7 +796,7 @@ public class GameSpace implements Serializable
         double increaseFactor = 0.1;
         if(this.difficultyRaiseTarget == 5)
             GameSpace.ObstacleSize -= GameSpace.ObstacleSize * increaseFactor;
-        else if(this.difficultyRaiseTarget == 15)
+        else if(this.difficultyRaiseTarget >= 15)
             Obstacle.enableAdvanceMode();
         else
         {

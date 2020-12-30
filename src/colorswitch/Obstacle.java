@@ -14,12 +14,16 @@ abstract class Obstacle extends Group implements Serializable
     protected double xCenter;
     protected double yCenter;
 
+    static
+    {
+        advanced=false;
+    }
+
     protected Obstacle()
     {
         super();
         this.getChildren().clear();
         this.obstacleSize=GameSpace.ObstacleSize;
-        Obstacle.advanced=false;
         this.xCenter=0;
         this.yCenter=0;
     }
