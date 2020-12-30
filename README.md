@@ -2,9 +2,9 @@
 
 Contributors:
 
-[Abhimanyu Gupta](https://github.com/0deadLock0)
+[Abhimanyu Gupta](https://github.com/0deadLock0)(abhimanyu19226@iiitd.ac.in)
 
-[Shubham Garg](https://github.com/shubham19336)
+[Shubham Garg](https://github.com/shubham19336)(shubham19336@iiitd.ac.in)
 
 Purpose: Course Project at [IIITD](https://www.iiitd.ac.in/)
 
